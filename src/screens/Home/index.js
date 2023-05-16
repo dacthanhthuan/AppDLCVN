@@ -1,12 +1,13 @@
 import React from "react";
 import styles from "./styles";
-import {View} from 'react-native'
+import {SafeAreaView, Text, View} from 'react-native'
+
 const Home = () =>{
     return(
-        <View>
-                
-        </View>
+        <SafeAreaView style={styles.container}>
+            <Text>Kho đổi điểm</Text>
+        </SafeAreaView>
     )
 }
 
-export default Home;
+export default React.memo(Home)
