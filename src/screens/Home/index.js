@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styles from './styles';
 import {SafeAreaView, StatusBar, Text, SectionList} from 'react-native';
+
+//Splash screen
+import SplashScreen from 'react-native-splash-screen';
 
 //Data
 import {data1} from './data';
@@ -17,6 +20,10 @@ import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 
 const Home = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
