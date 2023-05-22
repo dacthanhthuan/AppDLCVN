@@ -21,7 +21,7 @@ const App = () => {
 
 const MainTab = () => {
   return (
-    <Tab.Navigator screenOptions={tabOptions} tabBar={(prop) => <MyTabBar {...prop} />}>
+    <Tab.Navigator tabBar={(prop) => <MyTabBar {...prop} />} screenOptions={tabOptions}>
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="DoiDiem" component={Home} />
       <Tab.Screen name="NhaCC" component={Home} />
@@ -35,84 +35,30 @@ const MainTab = () => {
 const tabOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarShowLabel: false,
-  tabBarStyle: { backgroundColor: "#005AA9" },
-  tabBarActiveTintColor: "#005AA9",
-  tabBarActiveBackgroundColor: "white",
-  tabBarInactiveTintColor: "white",
-  tabBarItemStyle: {
-    marginHorizontal: "5%",
-    marginVertical: "1%",
-    height: "80%",
-    borderRadius: 10,
-    transform: [{ rotate: '45deg' }],
-  },
-  tabBarIconStyle: {
-    transform: [{ rotate: '-45deg' }],
-  },
-}
-
-
-const IconTabBar: React.FunctionComponent<Icontype> = ({ prop, routeName }) => {
-  let src = './src/assets/';
-
-  switch (routeName) {
-    case "Home":
-      src += 'Rectangle347.png';
-      break;
-    case "DoiDiem":
-      src += 'Rectangle348.png';
-      break;
-    case "NhaCC":
-      src += 'Rectangle335.png';
-      break;
-    case "Notification":
-      src += 'Rectangle336.png';
-      break;
-    case "User":
-      src += 'Rectangle344.png';
-      break;
-  }
-
-  return (
-    <Image source={require('./src/assets/Rectangle347.png')} style={{
-      width: "60%", height: "60%", tintColor: prop.focused ? "#005AA9" : "white"
-    }} />
-  )
-
-}
-
-
-type Icontype = {
-  prop: {
-    focused: boolean,
-    color: string,
-    size: number,
-  },
-  routeName: string,
 }
 
 const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
-  ({ state, descriptors, navigation }) => {
-    return (
-      <View style={{ flexDirection: 'row', height: "8%", backgroundColor: "#005AA9" }}>
-        {state.routes.map((route, index) => {
-          let src = './src/assets/';
+  ({ state, navigation }) => {
+    let image: any;
 
+    return (
+      <View style={styles.tabBar}>
+        {state.routes.map((route, index) => {
           switch (route.name) {
             case "Home":
-              src += 'Rectangle347.png';
+              image = require('./src/assets/Rectangle347.png')
               break;
             case "DoiDiem":
-              src += 'Rectangle348.png';
+              image = require('./src/assets/Rectangle348.png')
               break;
             case "NhaCC":
-              src += 'Rectangle335.png';
+              image = require('./src/assets/Rectangle335.png')
               break;
             case "Notification":
-              src += 'Rectangle336.png';
+              image = require('./src/assets/Rectangle336.png')
               break;
             case "User":
-              src += 'Rectangle344.png';
+              image = require('./src/assets/Rectangle344.png')
               break;
           }
 
@@ -132,21 +78,43 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
 
           return (
             <Pressable
+              key={index}
               onPress={onPress}
-              style={{ flex: 1, alignSelf: 'center' }}>
-              <Text>{src}</Text>
+              style={[styles.tabBarIconBackground,
+              { backgroundColor: isFocused ? "white" : "transparent" }]}>
+              <Image source={image} style={[styles.tabBarIcon,
+              { tintColor: isFocused ? "#005AA9" : "white", }]} />
             </Pressable>
           );
         })}
-      </View>
+      </View >
     );
   }
 
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  tabBar: {
+    flexDirection: 'row',
+    height: 65,
+    backgroundColor: "#005AA9",
+    alignItems: 'center',
+    justifyContent: 'space-around'
   },
+
+  tabBarIconBackground: {
+    height: 40,
+    width: 40,
+    borderRadius: 10,
+    transform: [{ rotate: '45deg' }],
+    justifyContent: 'center'
+  },
+
+  tabBarIcon: {
+    transform: [{ rotate: "-45deg" }],
+    width: "63%",
+    height: "63%",
+    alignSelf: 'center'
+  }
 });
 
 export default App;
