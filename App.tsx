@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/screens/Home';
 import Warehouse from './src/screens/Warehouse';
 import Cart from './src/screens/Cart';
-import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
 import NotLogin from './src/screens/NotLogin';
 import Menu from './src/screens/Menu';
@@ -27,17 +27,17 @@ import CustomerInformation from './src/screens/CustomerInformation';
 import AddAddress from './src/screens/AddAddress';
 import UpdateAddress1 from './src/screens/UpdateAddress1';
 
-const Stack = createStackNavigator();
+
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='MainTab'>
         <Stack.Screen name="NotLogin" component={NotLogin} />
-        <Stack.Screen name="Bottom" component={Bottom} />
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="NoOrders" component={NoOrders} />
         <Stack.Screen name="Team" component={Team} />
@@ -55,27 +55,123 @@ const App = () => {
         <Stack.Screen name="CustomerInformation" component={CustomerInformation} />
         <Stack.Screen name="UpdateAddress1" component={UpdateAddress1} />
         <Stack.Screen name="AddAddress" component={AddAddress} />
+        <Stack.Screen name='MainTab' component={MainTab} />
       </Stack.Navigator>
     </NavigationContainer>
   )
 
 };
 
-const Bottom = () => {
+// const Bottom = () => {
+//   return (
+//     <Tab.Navigator screenOptions={{ headerShown: false }}>
+//       <Tab.Screen name="Home" component={Home} />
+      
+
+//     </Tab.Navigator>
+//   )
+// }
+
+const MainTab = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator tabBar={(prop) => <MyTabBar {...prop} />} screenOptions={tabOptions}>
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="DoiDiem" component={Home} />
+      <Tab.Screen name="NhaCC" component={Home} />
+      <Tab.Screen name="Notification" component={Home} />
+      <Tab.Screen name="User" component={Home} />
+
       <Tab.Screen name="Warehouse" component={Warehouse} />
       <Tab.Screen name="Menu" component={Menu} />
       <Tab.Screen name="Profile" component={Profile} />
-
     </Tab.Navigator>
   )
 }
+
+
+const tabOptions: BottomTabNavigationOptions = {
+  headerShown: false,
+  tabBarShowLabel: false,
+}
+
+const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
+  ({ state, navigation }) => {
+    let image: any;
+
+    return (
+      <View style={styles.tabBar}>
+        {state.routes.map((route, index) => {
+          switch (route.name) {
+            case "Home":
+              image = require('./src/assets/Rectangle347.png')
+              break;
+            case "DoiDiem":
+              image = require('./src/assets/Rectangle348.png')
+              break;
+            case "NhaCC":
+              image = require('./src/assets/Rectangle335.png')
+              break;
+            case "Notification":
+              image = require('./src/assets/Rectangle336.png')
+              break;
+            case "User":
+              image = require('./src/assets/Rectangle344.png')
+              break;
+          }
+
+          const isFocused = state.index === index;
+
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true
+            });
+
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+
+          return (
+            <Pressable
+              key={index}
+              onPress={onPress}
+              style={[styles.tabBarIconBackground,
+              { backgroundColor: isFocused ? "white" : "transparent" }]}>
+              <Image source={image} style={[styles.tabBarIcon,
+              { tintColor: isFocused ? "#005AA9" : "white", }]} />
+            </Pressable>
+          );
+        })}
+      </View >
+    );
+  }
+
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  tabBar: {
+    flexDirection: 'row',
+    height: 65,
+    backgroundColor: "#005AA9",
+    alignItems: 'center',
+    justifyContent: 'space-around'
   },
+
+  tabBarIconBackground: {
+    height: 40,
+    width: 40,
+    borderRadius: 10,
+    transform: [{ rotate: '45deg' }],
+    justifyContent: 'center'
+  },
+
+  tabBarIcon: {
+    transform: [{ rotate: "-45deg" }],
+    width: "63%",
+    height: "63%",
+    alignSelf: 'center'
+  }
 });
 
 export default App;
