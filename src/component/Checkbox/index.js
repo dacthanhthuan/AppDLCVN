@@ -16,9 +16,9 @@ const Checkbox_1 = ({ checked, onPress, check }) => {
 
 export default React.memo(Checkbox_1);
 
-import React, { useState } from "react";
-import { Pressable, View } from "react-native";
-import styles from "./style";
+// import React, { useState } from "react";
+// import { Pressable, View } from "react-native";
+import style from "./style";
 
 
 
@@ -28,8 +28,8 @@ export const Checkbox_2 = () => {
         setChecked(value => !value);
     };
     return (
-        <Pressable onPress={check1} style={[styles.container, ischecked ? styles.checkedBox : {}]}>
-            {ischecked ? <View style={styles.innerSquare} /> : null}
+        <Pressable onPress={check1} style={[style.container, ischecked ? style.checkedBox : {}]}>
+            {ischecked ? <View style={style.innerSquare} /> : null}
         </Pressable>
     )
 };

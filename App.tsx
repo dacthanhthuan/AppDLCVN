@@ -96,7 +96,7 @@ const MainTab = () => {
     <Tab.Navigator tabBar={(prop) => <MyTabBar {...prop} />} screenOptions={tabOptions}>
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Warehouse" component={Warehouse} />
-      <Tab.Screen name="NhaCC" component={Home} />
+      <Tab.Screen name="Supplier" component={Supplier} />
       <Tab.Screen name="Notification" component={Home} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
@@ -123,7 +123,7 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
             case "Warehouse":
               image = require('./src/assets/Rectangle348.png')
               break;
-            case "NhaCC":
+            case "Supplier":
               image = require('./src/assets/Rectangle335.png')
               break;
             case "Notification":
