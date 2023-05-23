@@ -1,14 +1,13 @@
 import React from 'react';
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
-import Style_Button from './style';
+import { TouchableOpacity, Text } from 'react-native';
+import styles from './styles';
 
-const Button = ({ onPress, text, style }) => {
-    return (
-        <SafeAreaView>
-                <TouchableOpacity onPress={onPress} style={[Style_Button.container, style]}>
-                    <Text style={Style_Button.text}>{text}</Text>
-                </TouchableOpacity>
-        </SafeAreaView>
+const Button = ({text, onPress, style, styleText}) =>{
+    return(
+        <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
+            <Text style={[styles.text, styleText]}>{text}</Text>
+        </TouchableOpacity>
     )
 }
-export default Button;
+
+export default React.memo(Button);

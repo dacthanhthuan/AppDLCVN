@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, Text, View, TouchableOpacity } from "react-native";
-import styles from "./style";
+import styles from "./styles";
 
 const CardTeamThree = ({ name, image, phone, style, pv }) => {
     return (
@@ -13,7 +13,7 @@ const CardTeamThree = ({ name, image, phone, style, pv }) => {
                 </View>
             </View>
             <TouchableOpacity>
-                <Text style={styles.textPV}>{pv}</Text>
+                <Text style={styles.textPV}>{pv} PV</Text>
             </TouchableOpacity>
         </View>
     )
