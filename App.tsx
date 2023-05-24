@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { Image, Pressable, StyleSheet, StatusBar, View } from 'react-native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import Supplier from './src/screens/Supplier';
 import Login from './src/screens/Login';
 import Register from './src/screens/Register';
@@ -16,6 +16,7 @@ import WithdrawHistory from './src/screens/WithdrawHistory';
 import RechargeHistory from './src/screens/RechargeMoney';
 import Sales from './src/screens/Sales/Sales_1/index';
 import Sales_2 from './src/screens/Sales/Sales_2';
+import Sales_3 from './src/screens/Sales/Sales_3';
 import Walk from './src/screens/Walk';
 import WalletScreen from './src/screens/MainWallet/MainWallet_1';
 import WalletScreen_2 from './src/screens/MainWallet/MainWallet_2';
@@ -53,10 +54,26 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const App = () => {
-
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='MainTab'>
+        <Stack.Screen name="DetailOrder" component={DetailOrder} />
+        <Stack.Screen name="DetailProduct" component={DetailProduct} />
+        <Stack.Screen name="Detail_User" component={Detail_User} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="InforTranfer" component={InforTranfer} />
+        <Stack.Screen name="WalletScreen" component={WalletScreen} />
+        <Stack.Screen name="WalletScreen_2" component={WalletScreen_2} />
+        <Stack.Screen name="OverView" component={OverView} />
+        <Stack.Screen name="Payment" component={Payment} />
+        <Stack.Screen name="RechargeHistory" component={RechargeHistory} />
+        <Stack.Screen name="Sales" component={Sales} />
+        <Stack.Screen name="Sales_2" component={Sales_2} />
+        <Stack.Screen name="Sales_3" component={Sales_3} />
+        <Stack.Screen name="TranferMoneyTwo" component={TranferMoneyTwo} />
+        <Stack.Screen name="Walk" component={Walk} />
+        <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
         <Stack.Screen name="NotLogin" component={NotLogin} />
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="NoOrders" component={NoOrders} />
@@ -82,16 +99,6 @@ const App = () => {
   )
 
 };
-
-// const Bottom = () => {
-//   return (
-//     <Tab.Navigator screenOptions={{ headerShown: false }}>
-//       <Tab.Screen name="Home" component={Home} />
-
-
-//     </Tab.Navigator>
-//   )
-// }
 
 const MainTab = () => {
   return (

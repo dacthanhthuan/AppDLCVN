@@ -2,12 +2,19 @@ import {View, Image, StyleSheet} from 'react-native';
 import ImageButton from './ImageButton';
 import InputSearch from './InputSearch';
 import {memo} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 const logo = require('../../assets/Home/Rectangle2.png');
 const cart = require('../../assets/Home/Vector.png');
 const searchSetting = require('../../assets/Home/Rectangle313.png');
 
 const Header = () => {
+  const navigation = useNavigation();
+
+  const goToCart = () => {
+    navigation.navigate('Cart');
+  };
+
   return (
     <View style={styles.topContainer}>
       <View style={styles.logoAndCart}>
@@ -16,6 +23,7 @@ const Header = () => {
           containerStyle={styles.cartPressable}
           imageStyle={styles.cart}
           imagesource={cart}
+          onPress={() => goToCart()}
         />
       </View>
       <View style={{flexDirection: 'row'}}>

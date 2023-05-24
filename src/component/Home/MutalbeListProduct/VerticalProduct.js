@@ -1,8 +1,15 @@
 import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import {WINDOW_WIDTH} from '../../../global';
 import {memo} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 const VerticalProduct = ({data}) => {
+  const navigation = useNavigation();
+
+  const goToDetailProduct = () => {
+    navigation.navigate('DetailProduct');
+  };
+
   const formatCurrency = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
     currency: 'VND',
@@ -14,7 +21,12 @@ const VerticalProduct = ({data}) => {
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.containerPressable}>
+      <Pressable
+        style={({pressed}) => [
+          styles.containerPressable,
+          pressed ? {opacity: 0.5} : null,
+        ]}
+        onPress={() => goToDetailProduct()}>
         <Image source={data.source} style={styles.image} resizeMode="contain" />
         <Text style={styles.promotion} numberOfLines={2}>
           {data.promotion.title}

@@ -20,7 +20,7 @@ const MutableList = ({item, checked}) => {
       <ButtonGroup
         button={item}
         checked={checked}
-        onSelect={value => setSelect(value)}
+        onSelect={item => setSelect(item.value)}
       />
       <MutableCarousel data={data} select={select} />
     </View>

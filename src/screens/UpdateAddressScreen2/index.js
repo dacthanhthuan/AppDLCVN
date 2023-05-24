@@ -11,10 +11,6 @@ import ChooseItem from '../../component/UpdateAddress2/ChooseItem';
 const left = require('../../assets/UpdateAddress/Arrow1.png');
 
 const UpdateAddress2 = () => {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
-
   const [data, setData] = useState([]);
   const [title, setTitle] = useState('');
   const [buttonSelect, setButtonSelect] = useState();

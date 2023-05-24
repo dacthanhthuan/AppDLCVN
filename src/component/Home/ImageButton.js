@@ -1,5 +1,6 @@
 import {Pressable, Image, Text} from 'react-native';
 import {memo} from 'react';
+import {opacity} from 'react-native-redash';
 
 const ImageButton = ({
   containerStyle,
@@ -11,7 +12,9 @@ const ImageButton = ({
   resizeMode,
 }) => {
   return (
-    <Pressable style={containerStyle} onPress={onPress}>
+    <Pressable
+      style={({pressed}) => [containerStyle, pressed ? {opacity: 0.4} : null]}
+      onPress={onPress}>
       <Image
         source={imagesource}
         style={imageStyle}

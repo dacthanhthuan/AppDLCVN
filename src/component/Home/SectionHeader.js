@@ -6,7 +6,11 @@ const SectionHeader = ({title, isMore}) => {
     <View style={styles.categoryTitle}>
       <Text style={styles.textTitle}>{title}</Text>
       {isMore ? (
-        <Pressable style={styles.textPressable}>
+        <Pressable
+          style={({pressed}) => [
+            styles.textPressable,
+            pressed ? {opacity: 0.5} : null,
+          ]}>
           <Text style={styles.textButton}>Xem tất cả</Text>
         </Pressable>
       ) : null}
