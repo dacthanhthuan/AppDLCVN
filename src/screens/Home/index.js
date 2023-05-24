@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import styles from './styles';
 import {SafeAreaView, StatusBar, Text, SectionList} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 
 //Splash screen
 import SplashScreen from 'react-native-splash-screen';
@@ -25,9 +26,16 @@ const Home = () => {
     SplashScreen.hide();
   }, []);
 
+  useFocusEffect(() => {
+    StatusBar.setHidden(true);
+
+    return () => {
+      StatusBar.setHidden(false);
+    };
+  });
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar hidden={true} />
       <SectionList
         showsVerticalScrollIndicator={false}
         style={styles.scrollview}

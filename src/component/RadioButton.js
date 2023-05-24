@@ -1,4 +1,4 @@
-import {Pressable, Text, View} from 'react-native';
+import {Pressable, Text, View, FlatList} from 'react-native';
 import {memo, useState, useEffect} from 'react';
 
 /**
@@ -24,28 +24,35 @@ const RadioButton = ({
   containerStyle,
   buttonStyle,
   checked,
+  extraData,
   activeContButtonStyle,
   inActiveContButtonStyle,
 }) => {
   const [select, setSelect] = useState(
-    checked ? data[checked - 1].value : data[0].value,
+    checked ? data[checked - 1]?.value : data[0]?.value,
   );
 
   useEffect(() => {
-    onSelect ? onSelect(select) : null;
+    onSelect
+      ? data.forEach(item => {
+          item.value === select ? onSelect(item) : null;
+        })
+      : null;
   }, [select]);
 
   return (
-    <View
-      style={[
-        containerStyle,
-        horizontal ? {flexDirection: 'row'} : {flexDirection: 'column'},
-      ]}>
-      {data.map(item => {
-        return (
+    <View>
+      <FlatList
+        style={[
+          containerStyle,
+          horizontal ? {flexDirection: 'row'} : {flexDirection: 'column'},
+        ]}
+        data={data}
+        renderItem={({item}) => (
           <Pressable
             key={item.value}
-            style={[
+            style={({pressed}) => [
+              pressed ? {opacity: 0.3} : null,
               buttonStyle,
               select === item.value
                 ? activeContButtonStyle
@@ -58,8 +65,10 @@ const RadioButton = ({
               <Text>{item.title}</Text>
             )}
           </Pressable>
-        );
-      })}
+        )}
+        removeClippedSubviews={true}
+        extraData={extraData}
+      />
     </View>
   );
 };
