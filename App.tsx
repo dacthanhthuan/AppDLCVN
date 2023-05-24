@@ -53,13 +53,15 @@ import UpdateAddress1 from './src/screens/UpdateAddress1';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-
-
 const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='MainTab'>
+        <Stack.Screen name="DetailOrder" component={DetailOrder} />
+        <Stack.Screen name="DetailProduct" component={DetailProduct} />
+        <Stack.Screen name="Detail_User" component={Detail_User} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="InforTranfer" component={InforTranfer} />
         <Stack.Screen name="WalletScreen" component={WalletScreen} />
         <Stack.Screen name="WalletScreen_2" component={WalletScreen_2} />
