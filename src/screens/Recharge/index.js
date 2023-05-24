@@ -29,7 +29,6 @@ const Recharge = ({navigation}) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Nạp tiền'
-                iconRight={require('../../assets/white.png')}
                 onPressLeft={()=>{navigation.goBack()}}
             />
 
@@ -69,10 +68,10 @@ const Recharge = ({navigation}) => {
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.card, { marginTop: 12 }]}>
+            <TouchableOpacity onPress={()=> navigation.navigate('WithdrawHistory')} style={[styles.card, { marginTop: 12 }]}>
                 <View style={{ flexDirection: 'row' }}>
                     <Image style={styles.iconLeft} source={require('../../assets/Rectangle331.png')} />
-                    <Text style={[styles.textCard, { marginLeft: 8 }]}>Lịch sử rút tiền</Text>
+                    <Text style={[styles.textCard, { marginLeft: 8 }]}>Lịch sử nạp tiền</Text>
                 </View>
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>

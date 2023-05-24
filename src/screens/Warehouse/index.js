@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles";
-import { Image, SafeAreaView, Text, View, FlatList, TouchableOpacity } from 'react-native'
+import { Image, SafeAreaView, Text, View, FlatList } from 'react-native'
 import Input from "../../component/Input";
 import CardProduct from "../../component/CardProduct";
 import Header from "../../component/Header";
@@ -11,7 +11,7 @@ const data = [
         title: "Auslac Lactoferrin (Giá Ưu Đãi)",
         categori: "AUS01",
         price: "1,089,000",
-        image: require('../../assets/Rectangle293.png')
+        image: require('../../assets/Home/Rectangle293.png')
     },
     {
         id: 2,
@@ -32,7 +32,7 @@ const data = [
         title: "DLC Brazil Green Propolis",
         categori: "AUS01",
         price: "1,361,000",
-        image: require('../../assets/dlcbrazil.png')
+        image: require('../../assets/Home/Rectangle374.png')
     },
 ];
 
@@ -90,13 +90,14 @@ const Warehouse = ({ navigation }) => {
                     return (
                         <CardProduct
                             style={index % 2 === 0
-                                ? {marginLeft: 2, marginRight: 22 }
+                                ? {marginLeft: 2, marginRight: 8 }
                                 : {marginRight: 4}}
                             key={item.id}
                             image={item.image}
                             title={item.title}
                             categori={item.categori}
-                            price={item.price} />
+                            price={item.price}
+                            onPress={()=>navigation.navigate('DetailProduct')} />
                     )
                 }}
             />

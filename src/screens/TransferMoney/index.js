@@ -72,7 +72,6 @@ const TransferMoney = ({navigation}) => {
       <Header
         iconLeft={require("../../assets/Arrow1.png")}
         text="Chuyển tiền"
-        iconRight={require("../../assets/white.png")}
         onPressLeft={()=>{navigation.goBack()}}
       />
 
@@ -95,7 +94,7 @@ const TransferMoney = ({navigation}) => {
       <View style={{ alignItems: "center" }}>
         <Button
           text="Tiếp theo"
-          style={{ bottom: -35, width: "90%" }}
+          style={{ bottom: 0, width: "90%" }}
           onPress={openBottomSheet}
         />
       </View>
@@ -136,7 +135,7 @@ const TransferMoney = ({navigation}) => {
           </View>
 
           <View style={{ alignItems: 'center' }}>
-            <Button text='Tiếp tục' style={{ width: '90%', bottom: -50 }} />
+            <Button text='Tiếp tục' style={{ width: '90%', marginTop: 50 }} />
           </View>
 
         </View>

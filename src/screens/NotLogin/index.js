@@ -24,7 +24,7 @@ const NotLogin = ({navigation}) => {
                 text='Thiết lập bảo mật'
                 image={require('../../assets/Rectangle300.png')} />
 
-            <Button style={{ marginTop: 185 }} text='Đăng nhập' onPress={()=> navigation.navigate('Bottom')}/>
+            <Button style={{ marginTop: 185 }} text='Đăng nhập' onPress={()=> navigation.navigate('Login')}/>
 
         </SafeAreaView>
     )

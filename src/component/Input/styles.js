@@ -10,11 +10,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 7,
         width: '100%',
-        paddingHorizontal: 18
+        paddingVertical: 4,
+        paddingHorizontal: 12
     },
     textInput:{
+        flex: 1,
         fontSize: 16,
-        paddingVertical: 12
     },
     icon:{
         width: 23,

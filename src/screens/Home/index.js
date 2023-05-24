@@ -20,6 +20,7 @@ import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 
 const Home = () => {
+  
   useEffect(() => {
     SplashScreen.hide();
   }, []);

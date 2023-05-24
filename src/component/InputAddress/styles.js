@@ -19,10 +19,11 @@ const styles = StyleSheet.create({
         fontWeight: '500'
     },
     input: {
+        width: '100%',
         flexWrap: 'wrap',
         fontSize: 16,
         color: '#000000',
-        marginTop: 20
+        marginTop: 10
     },
 })
 
