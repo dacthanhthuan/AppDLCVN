@@ -76,5 +76,4 @@ const Home = () => {
     </SafeAreaView>
   );
 };
-
 export default React.memo(Home);

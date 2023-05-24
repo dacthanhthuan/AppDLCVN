@@ -14,15 +14,16 @@ public class MainActivity extends ReactActivity {
    * rendering of the component.
    */
   @Override
+  protected String getMainComponentName() {
+    return "AppDLCVN";
+  }
+
+  @Override
   protected void onCreate(Bundle savedInstanceState) {
     SplashScreen.show(this);
     super.onCreate(null);
   }
 
-  @Override
-  protected String getMainComponentName() {
-    return "AppDLCVN";
-  }
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link
