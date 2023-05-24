@@ -1,5 +1,6 @@
 import React from "react";
 import { SafeAreaView, View, Text, Image, useWindowDimensions, FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Style_DetailOrder from "./style";
 import Header from "../../component/Header";
 import Line from "../../component/Line";
@@ -7,12 +8,13 @@ import Information from "../../component/Information";
 import Detail_Input from "../../component/Detail_Input";
 
 const DetailOrder = () => {
+    const navigation = useNavigation();
     const lineWidth = useWindowDimensions().width;
     return (
         <SafeAreaView style={Style_DetailOrder.container}>
-            <Header onPress={() => navigation.goBack()}
-                iconLeft={require('../../assets/imgSupplier/Arrow_1.png')}
-                title={'Chi tiết đơn hàng'} />
+            <Header onPressLeft={() => navigation.goBack()}
+                iconLeft={require('../../assets/Arrow1.png')}
+                text={'Chi tiết đơn hàng'} />
             <View style={Style_DetailOrder.container_1}>
                 <View style={{ backgroundColor: '#005AA9', width: lineWidth, padding: 10, paddingLeft: 20 }}>
                     <Text style={Style_DetailOrder.text_1}>Đơn hàng: #3434654</Text>

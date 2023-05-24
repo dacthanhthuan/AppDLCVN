@@ -6,13 +6,13 @@ import MainWallet from '../../component/Mainwallet';
 import Information from '../../component/Information';
 import Button from '../../component/Button';
 
-const TranferMoneyTwo = () => {
+const TranferMoneyTwo = ({navigation}) => {
     return (
         <SafeAreaView style={Style_TranferMoneyTwo.container}>
-            <Header onPress={() => navigation.goBack()}
-                iconLeft={require('../../assets/imgSupplier/Arrow_1.png')}
-                title={'Chuyển tiền'} />
-            <Text style={Style_TranferMoneyTwo.text_1}>Người nhận</Text>
+            <Header onPressLeft={() => navigation.goBack()}
+                iconLeft={require('../../assets/Arrow1.png')}
+                text={'Chuyển tiền'} />
+            <Text style={[Style_TranferMoneyTwo.text_1, {marginTop: 40}]}>Người nhận</Text>
             <View style={Style_TranferMoneyTwo.viewUser}>
                 <Image style={Style_TranferMoneyTwo.imgUser} source={require('../../assets/imgUser/user_1.png')} />
                 <Text style={Style_TranferMoneyTwo.text_2}>Lê Thành Tín</Text>

@@ -44,6 +44,7 @@ import SearchRecent from './src/screens/SearchRecent';
 import CustomerInformation from './src/screens/CustomerInformation';
 import AddAddress from './src/screens/AddAddress';
 import UpdateAddress1 from './src/screens/UpdateAddress1';
+import Sales_3 from './src/screens/Sales/Sales_3';
 
 
 
@@ -73,6 +74,24 @@ const App = () => {
         <Stack.Screen name="CustomerInformation" component={CustomerInformation} />
         <Stack.Screen name="UpdateAddress1" component={UpdateAddress1} />
         <Stack.Screen name="AddAddress" component={AddAddress} />
+        <Stack.Screen name="CreateOrder" component={CreateOrder} />
+        <Stack.Screen name="DetailOrder" component={DetailOrder} />
+        <Stack.Screen name="DetailProduct" component={DetailProduct} />
+        <Stack.Screen name="Detail_User" component={Detail_User} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="InforTranfer" component={InforTranfer} />
+        <Stack.Screen name="WalletScreen" component={WalletScreen} />
+        <Stack.Screen name="WalletScreen_2" component={WalletScreen_2} />
+        <Stack.Screen name="OverView" component={OverView} />
+        <Stack.Screen name="Payment" component={Payment} />
+        <Stack.Screen name="RechargeHistory" component={RechargeHistory} />
+        <Stack.Screen name="Sales" component={Sales} />
+        <Stack.Screen name="Sales_2" component={Sales_2} />
+        <Stack.Screen name="Sales_3" component={Sales_3} />
+        <Stack.Screen name="TranferMoneyTwo" component={TranferMoneyTwo} />
+        <Stack.Screen name="Walk" component={Walk} />
+        <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
         <Stack.Screen name='MainTab' component={MainTab} />
       </Stack.Navigator>
     </NavigationContainer>
@@ -84,7 +103,7 @@ const App = () => {
 //   return (
 //     <Tab.Navigator screenOptions={{ headerShown: false }}>
 //       <Tab.Screen name="Home" component={Home} />
-      
+
 
 //     </Tab.Navigator>
 //   )
@@ -95,8 +114,8 @@ const MainTab = () => {
     <Tab.Navigator tabBar={(prop) => <MyTabBar {...prop} />} screenOptions={tabOptions}>
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Warehouse" component={Warehouse} />
-      <Tab.Screen name="Supplier" component={Supplier} />
-      <Tab.Screen name="Notification" component={Home} />
+      <Tab.Screen name="Supplier" component={TransferMoney} />
+      <Tab.Screen name="Notification" component={TeamThree} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   )

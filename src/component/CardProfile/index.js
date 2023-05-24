@@ -2,7 +2,7 @@ import React from "react";
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import styles from "./styles";
 
-const CardProfile = ({ text, image, id, style }) => {
+const CardProfile = ({ text, image, id, style, onPress }) => {
     return (
         <View style={[styles.container, style]}>
             <View style={{ flexDirection: 'row' }}>
@@ -12,7 +12,7 @@ const CardProfile = ({ text, image, id, style }) => {
                     <Text style={styles.id}>{id}</Text>
                 </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onPress}>
                 <Text style={styles.textProfile}>Xem hồ sơ</Text>
             </TouchableOpacity>
         </View>

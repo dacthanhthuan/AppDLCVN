@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles";
-import { Image, SafeAreaView, Text, View, FlatList, TouchableOpacity } from 'react-native'
+import { Image, SafeAreaView, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
 import Input from "../../component/Input";
 import CardProduct from "../../component/CardProduct";
 import Header from "../../component/Header";
@@ -37,7 +38,6 @@ const data = [
 ];
 
 const Warehouse = ({ navigation }) => {
-
     const [filteredUser, setFilteredUser] = useState(data);
     const [keywork, setKeywork] = useState('');
 
@@ -96,7 +96,8 @@ const Warehouse = ({ navigation }) => {
                             image={item.image}
                             title={item.title}
                             categori={item.categori}
-                            price={item.price} />
+                            price={item.price}
+                            onPress={() => navigation.navigate('DetailProduct')} />
                     )
                 }}
             />

@@ -8,10 +8,10 @@ import Button from "../../component/Button";
 const InforTranfer = () => {
     return (
         <SafeAreaView style={Style_InforTranfer.container}>
-            <Header onPress={() => navigation.goBack()}
-                iconLeft={require('../../assets/imgSupplier/Arrow_1.png')}
-                title={'Thông tin chuyển khoản'} />
-            <Text style={[Style_InforTranfer.text_1, { marginBottom: 15 }]}>Thực hiện chuyển khoản theo thông tin dưới đây để hoàn tất nạp tiền</Text>
+            <Header onPressLeft={() => navigation.goBack()}
+                iconLeft={require('../../assets/Arrow1.png')}
+                text={'Thông tin chuyển khoản'} />
+            <Text style={[Style_InforTranfer.text_1, { marginBottom: 15, marginTop: 20 }]}>Thực hiện chuyển khoản theo thông tin dưới đây để hoàn tất nạp tiền</Text>
             <View style={Style_InforTranfer.viewborder}>
                 <View style={{ marginTop: 10 }}>
                     <Text style={Style_InforTranfer.text_1}>Tên chủ tài khoản</Text>

@@ -10,13 +10,15 @@ const Detail_User = () => {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={Style_User.container}>
-            <Header onPress={() => navigation.goBack()} title={'Chi tiết tài khoản'} iconLeft={require('../../assets/imgSupplier/Arrow_1.png')} />
+            <Header onPressLeft={() => navigation.goBack()} text={'Chi tiết tài khoản'} iconLeft={require('../../assets/Arrow1.png')} />
             <ScrollView style={Style_User.scrollview} showsVerticalScrollIndicator={false}>
-                <TouchableOpacity style={Style_User.container_1}>
-                    <Image style={Style_User.imgUser} source={require('../../assets/imgSupplier/Ellipse_88.png')} />
-                    <Image style={Style_User.iconCamera} source={require('../../assets/imgSupplier/Rectangle_310.png')} />
+                <View style={Style_User.container_1}>
+                    <TouchableOpacity>
+                        <Image style={Style_User.imgUser} source={require('../../assets/imgSupplier/Ellipse_88.png')} />
+                        <Image style={Style_User.iconCamera} source={require('../../assets/imgSupplier/Rectangle_310.png')} />
+                    </TouchableOpacity>
                     <Text style={Style_User.nameUser}>Nguyễn Thái Năng</Text>
-                </TouchableOpacity>
+                </View>
                 <Detail_Input text={'Mã NPP'} placeholder={'Chưa có thông tin'} />
                 <Detail_Input text={'Điện thoại'} placeholder={'Chưa có thông tin'} />
                 <Detail_Input text={'Tên đăng nhập'} placeholder={'Chưa có thông tin'} />
@@ -43,7 +45,7 @@ const Detail_User = () => {
                 <Detail_Input text={'Địa chỉ tạm trú(thuờng trú hoặc tạm trú trong trường hợp không cư trú tại nơi thường trú):'} placeholder={'Chưa có thông tin'} />
                 <Detail_Input text={'Số hợp đồng người bảo trợ'} placeholder={'Chưa có thông tin'} />
                 <View style={{ paddingLeft: 30, paddingRight: 30 }}>
-                    <Button style={{ marginTop: 30, }} text={'Cập nhật'} />
+                    <Button onPress={() => navigation.navigate('Profile')} style={{ marginTop: 30, }} text={'Cập nhật'} />
                 </View>
             </ScrollView>
         </SafeAreaView>

@@ -69,7 +69,6 @@ const Style_Detail = StyleSheet.create({
         color: '#000000',
     },
     container_7: {
-        width: '100%',
         flexDirection: "row",
         marginTop: 10,
         justifyContent: "space-between",

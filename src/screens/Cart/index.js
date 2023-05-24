@@ -80,7 +80,7 @@ const Cart = ({ navigation }) => {
                     <Text style={{ fontSize: 16, color: '#000000', marginLeft: 10, fontWeight: '500' }}>2,500,000 đ</Text>
                 </View>
             </View>
-            <Button text='Tạo đơn' onPress={NotLogin} />
+            <Button text='Tạo đơn' onPress={() => navigation.navigate('CreateOrder')} />
 
         </SafeAreaView>
     )

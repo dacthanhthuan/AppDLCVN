@@ -42,6 +42,7 @@ const Style_CreateOrder = StyleSheet.create({
     flatlist: {
         flexDirection: 'row',
         marginTop: 20,
+        paddingHorizontal: 15,
     },
     view_3: {
         marginLeft: 10,

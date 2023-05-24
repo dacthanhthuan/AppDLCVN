@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+// import React from "react";
 import { Pressable, View } from "react-native";
 import styles from "./styles";
 
@@ -16,12 +17,7 @@ const Checkbox_1 = ({ checked, onPress, check }) => {
 
 export default React.memo(Checkbox_1);
 
-// import React, { useState } from "react";
-// import { Pressable, View } from "react-native";
 import style from "./style";
-
-
-
 export const Checkbox_2 = () => {
     const [ischecked, setChecked] = useState(false);
     const check1 = () => {

@@ -18,6 +18,7 @@ const Style_User = StyleSheet.create({
         width: 50,
         height: 50,
         marginTop: -80,
+        alignSelf: 'center',
     },
     nameUser: {
         color: '#005AA9',

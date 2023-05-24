@@ -29,15 +29,15 @@ const CreateOrder = () => {
 
     return (
         <SafeAreaView style={Style_CreateOrder.container}>
-            <Header onPress={() => navigation.goBack()} iconLeft={require('../../assets/imgSupplier/Arrow_1.png')} title={'Tạo đơn hàng'} />
-            <FlatList
+            <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../assets/Arrow1.png')} text={'Tạo đơn hàng'} />
+            <FlatList style={{ width: lineWidth, alignSelf: "center" }}
                 data={data_product}
                 renderItem={render_item}
                 keyExtractor={(item, title) => title.toString()}
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={(
-                    <View>
-                        <View style={{ alignItems: "center", marginTop: 15, marginBottom: 15, }}>
+                    <View style={Style_CreateOrder.container}>
+                        <View style={{ alignItems: "center", marginBottom: 15, }}>
                             <Image style={{ width: lineWidth }} source={require('../../assets/imgOder/Group_203.png')} />
                         </View>
                         <View style={{ flexDirection: "row" }}>
@@ -69,7 +69,7 @@ const CreateOrder = () => {
                     </View>
                 )}
                 ListFooterComponent={(
-                    <View>
+                    <View style={Style_CreateOrder.container}>
                         <Line />
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <Image style={Style_CreateOrder.icon} source={require('../../assets/imgOder/Rectangle_231.png')} />
@@ -120,7 +120,7 @@ const CreateOrder = () => {
                             </View>
                         </View>
                         <View style={{ flex: 1, paddingLeft: 30, paddingRight: 30, marginTop: 70, }}>
-                            <Button text={'Tiến hành thanh toán'} />
+                            <Button onPress={() => navigation.navigate('Payment')} text={'Tiến hành thanh toán'} />
                         </View>
                     </View>
                 )}

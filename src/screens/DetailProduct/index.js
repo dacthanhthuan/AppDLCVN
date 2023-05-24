@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Style_Detail from "./style";
 import { useNavigation } from "@react-navigation/native";
@@ -9,18 +9,30 @@ import Line from "../../component/Line";
 
 const DetailProduct = () => {
     const navigation = useNavigation();
+    const [quantity, setQuantity] = useState(1);
+    // Tăng số lượng
+    const increase = () => {
+        setQuantity(quantity + 1);
+    };
+
+    // Giảm số lượng
+    const reduce = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
 
     return (
         <SafeAreaView style={Style_Detail.container}>
-            <Header iconLeft={require('../../assets/imgSupplier/Arrow_1.png')} title={'Chi tiêt sản phẩm'} />
+            <Header onPressLeft={()=>navigation.goBack()} iconLeft={require('../../assets/Arrow1.png')} text={'Chi tiêt sản phẩm'} />
             <View style={{ alignItems: "center", marginTop: 15 }}>
                 <Image style={Style_Detail.imgProduct} source={require('../../assets/imgDetail/Rectangle_91.png')} />
                 <View style={Style_Detail.container_1}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={reduce}>
                         <Image style={Style_Detail.imgIconMinus} source={require('../../assets/imgDetail/minus.png')} />
                     </TouchableOpacity>
-                    <Text style={Style_Detail.textquantity}>1</Text>
-                    <TouchableOpacity>
+                    <Text style={Style_Detail.textquantity}>{quantity}</Text>
+                    <TouchableOpacity onPress={increase}>
                         <Image style={Style_Detail.imgIconPlus} source={require('../../assets/imgDetail/plus.png')} />
                     </TouchableOpacity>
                 </View>
@@ -45,13 +57,13 @@ const DetailProduct = () => {
                 <Text style={Style_Detail.text_1}>Sản phẩm dựa trên công nghệ hiện đại, môi trường khép kín. Với tiêu chí “an toàn -  sạch - đẹp”, được sản xuất hoàn toàn từ những nguyên liệu tự nhiên an toàn cho sức khỏe, quy trình làm việc sạch sẽ, đảm bảo an toàn vệ sinh thực phẩm, thiết kế bao bì mẫu mã đẹp mắt.</Text>
             </View>
             <View style={Style_Detail.container_7}>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                     <View style={Style_Detail.container_8}>
                         <Image style={Style_Detail.imgCart} source={require('../../assets/imgDetail/Vector.png')} />
                     </View>
                 </TouchableOpacity>
                 <View style={{ flex: 1, paddingLeft: 15, }}>
-                    <Button text={'Chọn mua'} />
+                    <Button onPress={() =>navigation.navigate('CreateOrder')} text={'Chọn mua'} style={{marginTop: 0}}/>
                 </View>
             </View>
         </SafeAreaView>

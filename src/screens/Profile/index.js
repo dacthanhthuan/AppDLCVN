@@ -17,6 +17,7 @@ const Profile = ({navigation}) => {
                     image={require('../../assets/Rectangle312.png')}
                     text='Nguyễn Thái Năng'
                     id={'331550479'}
+                    onPress={() => navigation.navigate('Detail_User')}
                 />
 
                 <Text style={styles.title}>Quản lí ví</Text>
@@ -62,6 +63,7 @@ const Profile = ({navigation}) => {
                 <InfoCard
                     image={require('../../assets/Rectangle298.png')}
                     text='Danh sách đội nhóm'
+                    onPress={() => navigation.navigate('TeamThree')}
                 />
                 <InfoCard
                     image={require('../../assets/Rectangle299.png')}

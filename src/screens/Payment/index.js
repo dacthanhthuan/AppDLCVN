@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, Image, useWindowDimensions } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Style_Payment from "./style";
 import Header from "../../component/Header";
 import Information from "../../component/Information";
-import Checkbox from "../../component/Checkbox";
+import Checkbox, { Checkbox_2 } from "../../component/Checkbox";
 import Button from "../../component/Button";
 
 const Payment = () => {
+    const navigation = useNavigation();
     const lineWidth = useWindowDimensions().width;
     return (
         <SafeAreaView style={Style_Payment.container}>
-            <Header onPress={() => navigation.goBack()}
-                iconLeft={require('../../assets/imgSupplier/Arrow_1.png')}
-                title={'Xác nhận thanh toán'} />
+            <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../assets/Arrow1.png')} text={'Xác nhận thanh toán'} />
             <View style={Style_Payment.container_1}>
                 <View style={{ backgroundColor: '#005AA9', width: lineWidth, padding: 10, paddingLeft: 20 }}>
                     <Text style={Style_Payment.text_1}>Đơn hàng: #3434654</Text>
@@ -52,35 +52,35 @@ const Payment = () => {
                                 <View style={Style_Payment.viewborder}><Text style={Style_Payment.text_3}>VNĐ</Text></View>
                                 <Text style={Style_Payment.text_4}>Thanh toán bằng Ví VNĐ</Text>
                             </View>
-                            <Checkbox />
+                            <Checkbox_2 />
                         </View>
                         <View style={Style_Payment.viewpayment}>
                             <View style={{ flexDirection: "row" }}>
                                 <View style={Style_Payment.viewborder}><Text style={Style_Payment.text_3}>Point</Text></View>
                                 <Text style={Style_Payment.text_4}>Thanh toán bằng Ví điểm</Text>
                             </View>
-                            <Checkbox />
+                            <Checkbox_2 />
                         </View>
                         <View style={Style_Payment.viewpayment}>
                             <View style={{ flexDirection: "row", }}>
                                 <Image style={Style_Payment.icon_2} source={require('../../assets/imgOder/Momo.png')} />
                                 <Text style={Style_Payment.text_4}>Thanh toán bằng Ví Momo</Text>
                             </View>
-                            <Checkbox />
+                            <Checkbox_2 />
                         </View>
                     </View>
                 </View>
             </View>
-            <View style={{ padding: 15, flexDirection: 'row', justifyContent: "space-between" }}>
-                <View style={{ flexDirection: "row", width: '94%' }}>
+            <View style={{ padding: 15, flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
+                <View style={{ flexDirection: "row", width: '94%', }}>
                     <Image style={Style_Payment.icon_1} source={require('../../assets/imgOder/Rectangle_239.png')} />
                     <Text style={[Style_Payment.title_1, { marginLeft: 20 }]}>Thanh toán bằng Ví Momo</Text>
                 </View>
-                <Checkbox />
+                <Checkbox_2 />
             </View>
             <View style={{ flex: 1, paddingLeft: 30, paddingRight: 30, }}>
                 <View style={{ flex: 1 }}></View>
-                <Button text={'Xác nhận thanh toán'} />
+                <Button onPress={() => navigation.navigate('SuccPayment')} text={'Xác nhận thanh toán'} />
             </View>
         </SafeAreaView>
     )

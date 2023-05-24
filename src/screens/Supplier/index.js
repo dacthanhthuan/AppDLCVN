@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, SafeAreaView, Text, TextInput, View, FlatList } from 'react-native';
+import { Image, SafeAreaView, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
 import StyleSupplier from './style';
 import data_supplier from '../../data/data_supplier/data';
 import Search from '../../component/Search';
@@ -27,8 +27,10 @@ const Supplier = () => {
         <SafeAreaView style={StyleSupplier.container}>
             <Text style={StyleSupplier.title}>Nhà cung cấp</Text>
             <View style={StyleSupplier.container_1}>
-                <Search placeholder={'Tìm nhà cung cấp'}/>
-                <Image style={StyleSupplier.imgSetting} source={require('../../assets/imgSupplier/Rectangle_313.png')} />
+                <Search placeholder={'Tìm nhà cung cấp'} />
+                <TouchableOpacity>
+                    <Image style={StyleSupplier.imgSetting} source={require('../../assets/imgSupplier/Rectangle_313.png')} />
+                </TouchableOpacity>
             </View>
             <View style={{ marginTop: 15 }}>
                 <FlatList

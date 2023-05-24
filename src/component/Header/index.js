@@ -38,7 +38,7 @@
 // export default React.memo(Header);
 
 import React from 'react';
-import {TouchableOpacity, Text, View, Image} from 'react-native';
+import { TouchableOpacity, Text, View, Image } from 'react-native';
 
 const Header = ({
   text,
@@ -67,7 +67,7 @@ const Header = ({
 
 export default React.memo(Header);
 
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     width: '100%',
