@@ -59,11 +59,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='MainTab'>
-        <Stack.Screen name="DetailOrder" component={DetailOrder} />
-        <Stack.Screen name="DetailProduct" component={DetailProduct} />
-        <Stack.Screen name="Detail_User" component={Detail_User} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="InforTranfer" component={InforTranfer} />
         <Stack.Screen name="WalletScreen" component={WalletScreen} />
         <Stack.Screen name="WalletScreen_2" component={WalletScreen_2} />
@@ -77,25 +73,11 @@ const App = () => {
         <Stack.Screen name="Walk" component={Walk} />
         <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
         <Stack.Screen name="NotLogin" component={NotLogin} />
-        <Stack.Screen name='MainTab' component={MainTab} />
-        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="DetailOrder" component={DetailOrder} />
         <Stack.Screen name="DetailProduct" component={DetailProduct} />
         <Stack.Screen name="Detail_User" component={Detail_User} />
         <Stack.Screen name="CreateOrder" component={CreateOrder} />
-        <Stack.Screen name="InforTranfer" component={InforTranfer} />
-        <Stack.Screen name="WalletScreen" component={WalletScreen} />
-        <Stack.Screen name="WalletScreen_2" component={WalletScreen_2} />
-        <Stack.Screen name="OverView" component={OverView} />
-        <Stack.Screen name="Payment" component={Payment} />
-        <Stack.Screen name="RechargeHistory" component={RechargeHistory} />
-        <Stack.Screen name="Sales" component={Sales} />
-        <Stack.Screen name="Sales_2" component={Sales_2} />
-        <Stack.Screen name="Sales_3" component={Sales_3} />
-        <Stack.Screen name="TranferMoneyTwo" component={TranferMoneyTwo} />
-        <Stack.Screen name="Walk" component={Walk} />
-        <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="NoOrders" component={NoOrders} />
         <Stack.Screen name="Team" component={Team} />
