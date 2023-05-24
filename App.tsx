@@ -10,7 +10,6 @@ import CreateOrder from './src/screens/CreateOrder';
 import DetailOrder from './src/screens/DetailOrder';
 import Payment from './src/screens/Payment';
 import InforTranfer from './src/screens/InforTranfer';
-import Information from './src/component/Information';
 import TranferMoneyTwo from './src/screens/TranferMoneyTwo';
 import WithdrawHistory from './src/screens/WithdrawHistory';
 import RechargeHistory from './src/screens/RechargeMoney';
