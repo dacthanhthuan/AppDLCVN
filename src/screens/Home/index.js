@@ -16,7 +16,7 @@ import CategoryItem from '../../component/Home/CategoryItem';
 import TrophyOf3 from '../../component/Home/TrophyOf3';
 import SlideHalf from '../../component/Home/SlideHalf';
 import CarouselProduct from '../../component/Home/CarouselProduct';
-import Header from '../../component/Home/Header';
+import Header from '../../component/Home/HeaderTitle';
 import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 

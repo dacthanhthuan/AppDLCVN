@@ -44,14 +44,14 @@ const CustomerInformation = ({ navigation }) => {
                             <CardAddress
                                 numberAddress={item.numberAddress}
                                 address={item.address}
-                                onPress={()=>navigation.navigate('UpdateAddress1')} 
+                                onPress={()=>navigation.navigate('UpdateAddress2')} 
                             />
                         </>
                     )
                 }}
                 ListFooterComponent={(
                     <TouchableOpacity onPress={()=>navigation.navigate('AddAddress')} style={styles.addAdress}>
-                        <Image source={require('../../assets/Rectangle268.png')} />
+                        <Image source={require('../../assets/Rectangle268.png')} style={{width: 20, height: 20}} resizeMode='contain'/>
                         <Text style={styles.textBlue}>Thêm địa chỉ mới</Text>
                     </TouchableOpacity>
                 )}

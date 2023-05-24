@@ -1,7 +1,7 @@
 import React from "react";
 import { SafeAreaView, View, Text, Image, useWindowDimensions, FlatList, ScrollView, } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Header from "../../component/Header";
+import Header from "../../component/Header/index";
 import Style_CreateOrder from "./style";
 import data_product from '../../data/products/data'
 import Detail_Input from "../../component/Detail_Input";

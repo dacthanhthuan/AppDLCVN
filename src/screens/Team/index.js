@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./styles";
 import { FlatList, SafeAreaView } from "react-native";
-import Header from "../../component/Header";
+import Header from "../../component/Header/index";
 import CardTeam from "../../component/CardTeam";
 
 const data = [

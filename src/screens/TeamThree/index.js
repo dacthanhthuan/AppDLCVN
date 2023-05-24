@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SafeAreaView, TouchableOpacity, View, Text, FlatList, Image } from "react-native";
 import styles from "./styles";
-import Header from "../../component/Header";
+import Header from "../../component/Header/index";
 import CardDistributor from "../../component/CardDistributor";
 import PurchaseHistory from "../../component/PurchaseHistory";
 import CardTeamThree from "../../component/CardTeamThree";

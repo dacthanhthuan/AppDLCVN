@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./styles";
 import { SafeAreaView, Text, View, Image } from "react-native";
-import Header from "../../component/Header";
+import Header from "../../component/Header/index";
 import CardSurplus from "../../component/CardSurplus";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../../component/Button";

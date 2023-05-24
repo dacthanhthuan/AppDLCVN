@@ -8,7 +8,7 @@ const logo = require('../../assets/Home/Rectangle2.png');
 const cart = require('../../assets/Home/Vector.png');
 const searchSetting = require('../../assets/Home/Rectangle313.png');
 
-const Header = () => {
+const Header_1 = () => {
   const navigation = useNavigation();
 
   const goToCart = () => {
@@ -38,7 +38,7 @@ const Header = () => {
   );
 };
 
-export default memo(Header);
+export default memo(Header_1);
 
 const styles = StyleSheet.create({
   logo: {

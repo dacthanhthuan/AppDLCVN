@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import Style_Detail from "./style";
 import { useNavigation } from "@react-navigation/native";
 import Button from "../../component/Button";
-import Header from "../../component/Header";
+import Header from "../../component/Header/index";
 import Information from "../../component/Information";
 import Line from "../../component/Line";
 
@@ -24,8 +24,7 @@ const DetailProduct = () => {
 
     return (
         <SafeAreaView style={Style_Detail.container}>
-
-            <Header iconLeft={require('../../assets/imgSupplier/Arrow_1.png')} title={'Chi tiêt sản phẩm'} />
+            <Header onPressLeft={() => navigation.goBack()} text={'Chi tiết tài khoản'} iconLeft={require('../../assets/Arrow1.png')} />
             <View style={{ alignItems: "center", marginTop: 15 }}>
                 <Image style={Style_Detail.imgProduct} source={require('../../assets/imgDetail/Rectangle_91.png')} />
                 <View style={Style_Detail.container_1}>
@@ -64,7 +63,7 @@ const DetailProduct = () => {
                     </View>
                 </TouchableOpacity>
                 <View style={{ flex: 1, paddingLeft: 15, }}>
-                    <Button onPress={() =>navigation.navigate('CreateOrder')} text={'Chọn mua'} style={{marginTop: 0}}/>
+                    <Button onPress={() => navigation.navigate('CreateOrder')} text={'Chọn mua'} style={{ marginTop: 0 }} />
                 </View>
             </View>
         </SafeAreaView>

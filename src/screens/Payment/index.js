@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { SafeAreaView, View, Text, Image, useWindowDimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Style_Payment from "./style";
-import Header from "../../component/Header";
+import Header from "../../component/Header/index";
 import Information from "../../component/Information";
-import Checkbox, { Checkbox_2 } from "../../component/Checkbox";
+import Checkbox_2 from "../../component/Checkbox";
 import Button from "../../component/Button";
 
 const Payment = () => {

@@ -10,7 +10,7 @@ import ChooseItem from '../../component/UpdateAddress2/ChooseItem';
 
 const left = require('../../assets/UpdateAddress/Arrow1.png');
 
-const UpdateAddress2 = () => {
+const UpdateAddress2 = ({navigation}) => {
   const [data, setData] = useState([]);
   const [title, setTitle] = useState('');
   const [buttonSelect, setButtonSelect] = useState();
@@ -53,6 +53,7 @@ const UpdateAddress2 = () => {
         containerStyle={styles.header}
         text={'Sửa địa chỉ'}
         iconLeft={left}
+        onPressLeft={() => navigation.goBack()}
       />
       <Text style={styles.title}>Chọn khu vực</Text>
       <CheckBoxGroup
