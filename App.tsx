@@ -5,6 +5,7 @@ import { BottomTabBarProps, BottomTabNavigationOptions, createBottomTabNavigator
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from './src/screens/Home';
+import UpdateAddress2 from './src/screens/UpdateAddressScreen2';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -12,8 +13,9 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='MainTab'>
         <Stack.Screen name='MainTab' component={MainTab} />
+        <Stack.Screen name='UpdateAddress2' component={UpdateAddress2} />
       </Stack.Navigator>
     </NavigationContainer>
   )

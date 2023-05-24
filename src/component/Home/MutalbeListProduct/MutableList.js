@@ -1,6 +1,6 @@
 import Carousel from '../../Carousel';
-import {StyleSheet, Image, View, Text, Pressable} from 'react-native';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../../global';
+import {StyleSheet, View} from 'react-native';
+import {WINDOW_WIDTH} from '../../../global';
 import {useState, useEffect} from 'react';
 import ButtonGroup from './ButtonGroup';
 import VerticalProduct from './VerticalProduct';
