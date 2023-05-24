@@ -6,7 +6,7 @@ const CardTeam = ({ name, phone }) => {
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row' }}>
-                <Image style={styles.icon} source={require('../../assets/Rectangle267.png')} />
+                <Image style={styles.icon} source={require('../../assets/Rectangle278.png')} />
                 <View style={{ flexDirection: 'column', marginLeft: 12 }}>
                     <Text style={styles.name}>{name}</Text>
                     <Text style={styles.phone}>+{phone}</Text>

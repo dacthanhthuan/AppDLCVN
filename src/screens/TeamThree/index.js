@@ -319,7 +319,7 @@ const TeamThree = ({ navigation }) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Đội nhóm'
-                onPressLeft={() => { navigation.goBack() }}
+                onPressLeft={()=>{navigation.goBack()}}
             />
 
             <View style={styles.listTab}>

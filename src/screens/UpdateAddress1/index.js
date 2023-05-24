@@ -21,7 +21,6 @@ const UpdateAddress1 = ({ navigation }) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Sửa địa chỉ'
-                iconRight={require('../../assets/white.png')}
                 onPressLeft={() => { navigation.goBack() }}
             />
 
@@ -47,14 +46,14 @@ const UpdateAddress1 = ({ navigation }) => {
                 <TypeAddress text='Khác' check={check} onPress={handleTypeAddressPress} />
             </View>
 
-            <View style={{ alignItems: 'center', bottom: -20 }}>
+            <View style={{ alignItems: 'center', bottom: -60 }}>
                 <Button text='Cập nhật'
                     style={{ width: '90%' }} onPress={() => navigation.navigate('CustomerInformation')} />
                 <Button
                     text='Xóa khách hàng'
                     style={{ width: '90%', backgroundColor: '#FFFFFF', borderColor: '#E20B0B', borderWidth: 1, }}
                     styleText={{ color: '#E20B0B', fontWeight: '500' }}
-                    onPress={() => navigation.navigate('CustomerInformation')} />
+                    onPress={() => navigation.z('CustomerInformation')} />
             </View>
 
         </SafeAreaView >

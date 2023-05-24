@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.4,
     justifyContent: 'center',
     borderColor: '#8B8787',
+    height: '100%',
   },
 
   imageButton: {

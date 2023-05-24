@@ -28,7 +28,6 @@ const CustomerInformation = ({ navigation }) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Thông tin khách hàng'
-                iconRight={require('../../assets/white.png')}
                 onPressLeft={() => { navigation.goBack() }}
             />
 

@@ -20,7 +20,6 @@ const AddAddress = ({ navigation }) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Thêm địa chỉ'
-                iconRight={require('../../assets/white.png')}
                 onPressLeft={() => { navigation.goBack() }}
             />
 
@@ -51,7 +50,7 @@ const AddAddress = ({ navigation }) => {
             </View>
 
             <View style={{ alignItems: 'center' }}>
-                <Button text='Thêm' style={{ width: '90%', bottom: -140 }} />
+                <Button text='Thêm' style={{ width: '90%', bottom: -130 }} />
             </View>
 
         </SafeAreaView >

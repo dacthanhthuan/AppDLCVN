@@ -47,7 +47,6 @@ const Cart = ({ navigation }) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Giỏ hàng'
-                iconRight={require('../../assets/white.png')}
                 onPressLeft={() => { navigation.goBack() }}
             />
 

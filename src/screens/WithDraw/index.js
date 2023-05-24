@@ -21,7 +21,6 @@ const WithDraw = ({navigation}) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Rút tiền'
-                iconRight={require('../../assets/white.png')}
                 onPressLeft={()=>{navigation.goBack()}}
             />
 

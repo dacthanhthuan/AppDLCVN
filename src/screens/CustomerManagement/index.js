@@ -43,7 +43,6 @@ const CustomerManagement = ({navigation}) => {
                 <Header
                     iconLeft={require('../../assets/Arrow1.png')}
                     text='Quản lý khách hàng'
-                    iconRight={require('../../assets/white.png')}
                     onPressLeft={()=>{navigation.goBack()}}
                 />
                 <Input

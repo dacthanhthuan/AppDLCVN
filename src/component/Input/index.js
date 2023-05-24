@@ -12,7 +12,7 @@ const Input = ({ placeholder, value, onChangeText }) => {
                 placeholder={placeholder}
                 value={value}></TextInput>
             <TouchableOpacity>
-                <Image style={styles.icon} source={require('../../assets/ei_search.png')} />
+                <Image style={styles.icon} source={require('../../assets/Home/ei_search.png')} />
             </TouchableOpacity>
         </View>
     )

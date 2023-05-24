@@ -23,7 +23,7 @@ const CardMember = ({ name, image, phone, style }) => {
             </View>
             <TouchableOpacity style={styles.checkContainer} onPress={onPressCheck}>
                 {isCheck ? (
-                    <Image style={{ width: 6.25, height: 4.17 }} resizeMode="contain" source={require('../../assets/check.png')} />
+                    <Image style={{ width: 12, height: 12 }} resizeMode="contain" source={require('../../assets/check.png')} />
                 ) : null}
             </TouchableOpacity>
         </View>

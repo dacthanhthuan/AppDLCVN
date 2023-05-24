@@ -28,10 +28,12 @@ const Profile = ({navigation}) => {
                 <ImageBackground style={styles.rowTranfers} resizeMode='contain' source={require('../../assets/Rectangle303_1.png')} >
                     <TranfersMoney
                         image={require('../../assets/Rectangle303.png')}
-                        text='Quét mã' />
+                        text='Quét mã' 
+                        onPress={()=>navigation.navigate('UpdateAddress1')} />
                     <TranfersMoney
                         image={require('../../assets/Rectangle304.png')}
-                        text='Nạp ví' />
+                        text='Nạp ví'
+                        onPress={()=>navigation.navigate('Recharge')} />
                     <TranfersMoney
                         image={require('../../assets/Rectangle305.png')}
                         text='Chuyển tiền' 

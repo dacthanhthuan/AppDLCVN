@@ -73,7 +73,6 @@ const SearchTeam = ({navigation}) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Đội nhóm'
-                iconRight={require('../../assets/white.png')}
                 onPressLeft={()=>{navigation.goBack()}}
             />
 

@@ -17,7 +17,7 @@ const Login = () => {
                     <Text_Input placeholder='Số điện thoại' />
                     <Text_Input placeholder='Mật khẩu' />
                 </View>
-                <Button onPress={() => navigation.navigate('Register')} text={'Đăng nhập'} />
+                <Button onPress={() => navigation.navigate('MainTab')} text={'Đăng nhập'} />
                 <View style={Style_Login.container_3}>
                     <TouchableOpacity>
                         <Text style={Style_Login.textForgotpass}>Quên mật khẩu?</Text>
