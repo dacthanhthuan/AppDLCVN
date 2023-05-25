@@ -19,9 +19,9 @@ import CarouselProduct from '../../component/Home/CarouselProduct';
 import Header from '../../component/Home/HeaderTitle';
 import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
+import CarouselSlide from '../../component/Home/CarouselSlide';
 
 const Home = () => {
-  
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -53,14 +53,19 @@ const Home = () => {
         renderItem={({item, section}) => {
           switch (true) {
             case section.type.startsWith('slide'):
-              return section.type.includes('/half') ? (
-                <SlideHalf item={item} />
-              ) : (
-                <SlideLargest
-                  slide={item.source}
-                  backgroundColor={item.backgroundColor}
-                />
-              );
+              switch (true) {
+                case section.type.includes('/half'):
+                  return <SlideHalf item={item} />;
+                case section.type.includes('/carousel'):
+                  return <CarouselSlide data={item} />;
+                default:
+                  return (
+                    <SlideLargest
+                      slide={item.source}
+                      backgroundColor={item.backgroundColor}
+                    />
+                  );
+              }
             case section.type.startsWith('category'): {
               return <CategoryItem item={item} />;
             }
