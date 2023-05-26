@@ -16,9 +16,9 @@
 //     setAgreed(value => !value);
 //   };
 
- 
 
- 
+
+
 
 //   return (
 //     <SafeAreaView style={styles.container}>
@@ -60,7 +60,7 @@
 //       <Button text='Tạo đơn' onPress={() => navigation.navigate('CreateOrder')} />
 
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   View,
@@ -73,7 +73,7 @@ import styles from './styles';
 import ProductCart from '../../component/ProductCart';
 import Checkbox from '../../component/Checkbox';
 import Button from '../../component/Button';
-import {Swipeable} from 'react-native-gesture-handler';
+import { Swipeable } from 'react-native-gesture-handler';
 import Header from '../../component/Header';
 
 {/* const data = [
@@ -91,19 +91,19 @@ import Header from '../../component/Header';
   },
 ]; */}
 
-const Cart = ({navigation, route}) => {
+const Cart = ({ navigation, route }) => {
 
-const { quantity, item } = route?.params || {};
+  const { quantity, item } = route?.params || {};
 
-console.log("item", item);
-console.log("quantity", quantity);
-const [productData, setProductData] = useState([item]);
+  console.log("item", item);
+  console.log("quantity", quantity);
+  const [productData, setProductData] = useState(route?.params ? [item] : []);
 
 
   const [allCheck, setallCheck] = useState(false);
   const [forceChange, setForceChange] = useState(false);
   const [listCheck, setListCheck] = useState(
-    new Array(data.length).fill(false),
+    new Array(productData.length).fill(false),
   );
   const [check, setCheck] = useState(-1);
 
@@ -112,16 +112,10 @@ const [productData, setProductData] = useState([item]);
     setProductData(updatedProductData);
   };
 
-  const clearCard = (productId) => {
-    return (
-      <TouchableOpacity onPress={() => onPressClearCard(productId)} style={{ alignItems: 'center', justifyContent: 'center', padding: 12 }}>
-        <Image style={{ width: 22, height: 24 }} resizeMode="contain" source={require('../../assets/clearCart.png')} />
-      </TouchableOpacity>
-    );
-  };
 
-   // Không có đơn hàng chuyển qua trang NoOrders
-   useEffect(() => {
+
+  // Không có đơn hàng chuyển qua trang NoOrders
+  useEffect(() => {
     if (productData.length === 0) {
       navigation.navigate('CardEmpty');
     }
@@ -148,18 +142,14 @@ const [productData, setProductData] = useState([item]);
     setCheck(check);
   }, [listCheck]);
 
-  const clearCard = () => {
+  const clearCard = (productId) => {
     return (
-      <TouchableOpacity
-        style={{alignItems: 'center', justifyContent: 'center', padding: 12}}>
-        <Image
-          style={{width: 22, height: 24}}
-          resizeMode="contain"
-          source={require('../../assets/clearCart.png')}
-        />
+      <TouchableOpacity onPress={() => onPressClearCard(productId)} style={{ alignItems: 'center', justifyContent: 'center', padding: 12 }}>
+        <Image style={{ width: 22, height: 24 }} resizeMode="contain" source={require('../../assets/clearCart.png')} />
       </TouchableOpacity>
     );
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -171,13 +161,14 @@ const [productData, setProductData] = useState([item]);
       />
 
       <FlatList
-        data={data}
-        style={{marginTop: 35}}
-        keyExtractor={item => String(item.id)}
-        renderItem={({item, index}) => {
+        data={productData}
+        style={{ marginTop: 35 }}
+        // keyExtractor={item => String(item.id)}
+        renderItem={({ item, index }) => {
           return (
-            <Swipeable renderRightActions={() => clearCard(item.id)}>
+            <Swipeable renderRightActions={() => clearCard(item?.id)}>
               <ProductCart
+                sl={quantity}
                 onChecked={value =>
                   setListCheck(list =>
                     list.map((item, i) => {
@@ -186,9 +177,9 @@ const [productData, setProductData] = useState([item]);
                     }),
                   )
                 }
-                title={item.title}
-                price={item.price}
-                image={item.image}
+                title={item?.title}
+                price={item?.price}
+                image={item?.image}
                 allCheck={allCheck ? allCheck : listCheck[index]}
               />
             </Swipeable>
@@ -203,15 +194,15 @@ const [productData, setProductData] = useState([item]);
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Checkbox
             onChecked={onCheckboxAll}
             text={'Chọn tất cả'}
             forceChangeState={forceChange}
           />
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={{fontSize: 13, color: '#000000', marginLeft: 10}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{ fontSize: 13, color: '#000000', marginLeft: 10 }}>
             Tổng giá bán
           </Text>
           <Text

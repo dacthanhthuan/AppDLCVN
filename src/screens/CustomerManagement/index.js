@@ -64,6 +64,7 @@ const CustomerManagement = ({ navigation }) => {
                             name={item.name}
                             address={item.address}
                             phone={item.phone}
+                            onPress={()=>navigation.navigate('UpdateAddress1')}
                         />
                     )
                 }}

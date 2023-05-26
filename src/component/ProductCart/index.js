@@ -1,20 +1,12 @@
-import React, { useState } from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native'
-import styles from './styles'
-import Checkbox from '../Checkbox/index'
-
-const ProductCart = ({ title, price, image, checked, style, sl }) => {
-
-    const [agreed, setAgreed] = useState(false);
-    const [quantity, setQuantity] = useState(sl);
 import React, {useState, useEffect} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import styles from './styles';
 import Checkbox from '../Checkbox';
 
-const ProductCart = ({title, price, image, onChecked, style, allCheck}) => {
+
+const ProductCart = ({title, price, image, onChecked, style, allCheck, sl}) => {
   const [agreed, setAgreed] = useState(false);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(sl);
 
   const onCheckbox = value => {
     setAgreed(value);
