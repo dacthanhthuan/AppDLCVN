@@ -11,7 +11,7 @@ const tropy = require('../../assets/Home/Rectangle405.png');
  ]
  ** *second... : optional (
   *** -carousel: using carousel to display
-  *** -stack: using carousel with radio button to change item display
+  *** -mutable: using carousel with radio button to change item display
  )
  ** /more: if title have "More" option
  */

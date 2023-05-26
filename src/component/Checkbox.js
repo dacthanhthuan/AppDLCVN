@@ -9,16 +9,21 @@ const Checkbox = ({
   textStyle,
   check,
   disable,
+  forceChangeState,
 }) => {
-  const [checked, setChecked] = React.useState();
+  const [checked, setChecked] = React.useState(false);
 
   React.useEffect(() => {
     onChecked ? onChecked(checked) : null;
   }, [checked]);
 
   React.useEffect(() => {
-    check ? setChecked(true) : setChecked(false);
+    check != undefined ? setChecked(check) : null;
   }, [check]);
+
+  React.useEffect(() => {
+    forceChangeState != undefined ? setChecked(checked => !checked) : null;
+  }, [forceChangeState]);
 
   return (
     <Pressable
