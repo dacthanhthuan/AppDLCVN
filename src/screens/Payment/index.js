@@ -60,9 +60,19 @@ const Payment = () => {
                 <Checkbox_2 type={'Point'} title={'Thanh toán bằng Ví điểm'} onSelected={handleTypeAddressPress} isSelected={check} />
                 <Checkbox_2 title={'Thanh toán bằng Ví Momo'} img={require('../../assets/imgOder/Momo.png')} onSelected={handleTypeAddressPress} isSelected={check} />
             </View>
-
-            <Checkbox_2 img={require('../../assets/imgOder/Rectangle_239.png')} title={'Thanh toán bằng tiền mặt'} onSelected={handleTypeAddressPress} isSelected={check} />
-
+            <Checkbox_2
+                styleTitle={{
+                    fontWeight: '400',
+                    alignSelf: 'center',
+                }}
+                styleImg={{
+                    width: 31,
+                    height: 31,
+                }}
+                img={require('../../assets/imgOder/Rectangle_239.png')}
+                title={'Thanh toán bằng tiền mặt'}
+                onSelected={handleTypeAddressPress}
+                isSelected={check} />
             <View style={{ flex: 1, paddingLeft: 30, paddingRight: 30, }}>
                 <View style={{ flex: 1 }}></View>
                 <Button onPress={() => navigation.navigate('SuccPayment')} text={'Xác nhận thanh toán'} />

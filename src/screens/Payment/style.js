@@ -34,7 +34,8 @@ const Style_Payment = StyleSheet.create({
     title_1: {
         fontSize: 13,
         color: '#000000',
-        marginLeft: 12
+        marginLeft: 12,
+        fontWeight: '400'
     },
     viewborder: {
         borderRadius: 4,
@@ -42,8 +43,8 @@ const Style_Payment = StyleSheet.create({
         borderWidth: 0.5,
         padding: 3,
         alignItems: 'center',
-        width: 33,
-        height: 19,
+        width: 28,
+        height: 16,
         marginRight: 10,
     },
     text_3: {
@@ -52,8 +53,8 @@ const Style_Payment = StyleSheet.create({
     },
     icon_2: {
         marginRight: 10,
-        width: 33,
-        height: 19,
+        width: 28,
+        height: 16,
     },
     text_4: {
         fontSize: 13,

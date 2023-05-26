@@ -7,8 +7,8 @@ const Style_Detail = StyleSheet.create({
         padding: 15,
     },
     imgProduct: {
-        width: 370,
-        height: 190,
+        width: 200,
+        height: 200,
     },
     container_1: {
         marginTop: 30,

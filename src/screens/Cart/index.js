@@ -1,3 +1,12 @@
+// import React, { useState } from "react";
+// import { SafeAreaView, View, Text, TouchableOpacity, Image, FlatList } from 'react-native'
+// import styles from "./styles";
+// import ProductCart from "../../component/ProductCart";
+// import Checkbox from "../../component/Checkbox";
+// import Button from "../../component/Button";
+// import { Swipeable } from "react-native-gesture-handler";
+// import Header from "../../component/Header";
+// import { formatprice } from "../../global";
 // import React, { useState, useEffect } from "react";
 // import { SafeAreaView, View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
 // import styles from "./styles";
@@ -12,6 +21,13 @@
 
 //   const [agreed, setAgreed] = useState(false);
 
+// const Cart = ({ navigation, route }) => {
+//     const itemdata = route.params;
+//     const price = formatprice(itemdata.itemdata.item.price);
+//     const totalprice = formatprice(itemdata.itemdata.item.price * parseFloat(itemdata.quantity));
+//     console.log(itemdata.quantity);
+
+//     const [agreed, setAgreed] = useState(false);
 //   const onCheckboxAll = () => {
 //     setAgreed(value => !value);
 //   };
@@ -75,6 +91,7 @@ import Checkbox from '../../component/Checkbox';
 import Button from '../../component/Button';
 import { Swipeable } from 'react-native-gesture-handler';
 import Header from '../../component/Header';
+import { formatprice } from "../../global";
 
 {/* const data = [
   {
@@ -94,6 +111,8 @@ import Header from '../../component/Header';
 const Cart = ({ navigation, route }) => {
 
   const { quantity, item } = route?.params || {};
+  const price = formatprice(item?.price);
+  const totalprice = formatprice(item?.price * parseFloat(quantity));
 
   console.log("item", item);
   console.log("quantity", quantity);
@@ -178,8 +197,8 @@ const Cart = ({ navigation, route }) => {
                   )
                 }
                 title={item?.title}
-                price={item?.price}
-                image={item?.image}
+                price={price}
+                image={item?.source}
                 allCheck={allCheck ? allCheck : listCheck[index]}
               />
             </Swipeable>
@@ -212,13 +231,13 @@ const Cart = ({ navigation, route }) => {
               marginLeft: 10,
               fontWeight: '500',
             }}>
-            2,500,000 đ
+            {totalprice}
           </Text>
         </View>
       </View>
       <Button
         text="Tạo đơn"
-        onPress={() => navigation.navigate('CreateOrder')}
+        onPress={() => navigation.navigate('CreateOrder', { item, quantity, })}
       />
     </SafeAreaView>
   );

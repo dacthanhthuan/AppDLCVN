@@ -3,10 +3,10 @@ import { SafeAreaView, View, Text, Image, TouchableOpacity } from 'react-native'
 import Header from '../../../component/Header';
 import Style_WalletScreen_2 from './style';
 
-const WalletScreen_2 = () => {
+const WalletScreen_2 = ({ navigation }) => {
     return (
         <SafeAreaView style={Style_WalletScreen_2.container}>
-            <Header onPress={() => navigation.goBack()} iconLeft={require('../../../assets/imgSupplier/Arrow_1.png')} title={'Ví chính'} />
+            <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../../assets/imgSupplier/Arrow_1.png')} text={'Ví chính'} />
             <View>
                 <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
                     <View style={{ justifyContent: "center", paddingLeft: 15, zIndex: 999 }}>
@@ -20,7 +20,7 @@ const WalletScreen_2 = () => {
             <View>
                 <Text style={Style_WalletScreen_2.title}>Chức năng ví</Text>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 25 }}>
-                    <TouchableOpacity style={Style_WalletScreen_2.view}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Recharge')} style={Style_WalletScreen_2.view}>
                         <View style={Style_WalletScreen_2.view_2}>
                             <View style={Style_WalletScreen_2.borderIcon}>
                                 <Image style={Style_WalletScreen_2.icon} source={require('../../../assets/imgMainwallet/Rectangle_429.png')} />
@@ -28,7 +28,7 @@ const WalletScreen_2 = () => {
                             <Text style={Style_WalletScreen_2.text_2}>Nạp tiền</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={Style_WalletScreen_2.view}>
+                    <TouchableOpacity onPress={() => navigation.navigate('WithDraw')} style={Style_WalletScreen_2.view}>
                         <View style={Style_WalletScreen_2.view_2}>
                             <View style={Style_WalletScreen_2.borderIcon}>
                                 <Image style={Style_WalletScreen_2.icon} source={require('../../../assets/imgMainwallet/Rectangle_430.png')} />
@@ -36,7 +36,7 @@ const WalletScreen_2 = () => {
                             <Text style={Style_WalletScreen_2.text_2}>Rút tiền</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={Style_WalletScreen_2.view}>
+                    <TouchableOpacity onPress={() => navigation.navigate('TransferMoney')} style={Style_WalletScreen_2.view}>
                         <View style={Style_WalletScreen_2.view_2}>
                             <View style={Style_WalletScreen_2.borderIcon}>
                                 <Image style={Style_WalletScreen_2.icon} source={require('../../../assets/imgMainwallet/Rectangle_431.png')} />
@@ -44,7 +44,7 @@ const WalletScreen_2 = () => {
                             <Text style={Style_WalletScreen_2.text_2}>Chuyển tiền</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={Style_WalletScreen_2.view}>
+                    <TouchableOpacity onPress={() => navigation.navigate('WalletScreen')} style={Style_WalletScreen_2.view}>
                         <View style={Style_WalletScreen_2.view_2}>
                             <View style={Style_WalletScreen_2.borderIcon}>
                                 <Image style={Style_WalletScreen_2.icon} source={require('../../../assets/imgMainwallet/Rectangle_432.png')} />

@@ -33,7 +33,7 @@ const Recharge = ({ navigation }) => {
                 onPressLeft={() => { navigation.goBack() }}
             />
 
-            <CardSurplus style={{ marginTop: 35 }} />
+            <CardSurplus onPress={() => navigation.navigate('WalletScreen')} style={{ marginTop: 35 }} />
 
             <Text style={styles.title}>Nhập số tiền cần nạp</Text>
 
@@ -76,13 +76,10 @@ const Recharge = ({ navigation }) => {
                 </View>
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
-
-
             <View style={{ alignItems: 'center', bottom: WINDOW_HEIGHT * -0.2, }} >
                 <Button text='Tiếp theo'
                     style={{ width: '90%' }} />
             </View>
-
         </SafeAreaView>
     )
 }

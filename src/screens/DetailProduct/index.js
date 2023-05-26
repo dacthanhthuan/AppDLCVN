@@ -1,18 +1,24 @@
 import React, { useState } from "react";
-import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, Text, TouchableOpacity, View, Dimensions } from "react-native";
 import Style_Detail from "./style";
-import { useNavigation } from "@react-navigation/native";
 import Button from "../../component/Button";
 import Header from "../../component/Header/index";
 import Information from "../../component/Information";
 import Line from "../../component/Line";
+import { useNavigation } from "@react-navigation/native";
+import { Carousel, Pagination } from 'react-native-snap-carousel';
+import { formatprice } from "../../global";
+// import Carousel from 'react-native-reanimated-carousel';
 
-const DetailProduct = ({route}) => {
-    const {item} = route?.params || {};
+const DetailProduct = ({ route }) => {
+    const { item } = route?.params || {};
 
     // console.log('item :>> ', item);
     const navigation = useNavigation();
     const [quantity, setQuantity] = useState(1);
+    const price = formatprice(item.price);
+    const commission = formatprice(item.commission);
+
     // Tăng số lượng
     const increase = () => {
         setQuantity(quantity + 1);
@@ -25,11 +31,44 @@ const DetailProduct = ({route}) => {
         }
     };
 
+    const render_item = ({ item1 }) => {
+        return (
+            <View>
+                <Image style={Style_Detail.imgProduct} source={item.source} />
+            </View>
+        )
+    }
+
+    const data = [
+        {
+            "img": require('../../assets/imgDetail/Rectangle_91.png')
+        },
+        {
+            "img": require('../../assets/Rectangle293.png')
+        },
+        {
+            "img": require('../../assets/dlcsoybean.png')
+        },
+        {
+            "img": require('../../assets/dlcred.png')
+        },
+    ]
     return (
         <SafeAreaView style={Style_Detail.container}>
-            <Header onPressLeft={() => navigation.goBack()} text={'Chi tiết tài khoản'} iconLeft={require('../../assets/Arrow1.png')} />
+            <Header onPressLeft={() => navigation.goBack()} text={'Chi tiết sản phẩm'} iconLeft={require('../../assets/Arrow1.png')} onPressRight={() => navigation.navigate('NoOrders')} iconRight={require('../../assets/Vector.png')} />
             <View style={{ alignItems: "center", marginTop: 15 }}>
-                <Image style={Style_Detail.imgProduct} source={item.image} />
+                <Carousel
+                    data={data}
+                    renderItem={render_item}
+                    sliderWidth={200}
+                    itemWidth={200}
+                    firstItem={1}
+                    autoplay={true}
+                    autoplayDelay={2000}
+                    autoplayInterval={2000}
+                    loop={true}
+                    inactiveSlideScale={0.8}
+                />
                 <View style={Style_Detail.container_1}>
                     <TouchableOpacity onPress={reduce}>
                         <Image style={Style_Detail.imgIconMinus} source={require('../../assets/imgDetail/minus.png')} />
@@ -41,8 +80,8 @@ const DetailProduct = ({route}) => {
                 </View>
             </View>
             <View style={Style_Detail.container_2}>
-                <Text style={Style_Detail.nameproduct}>Nước rửa chén sinh học True - Bio Natural Dishwashing Liquid</Text>
-                <Text style={Style_Detail.price_1}>{item.price} đ</Text>
+                <Text style={Style_Detail.nameproduct}>{item.title}</Text>
+                <Text style={Style_Detail.price_1}>{price}</Text>
                 <Text style={Style_Detail.text_1}>Giá nhà cung cấp</Text>
             </View>
             <Line />
@@ -51,22 +90,25 @@ const DetailProduct = ({route}) => {
                 text_1={'Giá nhà cung cấp:'}
                 text_2={'Giá bán lẻ:'}
                 text_3={'Hoa hồng:'}
-                price_1={'800,000đ'}
+                price_1={price}
                 price_2={'1,763,000đ'}
-                price_3={'500,000đ'}
+                price_3={commission}
             />
             <View style={Style_Detail.container_3}>
                 <Text style={Style_Detail.title_2}>Giới thiệu sản phẩm</Text>
                 <Text style={Style_Detail.text_1}>Sản phẩm dựa trên công nghệ hiện đại, môi trường khép kín. Với tiêu chí “an toàn -  sạch - đẹp”, được sản xuất hoàn toàn từ những nguyên liệu tự nhiên an toàn cho sức khỏe, quy trình làm việc sạch sẽ, đảm bảo an toàn vệ sinh thực phẩm, thiết kế bao bì mẫu mã đẹp mắt.</Text>
             </View>
-            <View style={Style_Detail.container_7}>
-                <TouchableOpacity onPress={() => navigation.navigate('Cart', {item, quantity})}>
-                    <View style={Style_Detail.container_8}>
-                        <Image style={Style_Detail.imgCart} source={require('../../assets/imgDetail/Vector.png')} />
+            <View style={{ flex: 1, justifyContent: "space-between" }}>
+                <View></View>
+                <View style={Style_Detail.container_7}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Cart', { item, quantity })}>
+                        <View style={Style_Detail.container_8}>
+                            <Image style={Style_Detail.imgCart} source={require('../../assets/imgDetail/Vector.png')} />
+                        </View>
+                    </TouchableOpacity>
+                    <View style={{ flex: 1, paddingLeft: 15, }}>
+                        <Button onPress={() => navigation.navigate('Cart', { item, quantity })} text={'Chọn mua'} style={{ marginTop: 0 }} />
                     </View>
-                </TouchableOpacity>
-                <View style={{ flex: 1, paddingLeft: 15, }}>
-                    <Button onPress={() => navigation.navigate('CreateOrder')} text={'Chọn mua'} style={{ marginTop: 0 }} />
                 </View>
             </View>
         </SafeAreaView>

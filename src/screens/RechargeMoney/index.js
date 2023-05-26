@@ -5,13 +5,13 @@ import HistoryMoney from '../../component/HistoryMoney';
 import Style_RechargeHistory from './style';
 import data_history from '../../data/data_history';
 
-const RechargeHistory = () => {
+const RechargeHistory = ({navigation}) => {
     const render_item = ({ item }) => {
         return (
             <HistoryMoney img={require('../../assets/imgHistorymoney/recharge_money.png')}
                 datetime_1={'Ngày thực hiện:'}
                 money_1={'Số tiền:'}
-                action_1={'Rút về:'}
+                action_1={'Nạp về:'}
                 status_1={'Trạng thái:'}
                 datetime_2={item.datetime}
                 money_2={item.money}
@@ -42,9 +42,9 @@ const RechargeHistory = () => {
     }
     return (
         <SafeAreaView style={Style_RechargeHistory.container}>
-            <Header onPress={() => navigation.goBack()}
+            <Header onPressLeft={() => navigation.goBack()}
                 iconLeft={require('../../assets/imgSupplier/Arrow_1.png')}
-                title={'Lịch sử nạp tiền'} />
+                text={'Lịch sử nạp tiền'} />
             <View style={{ marginTop: 15, }}>
                 <FlatList
                     data={data_history}

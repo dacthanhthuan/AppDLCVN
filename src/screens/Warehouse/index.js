@@ -18,29 +18,29 @@ const data = [
     id: 1,
     title: 'Auslac Lactoferrin (Giá Ưu Đãi)',
     categori: 'AUS01',
-    price: '1,089,000',
-    image: require('../../assets/Rectangle293.png'),
+    price: 1089000,
+    source: require('../../assets/Rectangle293.png'),
   },
   {
     id: 2,
     title: 'DLC Soybean Germ Formula',
     categori: 'AUS01',
-    price: '1,361,000',
-    image: require('../../assets/dlcsoybean.png'),
+    price: 1361000,
+    source: require('../../assets/dlcsoybean.png'),
   },
   {
     id: 3,
     title: 'DLC Red Yeast Rice Formula',
     categori: 'AUS01',
-    price: '1,089,000',
-    image: require('../../assets/dlcred.png'),
+    price: 1089000,
+    source: require('../../assets/dlcred.png'),
   },
   {
     id: 4,
     title: 'DLC Brazil Green Propolis',
     categori: 'AUS01',
-    price: '1,361,000',
-    image: require('../../assets/dlcbrazil.png'),
+    price: 1361000,
+    source: require('../../assets/dlcbrazil.png'),
   },
 ];
 
@@ -107,7 +107,7 @@ const Warehouse = ({ navigation }) => {
                 ? { marginLeft: 12 }
                 : { marginRight: 4 }}
               key={item.id}
-              image={item.image}
+              image={item.source}
               title={item.title}
               categori={item.categori}
               price={item.price}

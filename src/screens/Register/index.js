@@ -11,7 +11,7 @@ const Register = () => {
 
     return (
         <SafeAreaView style={Style_Register.container}>
-            <Header onPress={() => navigation.goBack()} iconLeft={require('../../assets/imgSupplier/Arrow_1.png')} />
+            <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../assets/imgSupplier/Arrow_1.png')} />
             <Image style={Style_Register.imgLogo} source={require('../../assets/imgLoginAndRegister/Logo.png')} />
             <View style={Style_Register.container_1}>
                 <Text style={Style_Register.textRegister}>Tạo tài khoản mới</Text>

@@ -7,7 +7,7 @@ import Search from '../../component/Search';
 const Supplier = () => {
     const render_item = ({ item }) => {
         return (
-            <View style={StyleSupplier.container_2}>
+            <TouchableOpacity style={StyleSupplier.container_2}>
                 <Image style={StyleSupplier.imgSupplier} source={item.img} />
                 <View>
                     <View style={StyleSupplier.container_3}>
@@ -19,7 +19,7 @@ const Supplier = () => {
                         <Text style={StyleSupplier.city}>{item.city}</Text>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 

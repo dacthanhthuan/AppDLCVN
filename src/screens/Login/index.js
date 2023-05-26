@@ -4,12 +4,14 @@ import Style_Login from './style';
 import { useNavigation } from "@react-navigation/native";
 import Text_Input from '../../component/TextInput';
 import Button from '../../component/Button';
+import Header from '../../component/Header';
 
 const Login = () => {
     const navigation = useNavigation();
 
     return (
         <SafeAreaView style={Style_Login.container}>
+            <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../assets/imgSupplier/Arrow_1.png')} />
             <Image style={Style_Login.imgLogo} source={require('../../assets/imgLoginAndRegister/Logo.png')} />
             <View style={Style_Login.container_1}>
                 <Text style={Style_Login.textLogin}>Đăng nhập tài khoản</Text>

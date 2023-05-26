@@ -8,20 +8,24 @@ import Detail_Input from "../../component/Detail_Input";
 import Information from "../../component/Information";
 import Line from "../../component/Line";
 import Button from "../../component/Button";
+import { formatprice, WINDOW_WIDTH } from "../../global";
 
-const CreateOrder = () => {
-    const lineWidth = useWindowDimensions().width;
+const CreateOrder = ({ route }) => {
+    const { item, quantity } = route?.params || {};
+    const price = formatprice(item.price);
+    const totalprice = formatprice(item.price * parseFloat(quantity));
+    const commission = formatprice(item.commission);
     const navigation = useNavigation();
 
-    const render_item = ({ item }) => {
+    const render_item = ({ item1 }) => {
         return (
             <View style={Style_CreateOrder.flatlist}>
-                <Image source={item.img} />
+                <Image style={{ width: 60, height: 60 }} source={item.source} />
                 <View style={Style_CreateOrder.view_3}>
-                    <Text style={Style_CreateOrder.text_1}>{item.name}</Text>
-                    <Text style={Style_CreateOrder.text_3}>Giá nhà cung cấp: {item.price_1}</Text>
-                    <Text style={Style_CreateOrder.text_2}>Giá bán: {item.price_2}</Text>
-                    <Text style={Style_CreateOrder.text_3}>Số lượng: {item.quantity}</Text>
+                    <Text style={Style_CreateOrder.text_1}>{item.title}</Text>
+                    <Text style={Style_CreateOrder.text_3}>Giá nhà cung cấp: {price}</Text>
+                    <Text style={Style_CreateOrder.text_2}>Giá bán: {price}</Text>
+                    <Text style={Style_CreateOrder.text_3}>Số lượng: {quantity}</Text>
                 </View>
             </View>
         )
@@ -30,7 +34,8 @@ const CreateOrder = () => {
     return (
         <SafeAreaView style={Style_CreateOrder.container}>
             <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../assets/Arrow1.png')} text={'Tạo đơn hàng'} />
-            <FlatList style={{ width: lineWidth, alignSelf: "center" }}
+            <FlatList
+                style={{ width: WINDOW_WIDTH, alignSelf: "center" }}
                 data={data_product}
                 renderItem={render_item}
                 keyExtractor={(item, title) => title.toString()}
@@ -38,7 +43,7 @@ const CreateOrder = () => {
                 ListHeaderComponent={(
                     <View style={Style_CreateOrder.container}>
                         <View style={{ alignItems: "center", marginBottom: 15, }}>
-                            <Image style={{ width: lineWidth }} source={require('../../assets/imgOder/Group_203.png')} />
+                            <Image style={{ width: WINDOW_WIDTH }} source={require('../../assets/imgOder/Group_203.png')} />
                         </View>
                         <View style={{ flexDirection: "row" }}>
                             <Image style={Style_CreateOrder.icon} source={require('../../assets/imgOder/Rectangle_225.png')} />
@@ -57,7 +62,7 @@ const CreateOrder = () => {
                             </View>
                         </View>
                         <View style={{ alignItems: "center", marginTop: 15, marginBottom: 15 }}>
-                            <Image style={{ width: lineWidth }} source={require('../../assets/imgOder/Group_203.png')} />
+                            <Image style={{ width: WINDOW_WIDTH }} source={require('../../assets/imgOder/Group_203.png')} />
                         </View>
                         <View style={{ flexDirection: "row" }}>
                             <Image style={Style_CreateOrder.icon} source={require('../../assets/imgOder/Rectangle_232.png')} />
@@ -91,7 +96,7 @@ const CreateOrder = () => {
                                     text_3={'Tổng số tiền cần thanh toán:'}
                                     price_1={'1,500,000đ'}
                                     price_2={'Freeship'}
-                                    price_3={'1,500,000đ'}
+                                    price_3={totalprice}
                                     style_5={{
                                         color: '#000000',
                                         fontStyle: "italic",
