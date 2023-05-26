@@ -31,16 +31,16 @@ const Checkbox = ({ checked, onPress, check }) => {
 export default Checkbox;
 
 
-export const Checkbox_2 = ({ isSelected, onSelected, img, title, type }) => {
+export const Checkbox_2 = ({ isSelected, onSelected, img, title, type, styleImg, styleTitle }) => {
   return (
     <View style={styles.viewpayment}>
       <View style={{ flexDirection: "row", flex: 1 }}>
         {img ? (
-          <Image style={styles.icon_2} source={img} />
+          <Image style={[styles.icon_2, styleImg]} source={img} />
         ) : (
           <View style={styles.viewborder}><Text style={styles.text_3}>{type}</Text></View>
         )}
-        <Text style={styles.text_4}>{title}</Text>
+        <Text style={[styles.text_4, styleTitle]}>{title}</Text>
       </View>
       <Pressable onPress={() => onSelected(title)} style={[styles.container, isSelected === title ? styles.checkedBox : {}]}>
         {isSelected === title ? <View style={styles.innerSquare} /> : null}

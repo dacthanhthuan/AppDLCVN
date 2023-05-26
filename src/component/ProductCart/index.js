@@ -35,7 +35,7 @@ const ProductCart = ({title, price, image, onChecked, style, allCheck, sl}) => {
         <View style={styles.rightCard}>
           <Text style={styles.title}>{title}</Text>
           <View style={styles.rowPriceSL}>
-            <Text style={{color: '#005AA9', fontSize: 16}}>{price} đ</Text>
+            <Text style={{color: '#005AA9', fontSize: 16}}>{price}</Text>
             <View style={styles.rowSL}>
               <TouchableOpacity onPress={reduce}>
                 <Text style={styles.buttonSL}>-</Text>

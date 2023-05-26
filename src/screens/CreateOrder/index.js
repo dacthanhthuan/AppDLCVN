@@ -11,21 +11,21 @@ import Button from "../../component/Button";
 import { formatprice, WINDOW_WIDTH } from "../../global";
 
 const CreateOrder = ({ route }) => {
-    const itemdata = route.params;
-    const price = formatprice(itemdata.itemdata.itemdata.item.price);
-    const totalprice = formatprice(itemdata.itemdata.itemdata.item.price * parseFloat(itemdata.itemdata.quantity));
-    const commission = formatprice(itemdata.itemdata.itemdata.item.commission);
+    const { item, quantity } = route?.params || {};
+    const price = formatprice(item.price);
+    const totalprice = formatprice(item.price * parseFloat(quantity));
+    const commission = formatprice(item.commission);
     const navigation = useNavigation();
 
-    const render_item = ({ item }) => {
+    const render_item = ({ item1 }) => {
         return (
             <View style={Style_CreateOrder.flatlist}>
-                <Image style={{ width: 60, height: 60 }} source={itemdata.itemdata.itemdata.item.source} />
+                <Image style={{ width: 60, height: 60 }} source={item.source} />
                 <View style={Style_CreateOrder.view_3}>
-                    <Text style={Style_CreateOrder.text_1}>{itemdata.itemdata.itemdata.item.title}</Text>
+                    <Text style={Style_CreateOrder.text_1}>{item.title}</Text>
                     <Text style={Style_CreateOrder.text_3}>Giá nhà cung cấp: {price}</Text>
                     <Text style={Style_CreateOrder.text_2}>Giá bán: {price}</Text>
-                    <Text style={Style_CreateOrder.text_3}>Số lượng: {itemdata.itemdata.quantity}</Text>
+                    <Text style={Style_CreateOrder.text_3}>Số lượng: {quantity}</Text>
                 </View>
             </View>
         )

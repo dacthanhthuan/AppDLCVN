@@ -5,18 +5,19 @@ import Button from "../../component/Button";
 import Header from "../../component/Header/index";
 import Information from "../../component/Information";
 import Line from "../../component/Line";
+import { useNavigation } from "@react-navigation/native";
 import { Carousel, Pagination } from 'react-native-snap-carousel';
 import { formatprice } from "../../global";
 // import Carousel from 'react-native-reanimated-carousel';
 
-const DetailProduct = ({route}) => {
-    const {item} = route?.params || {};
+const DetailProduct = ({ route }) => {
+    const { item } = route?.params || {};
 
     // console.log('item :>> ', item);
     const navigation = useNavigation();
     const [quantity, setQuantity] = useState(1);
-    const price = formatprice(itemdata.item.price);
-    const commission = formatprice(itemdata.item.commission);
+    const price = formatprice(item.price);
+    const commission = formatprice(item.commission);
 
     // Tăng số lượng
     const increase = () => {
@@ -30,10 +31,10 @@ const DetailProduct = ({route}) => {
         }
     };
 
-    const render_item = ({ item }) => {
+    const render_item = ({ item1 }) => {
         return (
             <View>
-                <Image style={Style_Detail.imgProduct} source={itemdata.item.source} />
+                <Image style={Style_Detail.imgProduct} source={item.source} />
             </View>
         )
     }
@@ -68,7 +69,6 @@ const DetailProduct = ({route}) => {
                     loop={true}
                     inactiveSlideScale={0.8}
                 />
-                <Image style={Style_Detail.imgProduct} source={item.image} />
                 <View style={Style_Detail.container_1}>
                     <TouchableOpacity onPress={reduce}>
                         <Image style={Style_Detail.imgIconMinus} source={require('../../assets/imgDetail/minus.png')} />
@@ -80,7 +80,7 @@ const DetailProduct = ({route}) => {
                 </View>
             </View>
             <View style={Style_Detail.container_2}>
-                <Text style={Style_Detail.nameproduct}>{itemdata.item.title}</Text>
+                <Text style={Style_Detail.nameproduct}>{item.title}</Text>
                 <Text style={Style_Detail.price_1}>{price}</Text>
                 <Text style={Style_Detail.text_1}>Giá nhà cung cấp</Text>
             </View>
@@ -101,13 +101,13 @@ const DetailProduct = ({route}) => {
             <View style={{ flex: 1, justifyContent: "space-between" }}>
                 <View></View>
                 <View style={Style_Detail.container_7}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Cart', { itemdata, quantity })}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Cart', { item, quantity })}>
                         <View style={Style_Detail.container_8}>
                             <Image style={Style_Detail.imgCart} source={require('../../assets/imgDetail/Vector.png')} />
                         </View>
                     </TouchableOpacity>
                     <View style={{ flex: 1, paddingLeft: 15, }}>
-                        <Button onPress={() => navigation.navigate('Cart', { itemdata, quantity })} text={'Chọn mua'} style={{ marginTop: 0 }} />
+                        <Button onPress={() => navigation.navigate('Cart', { item, quantity })} text={'Chọn mua'} style={{ marginTop: 0 }} />
                     </View>
                 </View>
             </View>

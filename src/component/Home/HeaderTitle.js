@@ -12,7 +12,7 @@ const Header_1 = () => {
   const navigation = useNavigation();
 
   const goToCart = () => {
-    navigation.navigate('NoOrders');
+    navigation.navigate('Cart');
   };
 
   return (
