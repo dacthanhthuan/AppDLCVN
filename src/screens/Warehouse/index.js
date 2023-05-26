@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './styles';
 import {
   Image,
@@ -44,7 +44,7 @@ const data = [
   },
 ];
 
-const Warehouse = ({navigation}) => {
+const Warehouse = ({ navigation }) => {
   const [filteredUser, setFilteredUser] = useState(data);
   const [keywork, setKeywork] = useState('');
 
@@ -88,8 +88,8 @@ const Warehouse = ({navigation}) => {
       <FlatList
         data={filteredUser}
         numColumns={2}
-        style={{ marginTop: 15, width:'100%' }}
-        contentContainerStyle={{alignItems:'center'}}
+        style={{ marginTop: 15, width: '100%' }}
+        contentContainerStyle={{ alignItems: 'center' }}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => String(item?.id)}
         ListHeaderComponent={(
@@ -111,7 +111,7 @@ const Warehouse = ({navigation}) => {
               title={item.title}
               categori={item.categori}
               price={item.price}
-              onPress={() => navigation.navigate('DetailProduct', {item})} />
+              onPress={() => navigation.navigate('DetailProduct', { item })} />
           )
         }}
       />
