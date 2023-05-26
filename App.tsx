@@ -103,7 +103,7 @@ const MainTab = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Warehouse" component={Warehouse} />
       <Tab.Screen name="Supplier" component={Supplier} />
-      <Tab.Screen name="Notification" component={UpdateAddress1} />
+      <Tab.Screen name="Notification" component={TeamThree} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   )

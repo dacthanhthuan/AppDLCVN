@@ -49,14 +49,18 @@ const Payment = () => {
                     <View style={{ marginTop: 10 }}>
                         <View style={Style_Payment.viewpayment}>
                             <View style={{ flexDirection: "row" }}>
-                                <View style={Style_Payment.viewborder}><Text style={Style_Payment.text_3}>VNĐ</Text></View>
+                                <View style={Style_Payment.viewborder}>
+                                    <Text style={Style_Payment.text_3}>VNĐ</Text>
+                                </View>
                                 <Text style={Style_Payment.text_4}>Thanh toán bằng Ví VNĐ</Text>
                             </View>
                             <Checkbox_2 />
                         </View>
                         <View style={Style_Payment.viewpayment}>
                             <View style={{ flexDirection: "row" }}>
-                                <View style={Style_Payment.viewborder}><Text style={Style_Payment.text_3}>Point</Text></View>
+                                <View style={Style_Payment.viewborder}>
+                                    <Text style={Style_Payment.text_3}>Point</Text>
+                                </View>
                                 <Text style={Style_Payment.text_4}>Thanh toán bằng Ví điểm</Text>
                             </View>
                             <Checkbox_2 />

@@ -5,7 +5,7 @@ import Header from '../../component/Header';
 import HistoryMoney from '../../component/HistoryMoney';
 import data_history from '../../data/data_history';
 
-const WithdrawHistory = () => {
+const WithdrawHistory = ({navigation}) => {
     const render_item = ({ item }) => {
         return (
             <HistoryMoney img={require('../../assets/imgHistorymoney/recharge_money.png')}
@@ -42,9 +42,9 @@ const WithdrawHistory = () => {
     }
     return (
         <SafeAreaView style={Style_WithdrawHistory.container}>
-            <Header onPress={() => navigation.goBack()}
+            <Header onPressLeft={() => navigation.goBack()}
                 iconLeft={require('../../assets/imgSupplier/Arrow_1.png')}
-                title={'Lịch sử rút tiền'} />
+                text={'Lịch sử rút tiền'} />
             <View style={{ marginTop: 15, }}>
                 <FlatList
                     data={data_history}

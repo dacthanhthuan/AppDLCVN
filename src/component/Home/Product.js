@@ -1,30 +1,24 @@
-import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../global';
-import {memo} from 'react';
-import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { WINDOW_WIDTH, WINDOW_HEIGHT, formatprice } from '../../global';
+import { memo } from 'react';
+import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const Product = ({item}) => {
+const Product = ({ item }) => {
   const navigation = useNavigation();
 
   const goToDetailProduct = () => {
-    navigation.navigate('DetailProduct');
+    navigation.navigate('DetailProduct', { item });
   };
-
-  const formatCurrency = new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
-  });
-
-  const price = formatCurrency.format(item.price).replace(/\./g, ',');
-  const commission = formatCurrency.format(item.commission).replace(/\./g, ',');
+  const price = formatprice(item.price);
+  const commission = formatprice(item.commission);
 
   return (
     <View style={[styles.renderItem]}>
       <Pressable
         onPress={goToDetailProduct}
-        style={({pressed}) => [
+        style={({ pressed }) => [
           styles.renderPressable,
-          pressed ? {opacity: 0.2, backgroundColor: '#005AA9'} : null,
+          pressed ? { opacity: 0.2, backgroundColor: '#005AA9' } : null,
         ]}>
         <Image
           source={item.source}

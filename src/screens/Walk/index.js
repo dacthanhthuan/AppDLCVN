@@ -55,9 +55,9 @@ const Walk = () => {
             case 'Đi bộ':
                 return (
                     <View>
-                        <View style={Style_Walk.pressGift}>
+                        <TouchableOpacity style={Style_Walk.pressGift}>
                             <Image style={Style_Walk.iconGift} source={require('../../assets/imgWalk/Group_348.png')} />
-                        </View>
+                        </TouchableOpacity>
                         <View style={{ alignItems: "center" }}>
                             <Image style={Style_Walk.imgCounter} source={require('../../assets/imgWalk/Group_349.png')} />
                         </View>

@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { SafeAreaView, View, TouchableOpacity, Text, Image, Dimensions, } from "react-native";
 import Style_WalletScreen from "./style";
-import Header from "../../../component/Header";
-import SwipeUpDown from 'react-native-swipe-up-down';
+import Header from '../../../component/Header';
 import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 
-const WalletScreen = () => {
+const WalletScreen = ({ navigation }) => {
     const { width: width, height: height } = Dimensions.get('window');
     const translateY = useSharedValue(0);
     const Max_TRANSLATE_Y = -height + 50;
@@ -40,9 +39,8 @@ const WalletScreen = () => {
     });
 
     return (
-        <GestureHandlerRootView style={Style_WalletScreen.container}>
-            {/* <SafeAreaView style={Style_WalletScreen.container}> */}
-            <Header onPress={() => navigation.goBack()} iconLeft={require('../../../assets/imgSupplier/Arrow_1.png')} title={'Ví chính'} />
+        <SafeAreaView style={Style_WalletScreen.container}>
+            <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../../assets/imgSupplier/Arrow_1.png')} text={'Ví chính'} />
             <View style={{ flexDirection: "row", }}>
                 <View style={{ justifyContent: "center", }}>
                     <Text style={Style_WalletScreen.text}>Số dư khả dụng</Text>
@@ -50,54 +48,55 @@ const WalletScreen = () => {
                 </View>
                 <Image style={Style_WalletScreen.imgWallet} source={require('../../../assets/imgMainwallet/Vector.png')} />
             </View>
-            <GestureDetector gesture={gesture}>
-                <Animated.View style={[{ alignItems: "center" }, BottomSheetStyle]}>
-                    <View style={Style_WalletScreen.bottomsheet}>
-                        <View style={Style_WalletScreen.line}></View>
-                        <View style={{ padding: 20 }}>
-                            <Text style={Style_WalletScreen.title}>Chức năng ví</Text>
-                            <TouchableOpacity style={Style_WalletScreen.view}>
-                                <View style={Style_WalletScreen.view_2}>
-                                    <View style={Style_WalletScreen.borderIcon}>
-                                        <Image style={Style_WalletScreen.icon} source={require('../../../assets/imgMainwallet/Rectangle_429.png')} />
+            <GestureHandlerRootView style={{ marginTop: height }} >
+                <GestureDetector gesture={gesture}>
+                    <Animated.View style={[{ alignItems: "center" }, BottomSheetStyle]}>
+                        <View style={Style_WalletScreen.bottomsheet}>
+                            <View style={Style_WalletScreen.line}></View>
+                            <View style={{ padding: 20 }}>
+                                <Text style={Style_WalletScreen.title}>Chức năng ví</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate('Recharge')} style={Style_WalletScreen.view}>
+                                    <View style={Style_WalletScreen.view_2}>
+                                        <View style={Style_WalletScreen.borderIcon}>
+                                            <Image style={Style_WalletScreen.icon} source={require('../../../assets/imgMainwallet/Rectangle_429.png')} />
+                                        </View>
+                                        <Text style={Style_WalletScreen.text_2}>Nạp tiền</Text>
                                     </View>
-                                    <Text style={Style_WalletScreen.text_2}>Nạp tiền</Text>
-                                </View>
-                                <Image style={Style_WalletScreen.imgArrow} source={require('../../../assets/imgMainwallet/Rectangle_424.png')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Style_WalletScreen.view}>
-                                <View style={Style_WalletScreen.view_2}>
-                                    <View style={Style_WalletScreen.borderIcon}>
-                                        <Image style={Style_WalletScreen.icon} source={require('../../../assets/imgMainwallet/Rectangle_430.png')} />
+                                    <Image style={Style_WalletScreen.imgArrow} source={require('../../../assets/imgMainwallet/Rectangle_424.png')} />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => navigation.navigate('WithDraw')} style={Style_WalletScreen.view}>
+                                    <View style={Style_WalletScreen.view_2}>
+                                        <View style={Style_WalletScreen.borderIcon}>
+                                            <Image style={Style_WalletScreen.icon} source={require('../../../assets/imgMainwallet/Rectangle_430.png')} />
+                                        </View>
+                                        <Text style={Style_WalletScreen.text_2}>Rút tiền</Text>
                                     </View>
-                                    <Text style={Style_WalletScreen.text_2}>Rút tiền</Text>
-                                </View>
-                                <Image style={Style_WalletScreen.imgArrow} source={require('../../../assets/imgMainwallet/Rectangle_424.png')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Style_WalletScreen.view}>
-                                <View style={Style_WalletScreen.view_2}>
-                                    <View style={Style_WalletScreen.borderIcon}>
-                                        <Image style={Style_WalletScreen.icon} source={require('../../../assets/imgMainwallet/Rectangle_431.png')} />
+                                    <Image style={Style_WalletScreen.imgArrow} source={require('../../../assets/imgMainwallet/Rectangle_424.png')} />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => navigation.navigate('TransferMoney')} style={Style_WalletScreen.view}>
+                                    <View style={Style_WalletScreen.view_2}>
+                                        <View style={Style_WalletScreen.borderIcon}>
+                                            <Image style={Style_WalletScreen.icon} source={require('../../../assets/imgMainwallet/Rectangle_431.png')} />
+                                        </View>
+                                        <Text style={Style_WalletScreen.text_2}>Chuyển tiền</Text>
                                     </View>
-                                    <Text style={Style_WalletScreen.text_2}>Chuyển tiền</Text>
-                                </View>
-                                <Image style={Style_WalletScreen.imgArrow} source={require('../../../assets/imgMainwallet/Rectangle_424.png')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Style_WalletScreen.view}>
-                                <View style={Style_WalletScreen.view_2}>
-                                    <View style={Style_WalletScreen.borderIcon}>
-                                        <Image style={Style_WalletScreen.icon} source={require('../../../assets/imgMainwallet/Rectangle_432.png')} />
+                                    <Image style={Style_WalletScreen.imgArrow} source={require('../../../assets/imgMainwallet/Rectangle_424.png')} />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={Style_WalletScreen.view}>
+                                    <View style={Style_WalletScreen.view_2}>
+                                        <View style={Style_WalletScreen.borderIcon}>
+                                            <Image style={Style_WalletScreen.icon} source={require('../../../assets/imgMainwallet/Rectangle_432.png')} />
+                                        </View>
+                                        <Text style={Style_WalletScreen.text_2}>Lịch sử</Text>
                                     </View>
-                                    <Text style={Style_WalletScreen.text_2}>Lịch sử</Text>
-                                </View>
-                                <Image style={Style_WalletScreen.imgArrow} source={require('../../../assets/imgMainwallet/Rectangle_424.png')} />
-                            </TouchableOpacity>
+                                    <Image style={Style_WalletScreen.imgArrow} source={require('../../../assets/imgMainwallet/Rectangle_424.png')} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                </Animated.View>
-            </GestureDetector>
-            {/* </SafeAreaView> */}
-        </GestureHandlerRootView>
+                    </Animated.View>
+                </GestureDetector>
+            </GestureHandlerRootView>
+        </SafeAreaView>
     )
 };
 

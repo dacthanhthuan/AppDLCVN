@@ -41,8 +41,8 @@ const Style_Payment = StyleSheet.create({
         borderWidth: 0.5,
         padding: 3,
         alignItems: 'center',
-        width: 33,
-        height: 19,
+        width: 28,
+        height: 16,
         marginRight: 10,
     },
     text_3: {
@@ -51,8 +51,8 @@ const Style_Payment = StyleSheet.create({
     },
     icon_2: {
         marginRight: 10,
-        width: 33,
-        height: 19,
+        width: 28,
+        height: 16,
     },
     text_4: {
         fontSize: 13,

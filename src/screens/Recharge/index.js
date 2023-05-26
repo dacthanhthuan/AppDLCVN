@@ -32,7 +32,7 @@ const Recharge = ({navigation}) => {
                 onPressLeft={()=>{navigation.goBack()}}
             />
 
-            <CardSurplus style={{ marginTop: 35 }} />
+            <CardSurplus onPress={() => navigation.navigate('WalletScreen')} style={{ marginTop: 35 }} />
 
             <Text style={styles.title}>Nhập số tiền cần nạp</Text>
 
@@ -68,7 +68,7 @@ const Recharge = ({navigation}) => {
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={()=> navigation.navigate('WithdrawHistory')} style={[styles.card, { marginTop: 12 }]}>
+            <TouchableOpacity onPress={()=> navigation.navigate('RechargeHistory')} style={[styles.card, { marginTop: 12 }]}>
                 <View style={{ flexDirection: 'row' }}>
                     <Image style={styles.iconLeft} source={require('../../assets/Rectangle331.png')} />
                     <Text style={[styles.textCard, { marginLeft: 8 }]}>Lịch sử nạp tiền</Text>

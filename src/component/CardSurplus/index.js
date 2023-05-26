@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
-const CardSurplus = ({style}) => {
+const CardSurplus = ({ style, onPress }) => {
     return (
-        <View style={[styles.container, style]}>
+        <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
             <View style={styles.iconContainer}>
                 <Image style={styles.icon} source={require('../../assets/Rectangle326.png')} />
             </View>
@@ -12,7 +12,7 @@ const CardSurplus = ({style}) => {
                 <Text style={styles.title}>Số dư ví chính</Text>
                 <Text style={styles.value}>15,000,000 đ</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

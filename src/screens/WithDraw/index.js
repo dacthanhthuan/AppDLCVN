@@ -6,7 +6,7 @@ import CardSurplus from "../../component/CardSurplus";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../../component/Button";
 
-const WithDraw = ({navigation}) => {
+const WithDraw = ({ navigation }) => {
 
     const [selectedAmount, setSelectedAmount] = useState("");
 
@@ -21,10 +21,10 @@ const WithDraw = ({navigation}) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Rút tiền'
-                onPressLeft={()=>{navigation.goBack()}}
+                onPressLeft={() => { navigation.goBack() }}
             />
 
-            <CardSurplus style={{ marginTop: 35 }} />
+            <CardSurplus onPress={() => navigation.navigate('WalletScreen')} style={{ marginTop: 35 }} />
 
             <Text style={styles.title}>Nhập số tiền cần rút</Text>
 
@@ -35,7 +35,7 @@ const WithDraw = ({navigation}) => {
                 keyboardType="number-pad"
                 value={selectedAmount}
                 onChangeText={selectAmount}
-             />
+            />
 
             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 25 }}>
                 <TouchableOpacity style={styles.numberContainerMoney} onPress={() => selectAmount("50 000")}>
@@ -54,7 +54,7 @@ const WithDraw = ({navigation}) => {
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.card, { marginTop: 12 }]}>
+            <TouchableOpacity onPress={() => navigation.navigate('WithdrawHistory')} style={[styles.card, { marginTop: 12 }]}>
                 <View style={{ flexDirection: 'row' }}>
                     <Image style={styles.iconLeft} source={require('../../assets/Rectangle331.png')} />
                     <Text style={[styles.textCard, { marginLeft: 8 }]}>Lịch sử rút tiền</Text>

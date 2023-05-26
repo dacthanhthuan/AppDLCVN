@@ -84,53 +84,6 @@ const Warehouse = ({ navigation }) => {
         placeholder="Bạn cần tìm gì ?"
         value={keywork}
       />
-      {/* <Text
-        style={{
-          marginTop: 25,
-          color: '#000000',
-          fontSize: 16,
-          fontWeight: '400',
-        }}>
-        25 sản phẩm phù hợp
-      </Text> */}
-      {/* <FlatList
-        data={filteredUser}
-        numColumns={2}
-        style={{marginTop: 15}}
-        showsVerticalScrollIndicator={false}
-        keyExtractor={item => String(item?.id)}
-        ListHeaderComponent={<View style={{marginTop: 12}}></View>}
-        ListEmptyComponent={
-          <>
-            <Text style={{textAlign: 'center'}}>No items found.</Text>
-          </>
-        }
-        renderItem={({item, index}) => {
-          return (
-            <CardProduct
-              style={
-                index % 2 === 0
-                  ? {marginLeft: 2, marginRight: 22}
-                  : {marginRight: 4}
-              }
-              key={item.id}
-              image={item.image}
-              title={item.title}
-              categori={item.categori}
-              price={item.price}
-            />
-            <View style={styles.rowPoint}>
-                <Text style={styles.helloText}>Chào Thái Năng !</Text>
-                <View style={styles.pointContainer}>
-                    <Text style={styles.pointText}>5,000,000</Text>
-                    <Image style={styles.iconAvatar} source={require('../../assets/Rectangle312.png')} />
-                </View>
-            </View>
-            <Input
-                onChangeText={setKeywork}
-                placeholder='Bạn cần tìm gì ?'
-                value={keywork}
-            /> */}
       <Text style={{ marginTop: 25, color: '#000000', fontSize: 16, fontWeight: '400' }}>25 sản phẩm phù hợp</Text>
       <FlatList
         data={filteredUser}

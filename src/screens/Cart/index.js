@@ -6,6 +6,7 @@ import Checkbox from "../../component/Checkbox";
 import Button from "../../component/Button";
 import { Swipeable } from "react-native-gesture-handler";
 import Header from "../../component/Header";
+import { formatprice } from "../../global";
 
 
 const data = [
@@ -23,11 +24,12 @@ const data = [
     },
 ]
 
-const Cart = ({ navigation }) => {
-
-    const NotLogin = () => {
-        navigation.navigate('NotLogin')
-    }
+const Cart = ({ navigation, route }) => {
+    const itemdata = route.params;
+    const price = formatprice(itemdata.itemdata.item.price);
+    const totalprice = formatprice(itemdata.itemdata.item.price * parseFloat(itemdata.quantity));
+    console.log(itemdata.quantity);
+    
     const [agreed, setAgreed] = useState(false);
 
     const onCheckboxAll = () => {
@@ -58,10 +60,11 @@ const Cart = ({ navigation }) => {
                     return (
                         <Swipeable renderRightActions={clearCard}>
                             <ProductCart
-                                title={item.title}
-                                price={item.price}
-                                image={item.image}
+                                title={itemdata.itemdata.item.title}
+                                price={price}
+                                image={itemdata.itemdata.item.source}
                                 checked={agreed}
+                                sl={itemdata.quantity}
                             />
                         </Swipeable>
 
@@ -76,10 +79,10 @@ const Cart = ({ navigation }) => {
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={{ fontSize: 14, color: '#000000', marginLeft: 10 }}>Tổng giá bán</Text>
-                    <Text style={{ fontSize: 16, color: '#000000', marginLeft: 10, fontWeight: '500' }}>2,500,000 đ</Text>
+                    <Text style={{ fontSize: 16, color: '#000000', marginLeft: 10, fontWeight: '500' }}>{totalprice}</Text>
                 </View>
             </View>
-            <Button text='Tạo đơn' onPress={() => navigation.navigate('CreateOrder')} />
+            <Button text='Tạo đơn' onPress={() => navigation.navigate('CreateOrder', { itemdata })} />
 
         </SafeAreaView>
     )

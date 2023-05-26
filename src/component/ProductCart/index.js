@@ -3,10 +3,10 @@ import { Image, Text, TouchableOpacity, View } from 'react-native'
 import styles from './styles'
 import Checkbox from '../Checkbox'
 
-const ProductCart = ({ title, price, image, checked, style }) => {
+const ProductCart = ({ title, price, image, checked, style, sl }) => {
 
     const [agreed, setAgreed] = useState(false);
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState(sl);
 
 
     const onCheckbox = () => {
@@ -35,7 +35,7 @@ const ProductCart = ({ title, price, image, checked, style }) => {
                 <View style={styles.rightCard}>
                     <Text style={styles.title}>{title}</Text>
                     <View style={styles.rowPriceSL}>
-                        <Text style={{ color: '#005AA9', fontSize: 16 }}>{price} đ</Text>
+                        <Text style={{ color: '#005AA9', fontSize: 16 }}>{price}</Text>
                         <View style={styles.rowSL}>
                             <TouchableOpacity onPress={reduce}>
                                 <Text style={styles.buttonSL}>-</Text>

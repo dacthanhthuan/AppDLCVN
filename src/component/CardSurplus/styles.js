@@ -27,10 +27,10 @@ const styles = StyleSheet.create({
     },
     value: {
         fontSize: 13,
-        fontFamily: 'Montserrat',
+        // fontFamily: 'Montserrat',
         color: '#000000',
         marginTop: 6,
-        fontWeight: '700'
+        fontWeight: '500'
     }
 
 })

@@ -8,8 +8,8 @@ const Style_WalletScreen = StyleSheet.create({
         padding: 16,
     },
     text: {
-        fontSize: 17, 
-        color: '#8B8787', 
+        fontSize: 17,
+        color: '#8B8787',
         fontWeight: "300",
     },
     textmoney: {
@@ -24,7 +24,7 @@ const Style_WalletScreen = StyleSheet.create({
     bottomsheet: {
         height: height,
         width: width,
-        top: height,
+        // marginTop: height,
         borderRadius: 40,
         shadowColor: "#000000",
         shadowOffset: {
