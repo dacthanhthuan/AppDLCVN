@@ -3,7 +3,7 @@ import { SafeAreaView, Text, Image } from "react-native";
 import styles from "./styles";
 import Button from "../../component/Button";
 
-const NoOrders = () => {
+const NoOrders = ({navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             <Image style={{ width: 95, height: 95 }} source={require('../../assets/sad.png')} />

@@ -5,6 +5,7 @@ import Header from "../../component/Header";
 import CardSurplus from "../../component/CardSurplus";
 import Button from "../../component/Button";
 import LogoBanking from "../../component/LogoBanking";
+import { WINDOW_HEIGHT } from "../../global";
 
 const data = {
     images: [
@@ -13,7 +14,7 @@ const data = {
     ]
 }
 
-const Recharge = ({navigation}) => {
+const Recharge = ({ navigation }) => {
 
     const [isSelected, setIsSelected] = useState(false)
 
@@ -29,7 +30,7 @@ const Recharge = ({navigation}) => {
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Nạp tiền'
-                onPressLeft={()=>{navigation.goBack()}}
+                onPressLeft={() => { navigation.goBack() }}
             />
 
             <CardSurplus style={{ marginTop: 35 }} />
@@ -68,7 +69,7 @@ const Recharge = ({navigation}) => {
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={()=> navigation.navigate('WithdrawHistory')} style={[styles.card, { marginTop: 12 }]}>
+            <TouchableOpacity onPress={() => navigation.navigate('WithdrawHistory')} style={[styles.card, { marginTop: 12 }]}>
                 <View style={{ flexDirection: 'row' }}>
                     <Image style={styles.iconLeft} source={require('../../assets/Rectangle331.png')} />
                     <Text style={[styles.textCard, { marginLeft: 8 }]}>Lịch sử nạp tiền</Text>
@@ -76,14 +77,10 @@ const Recharge = ({navigation}) => {
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
 
-            <View style={{ alignItems: 'center' }} >
-                <Button text='Tiếp theo'
-                    style={{ bottom: -240, width: '90%', alignItems: 'center' }} />
-            </View>
 
-            <View style={{ alignItems: 'center' }} >
+            <View style={{ alignItems: 'center', bottom: WINDOW_HEIGHT * -0.2, }} >
                 <Button text='Tiếp theo'
-                    style={{ bottom: -72, width: '90%' }} />
+                    style={{ width: '90%' }} />
             </View>
 
         </SafeAreaView>

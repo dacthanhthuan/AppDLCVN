@@ -7,7 +7,10 @@ import Header from "../../component/Header/index";
 import Information from "../../component/Information";
 import Line from "../../component/Line";
 
-const DetailProduct = () => {
+const DetailProduct = ({route}) => {
+    const {item} = route?.params || {};
+
+    // console.log('item :>> ', item);
     const navigation = useNavigation();
     const [quantity, setQuantity] = useState(1);
     // Tăng số lượng
@@ -26,7 +29,7 @@ const DetailProduct = () => {
         <SafeAreaView style={Style_Detail.container}>
             <Header onPressLeft={() => navigation.goBack()} text={'Chi tiết tài khoản'} iconLeft={require('../../assets/Arrow1.png')} />
             <View style={{ alignItems: "center", marginTop: 15 }}>
-                <Image style={Style_Detail.imgProduct} source={require('../../assets/imgDetail/Rectangle_91.png')} />
+                <Image style={Style_Detail.imgProduct} source={item.image} />
                 <View style={Style_Detail.container_1}>
                     <TouchableOpacity onPress={reduce}>
                         <Image style={Style_Detail.imgIconMinus} source={require('../../assets/imgDetail/minus.png')} />
@@ -39,7 +42,7 @@ const DetailProduct = () => {
             </View>
             <View style={Style_Detail.container_2}>
                 <Text style={Style_Detail.nameproduct}>Nước rửa chén sinh học True - Bio Natural Dishwashing Liquid</Text>
-                <Text style={Style_Detail.price_1}>800,000đ</Text>
+                <Text style={Style_Detail.price_1}>{item.price} đ</Text>
                 <Text style={Style_Detail.text_1}>Giá nhà cung cấp</Text>
             </View>
             <Line />
@@ -57,7 +60,7 @@ const DetailProduct = () => {
                 <Text style={Style_Detail.text_1}>Sản phẩm dựa trên công nghệ hiện đại, môi trường khép kín. Với tiêu chí “an toàn -  sạch - đẹp”, được sản xuất hoàn toàn từ những nguyên liệu tự nhiên an toàn cho sức khỏe, quy trình làm việc sạch sẽ, đảm bảo an toàn vệ sinh thực phẩm, thiết kế bao bì mẫu mã đẹp mắt.</Text>
             </View>
             <View style={Style_Detail.container_7}>
-                <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Cart', {item, quantity})}>
                     <View style={Style_Detail.container_8}>
                         <Image style={Style_Detail.imgCart} source={require('../../assets/imgDetail/Vector.png')} />
                     </View>

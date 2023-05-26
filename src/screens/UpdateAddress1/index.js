@@ -6,6 +6,7 @@ import InputAddress from "../../component/InputAddress";
 import TypeAddress from "../../component/TypeAddress";
 import Button from "../../component/Button";
 import DeliveryAddress from "../../component/DeliveryAddress";
+import { WINDOW_HEIGHT } from "../../global";
 
 const UpdateAddress1 = ({ navigation }) => {
 
@@ -16,6 +17,7 @@ const UpdateAddress1 = ({ navigation }) => {
     };
 
     return (
+
         <SafeAreaView style={styles.container}>
 
             <Header
@@ -46,14 +48,14 @@ const UpdateAddress1 = ({ navigation }) => {
                 <TypeAddress text='Khác' check={check} onPress={handleTypeAddressPress} />
             </View>
 
-            <View style={{ alignItems: 'center', bottom: -60 }}>
+            <View style={{ alignItems: 'center', bottom: WINDOW_HEIGHT * - 0.05 }}>
                 <Button text='Cập nhật'
                     style={{ width: '90%' }} onPress={() => navigation.navigate('CustomerInformation')} />
                 <Button
                     text='Xóa khách hàng'
                     style={{ width: '90%', backgroundColor: '#FFFFFF', borderColor: '#E20B0B', borderWidth: 1, }}
                     styleText={{ color: '#E20B0B', fontWeight: '500' }}
-                    onPress={() => navigation.z('CustomerInformation')} />
+                    onPress={() => navigation.navigate('CustomerInformation')} />
             </View>
 
         </SafeAreaView >

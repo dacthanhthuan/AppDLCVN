@@ -4,12 +4,19 @@ import { useNavigation } from "@react-navigation/native";
 import Style_Payment from "./style";
 import Header from "../../component/Header/index";
 import Information from "../../component/Information";
-import Checkbox_2 from "../../component/Checkbox";
+import { Checkbox_2 } from "../../component/Checkbox/index";
 import Button from "../../component/Button";
 
 const Payment = () => {
     const navigation = useNavigation();
     const lineWidth = useWindowDimensions().width;
+
+    const [check, setCheck] = useState('Thanh toán bằng Ví VNĐ');
+
+    const handleTypeAddressPress = (type) => {
+        setCheck(type);
+    };
+
     return (
         <SafeAreaView style={Style_Payment.container}>
             <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../assets/Arrow1.png')} text={'Xác nhận thanh toán'} />
@@ -42,42 +49,20 @@ const Payment = () => {
                 }}
             />
             <Text style={Style_Payment.text_2}>Chọn phương thức thanh toán</Text>
-            <View style={{ flexDirection: "row", padding: 15 }}>
+
+            <View style={{ flexDirection: "row", marginTop: 15, alignItems: 'center' }}>
                 <Image style={Style_Payment.icon_1} source={require('../../assets/imgOder/Rectangle_238.png')} />
-                <View style={{ width: '87%', marginLeft: 20 }}>
-                    <Text style={Style_Payment.title_1}>Thanh toán bằng ví điện tử</Text>
-                    <View style={{ marginTop: 10 }}>
-                        <View style={Style_Payment.viewpayment}>
-                            <View style={{ flexDirection: "row" }}>
-                                <View style={Style_Payment.viewborder}><Text style={Style_Payment.text_3}>VNĐ</Text></View>
-                                <Text style={Style_Payment.text_4}>Thanh toán bằng Ví VNĐ</Text>
-                            </View>
-                            <Checkbox_2 />
-                        </View>
-                        <View style={Style_Payment.viewpayment}>
-                            <View style={{ flexDirection: "row" }}>
-                                <View style={Style_Payment.viewborder}><Text style={Style_Payment.text_3}>Point</Text></View>
-                                <Text style={Style_Payment.text_4}>Thanh toán bằng Ví điểm</Text>
-                            </View>
-                            <Checkbox_2 />
-                        </View>
-                        <View style={Style_Payment.viewpayment}>
-                            <View style={{ flexDirection: "row", }}>
-                                <Image style={Style_Payment.icon_2} source={require('../../assets/imgOder/Momo.png')} />
-                                <Text style={Style_Payment.text_4}>Thanh toán bằng Ví Momo</Text>
-                            </View>
-                            <Checkbox_2 />
-                        </View>
-                    </View>
-                </View>
+                <Text style={Style_Payment.title_1}>Thanh toán bằng ví điện tử</Text>
             </View>
-            <View style={{ padding: 15, flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
-                <View style={{ flexDirection: "row", width: '94%', }}>
-                    <Image style={Style_Payment.icon_1} source={require('../../assets/imgOder/Rectangle_239.png')} />
-                    <Text style={[Style_Payment.title_1, { marginLeft: 20 }]}>Thanh toán bằng Ví Momo</Text>
-                </View>
-                <Checkbox_2 />
+
+            <View style={{ marginLeft: 45 }}>
+                <Checkbox_2 type={'VNĐ'} title={'Thanh toán bằng Ví VNĐ'} onSelected={handleTypeAddressPress} isSelected={check} />
+                <Checkbox_2 type={'Point'} title={'Thanh toán bằng Ví điểm'} onSelected={handleTypeAddressPress} isSelected={check} />
+                <Checkbox_2 title={'Thanh toán bằng Ví Momo'} img={require('../../assets/imgOder/Momo.png')} onSelected={handleTypeAddressPress} isSelected={check} />
             </View>
+
+            <Checkbox_2 img={require('../../assets/imgOder/Rectangle_239.png')} title={'Thanh toán bằng tiền mặt'} onSelected={handleTypeAddressPress} isSelected={check} />
+
             <View style={{ flex: 1, paddingLeft: 30, paddingRight: 30, }}>
                 <View style={{ flex: 1 }}></View>
                 <Button onPress={() => navigation.navigate('SuccPayment')} text={'Xác nhận thanh toán'} />
@@ -85,5 +70,4 @@ const Payment = () => {
         </SafeAreaView>
     )
 };
-
 export default Payment;

@@ -1,25 +1,26 @@
 import { StyleSheet } from 'react-native';
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
-        padding: 16
+        paddingHorizontal: 16
     },
-    rowHeader: {
+    rowTranfers: {
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: -19,
+        marginBottom: 10,
+        paddingVertical: 14,
     },
     title: {
-        flex: 1,
-        fontSize: 20,
-        color: '#005AA9',
-        textAlign: 'center',
-    },
-    icon: {
-        width: 20,
-    },
+        color: '#000000',
+        fontSize: 17,
+        marginVertical: 10
+    }
+
 });
 
 export default styles;

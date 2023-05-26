@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import styles from './styles'
-import Checkbox from '../Checkbox'
+import Checkbox from '../Checkbox/index'
 
-const ProductCart = ({ title, price, image, checked, style }) => {
+const ProductCart = ({ title, price, image, checked, style, sl }) => {
 
     const [agreed, setAgreed] = useState(false);
-    const [quantity, setQuantity] = useState(1);
-
+    const [quantity, setQuantity] = useState(sl);
 
     const onCheckbox = () => {
         setAgreed(value => !value)
@@ -40,7 +39,7 @@ const ProductCart = ({ title, price, image, checked, style }) => {
                             <TouchableOpacity onPress={reduce}>
                                 <Text style={styles.buttonSL}>-</Text>
                             </TouchableOpacity>
-                            <Text style={styles.buttonSL}>{quantity}</Text>
+                            <Text style={styles.buttonSL}>{quantity ? quantity : 1}</Text>
                             <TouchableOpacity onPress={increase}>
                                 <Text style={styles.buttonSL}>+</Text>
                             </TouchableOpacity>

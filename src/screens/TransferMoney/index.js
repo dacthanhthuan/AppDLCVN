@@ -7,6 +7,7 @@ import CardMember from "../../component/CardMember";
 import Button from "../../component/Button";
 import Modal from "react-native-modal";
 import CardSurplus from "../../component/CardSurplus";
+import { WINDOW_HEIGHT } from "../../global";
 
 const data = [
   {
@@ -42,7 +43,7 @@ const data = [
 
 ];
 
-const TransferMoney = ({navigation}) => {
+const TransferMoney = ({ navigation }) => {
   const [filteredUser, setFilteredUser] = useState(data);
   const [keywork, setKeywork] = useState("");
   const [showBottomSheet, setShowBottomSheet] = useState(false);
@@ -72,7 +73,7 @@ const TransferMoney = ({navigation}) => {
       <Header
         iconLeft={require("../../assets/Arrow1.png")}
         text="Chuyển tiền"
-        onPressLeft={()=>{navigation.goBack()}}
+        onPressLeft={() => { navigation.goBack() }}
       />
 
       <Input
@@ -94,7 +95,7 @@ const TransferMoney = ({navigation}) => {
       <View style={{ alignItems: "center" }}>
         <Button
           text="Tiếp theo"
-          style={{ bottom: 0, width: "90%" }}
+          style={{ bottom: WINDOW_HEIGHT * 0, width: "90%" }}
           onPress={openBottomSheet}
         />
       </View>
@@ -135,7 +136,7 @@ const TransferMoney = ({navigation}) => {
           </View>
 
           <View style={{ alignItems: 'center' }}>
-            <Button onPress={() => navigation.navigate('TranferMoneyTwo')} text='Tiếp tục' style={{ width: '90%', bottom: -50 }} />
+            <Button onPress={() => navigation.navigate('TranferMoneyTwo')} text='Tiếp tục' style={{ width: '90%', bottom: WINDOW_HEIGHT * -0.05 }} />
           </View>
 
         </View>

@@ -46,6 +46,8 @@ import SearchRecent from './src/screens/SearchRecent';
 import CustomerInformation from './src/screens/CustomerInformation';
 import AddAddress from './src/screens/AddAddress';
 import UpdateAddress1 from './src/screens/UpdateAddress1';
+import SingleMenu from './src/screens/Menu';
+import ProfileAdmin from './src/screens/ProfileAdmin';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -103,8 +105,8 @@ const MainTab = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Warehouse" component={Warehouse} />
       <Tab.Screen name="Supplier" component={Supplier} />
-      <Tab.Screen name="Notification" component={UpdateAddress1} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Menu" component={Menu} />
+      <Tab.Screen name="ProfileAdmin" component={ProfileAdmin} />
     </Tab.Navigator>
   )
 }
@@ -132,10 +134,10 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
             case "Supplier":
               image = require('./src/assets/Rectangle335.png')
               break;
-            case "Notification":
+            case "Menu":
               image = require('./src/assets/Rectangle336.png')
               break;
-            case "Profile":
+            case "ProfileAdmin":
               image = require('./src/assets/Rectangle344.png')
               break;
           }

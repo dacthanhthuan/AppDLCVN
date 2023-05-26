@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, View, Text, Image, useWindowDimensions, FlatList, ScrollView, } from "react-native";
+import { SafeAreaView, View, Text, Image, useWindowDimensions, FlatList, TouchableOpacity} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../component/Header/index";
 import Style_CreateOrder from "./style";
@@ -45,7 +45,9 @@ const CreateOrder = () => {
                             <View style={{ width: '90%' }}>
                                 <View style={Style_CreateOrder.view_1}>
                                     <Text style={Style_CreateOrder.text_1}>Địa chỉ giao hàng</Text>
+                                    <TouchableOpacity onPress={()=>navigation.navigate('CustomerInformation')}>
                                     <Text style={Style_CreateOrder.text_2}>Thay đổi</Text>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={Style_CreateOrder.view_2}>
                                     <Text style={Style_CreateOrder.text_2}>Chị Huyên</Text>

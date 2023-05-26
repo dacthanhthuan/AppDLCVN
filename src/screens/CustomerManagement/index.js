@@ -6,6 +6,7 @@ import Input from "../../component/Input";
 import CardManager from "../../component/CardManager";
 import Button from "../../component/Button";
 import { FlatList } from "react-native-gesture-handler";
+import { WINDOW_HEIGHT } from "../../global";
 
 const data = [
     {
@@ -22,11 +23,12 @@ const data = [
 
 ]
 
-const CustomerManagement = ({navigation}) => {
+const CustomerManagement = ({ navigation }) => {
 
     const [filteredUser, setFilteredUser] = useState(data);
     const [keywork, setKeywork] = useState('');
 
+      
     useEffect(() => {
         if (keywork?.length > 0) {
             const filteredItems = data?.filter(rec => rec?.name?.toLocaleLowerCase()?.includes(keywork?.toLocaleLowerCase()))
@@ -43,7 +45,7 @@ const CustomerManagement = ({navigation}) => {
                 <Header
                     iconLeft={require('../../assets/Arrow1.png')}
                     text='Quản lý khách hàng'
-                    onPressLeft={()=>{navigation.goBack()}}
+                    onPressLeft={() => { navigation.goBack() }}
                 />
                 <Input
                     placeholder='Tìm khách hàng'
@@ -67,8 +69,8 @@ const CustomerManagement = ({navigation}) => {
                 }}
 
             />
-            <View style={{alignItems: 'center'}}>
-            <Button style={{ bottom: -35, width: '85%' }} text='Thêm khách hàng mới' />
+            <View style={{ alignItems: 'center' }}>
+                <Button style={{ bottom: WINDOW_HEIGHT * 0, width: '85%' }} text='Thêm khách hàng mới' />
             </View>
 
         </SafeAreaView>
