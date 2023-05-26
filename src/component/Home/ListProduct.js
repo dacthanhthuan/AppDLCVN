@@ -12,7 +12,10 @@ const ListProduct = ({data}) => {
   );
 };
 
-export default memo(ListProduct);
+export default memo(ListProduct, (pre, next) => {
+  console.log(JSON.stringify(pre.data) === JSON.stringify(next.data));
+  return JSON.stringify(pre.data) === JSON.stringify(next.data);
+});
 
 const styles = StyleSheet.create({
   container: {

@@ -3,13 +3,26 @@ import {useState, useRef, useCallback, useEffect} from 'react';
 import {memo} from 'react';
 import {WINDOW_WIDTH} from '../global';
 
-const Carousel = ({data, _renderItem, style, itemPerPage, extraData}) => {
+const Carousel = ({
+  data,
+  _renderItem,
+  style,
+  itemPerPage,
+  extraData,
+  hidePagination,
+  autoPlay,
+  autoPlayDelay,
+  autoPlayInvertDirection,
+}) => {
+  const pageCount =
+    data?.length % itemPerPage === 0
+      ? data.length / itemPerPage
+      : Math.ceil(data.length / itemPerPage);
+
+  const [onScrolling, setOnScrolling] = useState(false);
+
   const PageDot = useCallback(
     ({index}) => {
-      const pageCount =
-        data?.length % itemPerPage === 0
-          ? data.length / itemPerPage
-          : Math.ceil(data.length / itemPerPage);
       const page = Array(pageCount).fill(0);
       return (
         <View style={styles.pageDotCont}>
@@ -36,7 +49,7 @@ const Carousel = ({data, _renderItem, style, itemPerPage, extraData}) => {
   indexRef.current = index;
 
   const onScroll = useCallback(event => {
-    const slideSize = WINDOW_WIDTH;
+    const slideSize = event.nativeEvent.layoutMeasurement.width;
     const index = event.nativeEvent.contentOffset.x / slideSize;
     const roundIndex = Math.round(index);
 
@@ -53,8 +66,56 @@ const Carousel = ({data, _renderItem, style, itemPerPage, extraData}) => {
   }, []);
 
   useEffect(() => {
-    flatListRef.current.scrollToOffset({offset: 0});
+    data.length > 0
+      ? flatListRef.current.scrollToIndex({index: 0, animated: false})
+      : null;
   }, [extraData]);
+
+  useEffect(() => {
+    const isLastIndexEnd = autoPlayInvertDirection
+      ? index === 0
+      : index === pageCount - 1;
+
+    let autoPlayTimer;
+
+    if (autoPlay && !onScrolling) {
+      autoPlayTimer = setTimeout(
+        () => {
+          if (pageCount < 1) {
+            // avoid nextIndex being set to NaN
+            return;
+          }
+
+          const nextIncrement = autoPlayInvertDirection ? -1 : +1;
+
+          let nextIndex = (nextIncrement + index) % pageCount;
+
+          if (autoPlayInvertDirection && nextIndex < 0)
+            nextIndex = pageCount - 1;
+
+          // Disable end loop animation if in last index
+          const animate = !isLastIndexEnd;
+
+          flatListRef.current.scrollToIndex({
+            index: nextIndex * itemPerPage,
+            animated: animate,
+          });
+        },
+        autoPlayDelay ? autoPlayDelay : 1000,
+      );
+    }
+
+    return () => {
+      clearTimeout(autoPlayTimer);
+    };
+  }, [
+    autoPlay,
+    index,
+    autoPlayInvertDirection,
+    autoPlayDelay,
+    pageCount,
+    onScrolling,
+  ]);
 
   const flatListOptimizationProps = {
     initialNumToRender: 1,
@@ -77,9 +138,14 @@ const Carousel = ({data, _renderItem, style, itemPerPage, extraData}) => {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         extraData={extraData}
+        onScrollToIndexFailed={i => {
+          return;
+        }}
+        onScrollBeginDrag={() => setOnScrolling(true)}
+        onScrollEndDrag={() => setOnScrolling(false)}
         {...flatListOptimizationProps}
       />
-      <PageDot index={index} />
+      {!hidePagination ? <PageDot index={index} /> : null}
     </>
   );
 };
@@ -90,7 +156,7 @@ export default memo(Carousel, (pre, next) => {
 
 const styles = StyleSheet.create({
   carousel: {
-    width: '96%',
+    width: WINDOW_WIDTH,
   },
 
   pageDotCont: {

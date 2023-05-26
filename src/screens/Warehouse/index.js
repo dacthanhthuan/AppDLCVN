@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './styles';
 import {
   Image,
@@ -44,7 +44,7 @@ const data = [
   },
 ];
 
-const Warehouse = ({ navigation }) => {
+const Warehouse = ({navigation}) => {
   const [filteredUser, setFilteredUser] = useState(data);
   const [keywork, setKeywork] = useState('');
 
@@ -116,7 +116,7 @@ const Warehouse = ({ navigation }) => {
         }}
       />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 export default React.memo(Warehouse);

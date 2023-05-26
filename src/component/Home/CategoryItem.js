@@ -6,6 +6,7 @@ import {memo} from 'react';
 const CategoryItem = ({item}) => {
   return (
     <FlatList
+      showsHorizontalScrollIndicator={false}
       style={styles.flatlist}
       horizontal={true}
       initialNumToRender={4}

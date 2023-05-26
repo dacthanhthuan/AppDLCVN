@@ -21,13 +21,14 @@ export default memo(SlideLargest);
 const styles = StyleSheet.create({
   container: {
     marginBottom: 10,
+    width: WINDOW_WIDTH,
   },
 
   slider: {
     width: WINDOW_WIDTH * 0.94,
     alignSelf: 'center',
     height: WINDOW_HEIGHT * 0.2,
-    marginVertical: '2%',
+    marginVertical: WINDOW_HEIGHT * 0.02,
   },
 
   slideImage: {

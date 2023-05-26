@@ -44,6 +44,8 @@ const MutableCarousel = ({data, select}) => {
       _renderItem={({item}) => <GroupProductVertical data={item} />}
       itemPerPage={1}
       extraData={select}
+      autoPlay={true}
+      autoPlayDelay={2000}
     />
   );
 };
