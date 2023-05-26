@@ -5,6 +5,7 @@ import Header from "../../component/Header/index";
 import CardSurplus from "../../component/CardSurplus";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import Button from "../../component/Button";
+import { WINDOW_HEIGHT } from "../../global";
 
 const WithDraw = ({ navigation }) => {
 
@@ -62,9 +63,9 @@ const WithDraw = ({ navigation }) => {
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
 
-            <View style={{ alignItems: 'center' }} >
+            <View style={{ alignItems: 'center', bottom: WINDOW_HEIGHT * -0.28 }} >
                 <Button text='Tiếp theo'
-                    style={{ bottom: -233, width: '90%' }} />
+                    style={{ width: '90%' }} />
             </View>
 
         </SafeAreaView>

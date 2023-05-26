@@ -31,14 +31,12 @@ const AddAddress = ({ navigation }) => {
             <Text style={styles.titleAfter}>Địa chỉ giao hàng</Text>
 
             <View style={{ marginLeft: 25 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <TextInput style={{ fontSize: 13 }} placeholder="Tỉnh/Thành phố, Quận/Huyện, Phường/Xã" />
-                    <TouchableOpacity>
-                        <Image source={require('../../assets/vectorRight.png')} />
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={()=>navigation.navigate('UpdateAddress2')} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 18 }}>
+                    <Text style={{color: '#C4C4C4'}}>Tỉnh/Thành phố, Quận/Huyện, Phường/Xã</Text>
+                    <Image source={require('../../assets/vectorRight.png')} />
+                </TouchableOpacity>
                 <View style={styles.line}></View>
-                <TextInput style={{ fontSize: 13 }} placeholder="Số nhà, tên đường" />
+                <TextInput style={{ fontSize: 13 }} placeholderTextColor='#C4C4C4' placeholder="Số nhà, tên đường" />
             </View>
 
             <Text style={styles.titleAfter}>Loại địa chỉ</Text>

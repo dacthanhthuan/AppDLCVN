@@ -34,6 +34,7 @@ const Style_Payment = StyleSheet.create({
     title_1: {
         fontSize: 13,
         color: '#000000',
+        marginLeft: 12
     },
     viewborder: {
         borderRadius: 4,

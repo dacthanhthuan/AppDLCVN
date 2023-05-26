@@ -2,11 +2,12 @@ import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
         backgroundColor: '#FFFFFF',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderWidth: 1, 
+        borderWidth: 1,
         borderColor: '#C2C2C2',
         borderRadius: 7,
         padding: 12,
@@ -19,14 +20,14 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 20,
         color: '#005AA9',
-        fontFamily: 'Montserrat'
+        fontFamily: 'Montserrat',
     },
     id: {
         fontSize: 16,
         color: '#C2C2C2',
     },
-    textProfile:{
-        fontSize: 13, 
+    textProfile: {
+        fontSize: 13,
         color: '#005AA9'
     }
 })

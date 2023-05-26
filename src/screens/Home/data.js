@@ -11,19 +11,33 @@ const tropy = require('../../assets/Home/Rectangle405.png');
  ]
  ** *second... : optional (
   *** -carousel: using carousel to display
-  *** -stack: using carousel with radio button to change item display
+  *** -mutable: using carousel with radio button to change item display
  )
  ** /more: if title have "More" option
  */
 export const data1 = [
   {
-    type: 'slide/first',
+    type: 'slide/carousel',
     title: '',
     data: [
-      {
-        source: require('../../assets/Home/Rectangle324.png'),
-        backgroundColor: '#005AA9',
-      },
+      [
+        {
+          source: require('../../assets/Home/Rectangle324.png'),
+          backgroundColor: '#005AA9',
+        },
+        {
+          source: require('../../assets/Home/Rectangle369.png'),
+          backgroundColor: '#005AA9',
+        },
+        {
+          source: require('../../assets/Home/Rectangle398.png'),
+          backgroundColor: '#005AA9',
+        },
+        {
+          source: require('../../assets/Home/Rectangle369.png'),
+          backgroundColor: '#005AA9',
+        },
+      ],
     ],
   },
   {
@@ -47,6 +61,14 @@ export const data1 = [
           title: 'Chống nắng',
           source: require('../../assets/Home/Rectangle380.png'),
         },
+        {
+          title: 'Dưỡng da',
+          source: require('../../assets/Home/Rectangle379.png'),
+        },
+        {
+          title: 'Sữa',
+          source: require('../../assets/Home/Rectangle378.png'),
+        },
       ],
     ],
   },
@@ -58,14 +80,17 @@ export const data1 = [
         {
           title: 'bán chạy nhất',
           source: tropy,
+          backgroundColor: '#A81811',
         },
         {
           title: 'chiết khấu cao',
           source: tropy,
+          backgroundColor: '#09355C',
         },
         {
           title: 'được đề xuất',
           source: tropy,
+          backgroundColor: '#F56318',
         },
       ],
     ],

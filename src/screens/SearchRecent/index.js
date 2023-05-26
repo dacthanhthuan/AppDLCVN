@@ -9,51 +9,56 @@ const data = [
     { name: 'Auslac Lactoferrin (Giá Ưu Đãi)' },
     { name: 'DLC Brazil Green Propolis' },
     { name: 'DLC Diamond Lip Balm No.1' },
-]
+];
 
 const SearchRecent = ({ navigation }) => {
-
     const [filteredUser, setFilteredUser] = useState(data);
-    const [keywork, setKeywork] = useState('');
+    const [keyword, setKeyword] = useState('');
 
     useEffect(() => {
-        if (keywork?.length > 0) {
-            const filteredItems = data?.filter(rec => rec?.name?.toLocaleLowerCase()?.includes(keywork?.toLocaleLowerCase()))
+        if (keyword?.length > 0) {
+            const filteredItems = data?.filter(rec =>
+                rec?.name?.toLocaleLowerCase()?.includes(keyword?.toLocaleLowerCase())
+            );
             setFilteredUser(filteredItems);
         } else {
             setFilteredUser(data);
         }
+    }, [keyword]);
 
-    }, [keywork])
+    const deleteSearch = (index) => {
+        const updatedData = filteredUser.filter((item, idx) => idx !== index);
+        setFilteredUser(updatedData);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
-
+            
             <Header
                 iconLeft={require('../../assets/Arrow1.png')}
                 text='Tìm kiếm'
                 iconRight={require('../../assets/Vector.png')}
                 onPressLeft={() => { navigation.goBack() }}
+                onPressRight={() => { navigation.navigate('Cart') }}
             />
 
             <Input
                 placeholder='Bạn cần tìm gì'
-                onChangeText={setKeywork}
-                value={keywork} />
+                onChangeText={setKeyword}
+                value={keyword}
+            />
 
             <Text style={{ marginTop: 25, fontSize: 16, color: '#000000', fontWeight: '500' }}>Đã tìm gần đây</Text>
 
             <FlatList
                 data={filteredUser}
                 style={{ marginTop: 15 }}
-                renderItem={({ item }) => {
-                    return (
-                        <CardRecent text={item.name} />
-                    )
-                }} />
-
+                renderItem={({ item, index }) => (
+                    <CardRecent text={item.name} onPress={() => deleteSearch(index)} />
+                )}
+            />
         </SafeAreaView>
-    )
-}
+    );
+};
 
 export default React.memo(SearchRecent);

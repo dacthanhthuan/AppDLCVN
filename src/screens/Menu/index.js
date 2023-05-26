@@ -34,6 +34,7 @@ const data = [
       require('../../assets/dlcsoybean.png'),
       require('../../assets/Group135.png'),
       require('../../assets/Group135.png'),
+      require('../../assets/Group135.png'),
     ],
     name: 'Auslac Lactoferrin (Giá Ưu Đãi)',
     price: ' 1,100,000',

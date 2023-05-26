@@ -10,6 +10,8 @@ export default CarouselProduct = ({data, itemPerPage}) => {
       _renderItem={({item}) => <Product item={item} />}
       itemPerPage={itemPerPage}
       style={styles.container}
+      autoPlay={true}
+      autoPlayDelay={2000}
     />
   );
 };

@@ -9,9 +9,11 @@ import { Carousel, Pagination } from 'react-native-snap-carousel';
 import { formatprice } from "../../global";
 // import Carousel from 'react-native-reanimated-carousel';
 
-const DetailProduct = ({ navigation, route }) => {
-    const itemdata = route.params;
-    console.log(itemdata);
+const DetailProduct = ({route}) => {
+    const {item} = route?.params || {};
+
+    // console.log('item :>> ', item);
+    const navigation = useNavigation();
     const [quantity, setQuantity] = useState(1);
     const price = formatprice(itemdata.item.price);
     const commission = formatprice(itemdata.item.commission);
@@ -66,6 +68,7 @@ const DetailProduct = ({ navigation, route }) => {
                     loop={true}
                     inactiveSlideScale={0.8}
                 />
+                <Image style={Style_Detail.imgProduct} source={item.image} />
                 <View style={Style_Detail.container_1}>
                     <TouchableOpacity onPress={reduce}>
                         <Image style={Style_Detail.imgIconMinus} source={require('../../assets/imgDetail/minus.png')} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './styles';
 import {
   Image,
@@ -44,7 +44,7 @@ const data = [
   },
 ];
 
-const Warehouse = ({ navigation }) => {
+const Warehouse = ({navigation}) => {
   const [filteredUser, setFilteredUser] = useState(data);
   const [keywork, setKeywork] = useState('');
 
@@ -88,7 +88,8 @@ const Warehouse = ({ navigation }) => {
       <FlatList
         data={filteredUser}
         numColumns={2}
-        style={{ marginTop: 15 }}
+        style={{ marginTop: 15, width:'100%' }}
+        contentContainerStyle={{alignItems:'center'}}
         showsVerticalScrollIndicator={false}
         keyExtractor={item => String(item?.id)}
         ListHeaderComponent={(
@@ -103,19 +104,19 @@ const Warehouse = ({ navigation }) => {
           return (
             <CardProduct
               style={index % 2 === 0
-                ? { marginLeft: 2, marginRight: 22 }
+                ? { marginLeft: 12 }
                 : { marginRight: 4 }}
               key={item.id}
               image={item.image}
               title={item.title}
               categori={item.categori}
               price={item.price}
-              onPress={() => navigation.navigate('DetailProduct')} />
+              onPress={() => navigation.navigate('DetailProduct', {item})} />
           )
         }}
       />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 export default React.memo(Warehouse);

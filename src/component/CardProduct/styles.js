@@ -1,24 +1,30 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
+import { WINDOW_WIDTH, WINDOW_HEIGHT } from '../../global';
 
 const styles = StyleSheet.create({
     container: {
-        width: 175,
-        paddingVertical: 8,
-        paddingLeft: 12,
+        width: (WINDOW_WIDTH - 32) / 2,
+        height: (WINDOW_HEIGHT * 0.35),
         flexDirection: 'column',
         justifyContent: 'center',
-        borderRadius: 7,
-        marginBottom: 16,
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 4.65,
-        elevation: 2,
         backgroundColor: '#FFFFFF',
-
-
+        marginBottom: 16,
+    },
+    containerView: {
+        width: '94%',
+        height: '96%',
+        borderRadius: 7,
+        paddingVertical: 8,
+        paddingLeft: 12,
+        backgroundColor: '#FFFFFF',
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 2,
+        // },
+        // shadowOpacity: 0.3,
+        // shadowRadius: 4.65,
+        //Andorid
+        elevation: 2,
 
     },
     image: {
