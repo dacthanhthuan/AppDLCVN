@@ -1,32 +1,49 @@
-import {FlatList, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
+import Carousel from '../AnimatedCarousel';
 import ImageButton from './ImageButton';
 import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../global';
-import {memo} from 'react';
+import {memo, useState, useCallback} from 'react';
+import {interpolate} from 'react-native-reanimated';
 
 const TopProductItem = ({item}) => {
+  const animationStyle = useCallback(value => {
+    'worklet';
+    const scale = interpolate(value, [-1, 0, 1], [1, 1.15, 1]);
+    const translateX = interpolate(
+      value,
+      [-1, 0, 1],
+      [-WINDOW_WIDTH / 3, 0, WINDOW_WIDTH / 3],
+    );
+
+    return {
+      transform: [{scale}, {translateX}],
+    };
+  }, []);
+
   return (
-    <FlatList
+    <Carousel
       style={styles.topProduct}
-      initialNumToRender={3}
       data={item}
-      renderItem={({item, index}) => (
-        <ImageButton
-          imagesource={item.source}
-          text={`TOP\n${item.title}`}
-          containerStyle={[
-            index === 1 ? styles.productTopCont : styles.productCont,
-            index === 0
-              ? {backgroundColor: '#A81811'}
-              : index === 1
-              ? {backgroundColor: '#09355C'}
-              : {backgroundColor: '#F56318'},
-          ]}
-          imageStyle={
-            index === 1 ? styles.productTopImage : styles.productImage
-          }
-          textStlye={styles.productText}
-        />
-      )}
+      renderItem={({item}) => {
+        return (
+          <ImageButton
+            imagesource={item.source}
+            text={`TOP\n${item.title}`}
+            containerStyle={[
+              styles.productCont,
+              {backgroundColor: item.backgroundColor},
+            ]}
+            imageStyle={styles.productImage}
+            textStlye={styles.productText}
+          />
+        );
+      }}
+      width={WINDOW_WIDTH / 3}
+      height={WINDOW_HEIGHT * 0.12}
+      autoPlay={true}
+      autoPlayInterval={3000}
+      scrollAnimationDuration={600}
+      customAnimation={animationStyle}
     />
   );
 };
@@ -35,40 +52,24 @@ export default memo(TopProductItem);
 
 const styles = StyleSheet.create({
   topProduct: {
-    flexDirection: 'row',
-    height: WINDOW_HEIGHT * 0.12,
-    marginHorizontal: '2%',
+    height: WINDOW_HEIGHT * 0.14,
     marginTop: '1%',
-    marginBottom: '4%',
-    alignContent: 'space-between',
+    marginBottom: '2%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: WINDOW_WIDTH,
   },
 
   productCont: {
     width: (WINDOW_WIDTH * 0.88) / 3,
     height: '100%',
     justifyContent: 'center',
-    marginHorizontal: WINDOW_WIDTH * 0.01,
+    alignSelf: 'center',
     borderRadius: 5,
-  },
-
-  productTopCont: {
-    width: (WINDOW_WIDTH * 0.88) / 3,
-    height: '100%',
-    justifyContent: 'center',
-    marginHorizontal: WINDOW_WIDTH * 0.02,
-    borderRadius: 5,
-    transform: [{scale: 1.1}],
   },
 
   productImage: {
     width: '35%',
-    height: '40%',
-    alignSelf: 'center',
-    marginBottom: 5,
-  },
-
-  productTopImage: {
-    width: '40%',
     height: '40%',
     alignSelf: 'center',
     marginBottom: 5,

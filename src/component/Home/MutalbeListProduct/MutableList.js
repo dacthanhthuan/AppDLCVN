@@ -1,7 +1,8 @@
-import Carousel from '../../Carousel';
+// import Carousel from '../../Carousel';
+import Carousel from '../../AnimatedCarousel';
 import {StyleSheet, View} from 'react-native';
 import {WINDOW_WIDTH} from '../../../global';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, memo} from 'react';
 import ButtonGroup from './ButtonGroup';
 import VerticalProduct from './VerticalProduct';
 
@@ -41,18 +42,21 @@ const MutableCarousel = ({data, select}) => {
     <Carousel
       style={styles.container}
       data={dataSpilit}
-      _renderItem={({item}) => <GroupProductVertical data={item} />}
-      itemPerPage={1}
-      extraData={select}
+      renderItem={({item}) => <GroupProductVertical data={item} />}
       autoPlay={true}
-      autoPlayDelay={2000}
+      width={WINDOW_WIDTH}
+      height={400}
+      autoPlayInterval={2000}
+      loop={true}
+      showPagination={true}
+      extraData={select}
     />
   );
 };
 
 const GroupProductVertical = ({data}) => {
   return (
-    <View>
+    <View style={styles.groupContainer}>
       {data?.map((item, index) => {
         return <VerticalProduct data={item} key={index} />;
       })}
@@ -60,12 +64,18 @@ const GroupProductVertical = ({data}) => {
   );
 };
 
-export default MutableList;
+export default memo(
+  MutableList,
+  (pre, next) => JSON.stringify(pre.item) === JSON.stringify(next.item),
+);
 
 const styles = StyleSheet.create({
   container: {
+    marginVertical: '1%',
+  },
+
+  groupContainer: {
     alignSelf: 'center',
     width: WINDOW_WIDTH * 0.96,
-    marginVertical: '1%',
   },
 });

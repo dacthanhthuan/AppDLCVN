@@ -23,19 +23,15 @@ export const data1 = [
       [
         {
           source: require('../../assets/Home/Rectangle324.png'),
-          backgroundColor: '#005AA9',
         },
         {
           source: require('../../assets/Home/Rectangle369.png'),
-          backgroundColor: '#005AA9',
         },
         {
           source: require('../../assets/Home/Rectangle398.png'),
-          backgroundColor: '#005AA9',
         },
         {
           source: require('../../assets/Home/Rectangle369.png'),
-          backgroundColor: '#005AA9',
         },
       ],
     ],
@@ -135,18 +131,6 @@ export const data1 = [
           source: require('../../assets/Home/Rectangle388.png'),
           data: [
             {
-              title: 'DLC Brazil Green Propolis',
-              promotion: {
-                type: 'discount',
-                title: 'Giảm 10%',
-                value: 0.1,
-              },
-              priceBefore: 800000,
-              price: 700000,
-              commission: 300000,
-              source: require('../../assets/Home/Rectangle374.png'),
-            },
-            {
               title: 'Viên uống DLC Antrodia Cinnamomea',
               promotion: {
                 type: 'gift',
@@ -157,6 +141,18 @@ export const data1 = [
               price: 800000,
               commission: 300000,
               source: require('../../assets/Home/Rectangle376.png'),
+            },
+            {
+              title: 'DLC Brazil Green Propolis',
+              promotion: {
+                type: 'discount',
+                title: 'Giảm 10%',
+                value: 0.1,
+              },
+              priceBefore: 800000,
+              price: 700000,
+              commission: 300000,
+              source: require('../../assets/Home/Rectangle374.png'),
             },
             {
               title: 'Viên uống DLC Antrodia Cinnamomea',
@@ -365,18 +361,6 @@ export const data1 = [
           source: require('../../assets/Home/Rectangle387.png'),
           data: [
             {
-              title: 'DLC Brazil Green Propolis',
-              promotion: {
-                type: 'discount',
-                title: 'Giảm 10%',
-                value: 0.1,
-              },
-              priceBefore: 800000,
-              price: 700000,
-              commission: 300000,
-              source: require('../../assets/Home/Rectangle374.png'),
-            },
-            {
               title: 'Viên uống DLC Antrodia Cinnamomea',
               promotion: {
                 type: 'gift',
@@ -399,6 +383,18 @@ export const data1 = [
               price: 800000,
               commission: 300000,
               source: require('../../assets/Home/Rectangle376.png'),
+            },
+            {
+              title: 'DLC Brazil Green Propolis',
+              promotion: {
+                type: 'discount',
+                title: 'Giảm 10%',
+                value: 0.1,
+              },
+              priceBefore: 800000,
+              price: 700000,
+              commission: 300000,
+              source: require('../../assets/Home/Rectangle374.png'),
             },
             {
               title: 'DLC Brazil Green Propolis',
