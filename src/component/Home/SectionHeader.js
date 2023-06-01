@@ -18,7 +18,10 @@ const SectionHeader = ({title, isMore}) => {
   );
 };
 
-export default memo(SectionHeader);
+export default memo(
+  SectionHeader,
+  (pre, next) => JSON.stringify(pre) === JSON.stringify(next),
+);
 
 const styles = StyleSheet.create({
   categoryTitle: {

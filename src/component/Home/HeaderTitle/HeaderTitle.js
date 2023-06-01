@@ -57,7 +57,7 @@ const Header = () => {
       interpolate(
         headerHeight.value,
         [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
-        [0, 100],
+        [0, 50],
         'clamp',
       ),
       {
@@ -138,6 +138,7 @@ const Header = () => {
     <View
       style={[styles.expandsStyle]}
       onLayout={({nativeEvent}) => {
+        console.log(nativeEvent);
         headerHeight.value = nativeEvent.layout.height;
       }}>
       <Animated.View style={[styles.logoAndCart, headerCollapseStyle]}>

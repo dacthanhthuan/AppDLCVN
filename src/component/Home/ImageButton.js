@@ -60,4 +60,6 @@ const AnimatedImageButton = forwardRef(
 export const AnimatedImgButton =
   Animated.createAnimatedComponent(AnimatedImageButton);
 
-export default memo(ImageButton);
+export default memo(ImageButton, (pre, next) => {
+  JSON.stringify(pre) === JSON.stringify(next);
+});

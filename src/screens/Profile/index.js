@@ -11,12 +11,12 @@ import InfoCard from '../../component/InfoCard';
 import CardProfile from '../../component/CardProfile';
 import TranfersMoney from '../../component/TranfersMoney';
 
-const Profile = ({navigation}) => {
+const Profile = ({ navigation }) => {
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <CardProfile
-          style={{marginTop: 25}}
+          style={{ marginTop: 25 }}
           image={require('../../assets/Rectangle312.png')}
           text="Nguyễn Thái Năng"
           id={'331550479'}
@@ -26,12 +26,12 @@ const Profile = ({navigation}) => {
         <Text style={styles.title}>Quản lí ví</Text>
 
         <Image
-          style={{width: '100%', height: 72}}
+          style={{ width: '100%', height: 72 }}
           resizeMode="contain"
           source={require('../../assets/Rectangle301.png')}
         />
         <Image
-          style={{width: '100%', height: 72, marginTop: -22}}
+          style={{ width: '100%', height: 72, marginTop: -22 }}
           resizeMode="contain"
           source={require('../../assets/Rectangle302.png')}
         />
@@ -43,7 +43,6 @@ const Profile = ({navigation}) => {
           <TranfersMoney
             image={require('../../assets/Rectangle303.png')}
             text="Quét mã"
-            onPress={() => navigation.navigate('UpdateAddress1')}
           />
           <TranfersMoney
             image={require('../../assets/Rectangle304.png')}
@@ -92,51 +91,51 @@ const Profile = ({navigation}) => {
         <InfoCard
           image={require('../../assets/Rectangle299.png')}
           text="Báo cáo hoa hồng"
-          style={{marginBottom: 32}}
+          style={{ marginBottom: 32 }}
         />
       </SafeAreaView>
     </ScrollView>
   );
 };
 
-        //         <Text style={styles.title}>Bảng điều khiển</Text>
+//         <Text style={styles.title}>Bảng điều khiển</Text>
 
-        //         <InfoCard
-        //             image={require('../../assets/Rectangle294.png')}
-        //             text='Chia sẻ app'
-        //             onPress={()=>navigation.navigate('SearchRecent')}
-        //             />
-        //         <InfoCard
-        //             image={require('../../assets/Rectangle295.png')}
-        //             text='Thiết lập bảo mật'
-        //             onPress={()=>navigation.navigate('CustomerManagement')}
-        //         />
-        //         <InfoCard
-        //             image={require('../../assets/Rectangle300.png')}
-        //             text='Tài khoản ngân hàng'
-        //         />
-        //         <InfoCard
-        //             image={require('../../assets/Rectangle295.png')}
-        //             text='Quản lý địa chỉ'
-        //         />
-        //         <InfoCard
-        //             image={require('../../assets/Rectangle298.png')}
-        //             text='Danh sách đội nhóm'
-        //             onPress={() => navigation.navigate('TeamThree')}
-        //         />
-        //         <InfoCard
-        //             image={require('../../assets/Rectangle299.png')}
-        //             text='Báo cáo doanh số'
-        //         />
-        //         <InfoCard
-        //             image={require('../../assets/Rectangle299.png')}
-        //             text='Báo cáo hoa hồng'
-        //             style={{ marginBottom: 32 }}
-        //         />
+//         <InfoCard
+//             image={require('../../assets/Rectangle294.png')}
+//             text='Chia sẻ app'
+//             onPress={()=>navigation.navigate('SearchRecent')}
+//             />
+//         <InfoCard
+//             image={require('../../assets/Rectangle295.png')}
+//             text='Thiết lập bảo mật'
+//             onPress={()=>navigation.navigate('CustomerManagement')}
+//         />
+//         <InfoCard
+//             image={require('../../assets/Rectangle300.png')}
+//             text='Tài khoản ngân hàng'
+//         />
+//         <InfoCard
+//             image={require('../../assets/Rectangle295.png')}
+//             text='Quản lý địa chỉ'
+//         />
+//         <InfoCard
+//             image={require('../../assets/Rectangle298.png')}
+//             text='Danh sách đội nhóm'
+//             onPress={() => navigation.navigate('TeamThree')}
+//         />
+//         <InfoCard
+//             image={require('../../assets/Rectangle299.png')}
+//             text='Báo cáo doanh số'
+//         />
+//         <InfoCard
+//             image={require('../../assets/Rectangle299.png')}
+//             text='Báo cáo hoa hồng'
+//             style={{ marginBottom: 32 }}
+//         />
 
-        //     </SafeAreaView>
+//     </SafeAreaView>
 
-        // </ScrollView>
+// </ScrollView>
 //     )
 // }
 

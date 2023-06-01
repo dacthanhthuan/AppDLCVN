@@ -1,11 +1,13 @@
 import Carousel from '../AnimatedCarousel';
 import {StyleSheet, View} from 'react-native';
 import Product from './Product';
-import {useEffect, useState} from 'react';
+import {useEffect, useState, memo, useContext} from 'react';
 import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../global';
+import {ScrollContext} from '../../screens/Home';
 
-export default CarouselProduct = ({data}) => {
+const CarouselProduct = ({data}) => {
   const [dataSpilit, setDataSpilit] = useState([]);
+  const isScroll = useContext(ScrollContext);
 
   useEffect(() => {
     setDataSpilit([]);
@@ -20,25 +22,34 @@ export default CarouselProduct = ({data}) => {
       renderItem={({item}) => <DoubleProduct data={item} />}
       width={WINDOW_WIDTH}
       height={WINDOW_HEIGHT * 0.35}
-      autoPlay={true}
+      autoPlay={!isScroll}
       loop={true}
       autoPlayInterval={2500}
       scrollAnimationDuration={600}
       showPagination={true}
       style={styles.container}
+      windowSize={3}
     />
   );
 };
 
-const DoubleProduct = ({data}) => {
-  return (
-    <View style={styles.doubleContainer}>
-      {data.map((item, index) => {
-        return <Product key={index} item={item} />;
-      })}
-    </View>
-  );
-};
+const DoubleProduct = memo(
+  ({data}) => {
+    return (
+      <View style={styles.doubleContainer}>
+        {data.map((item, index) => {
+          return <Product key={index} item={item} />;
+        })}
+      </View>
+    );
+  },
+  (pre, next) => JSON.stringify(pre) === JSON.stringify(next),
+);
+
+export default memo(
+  CarouselProduct,
+  (pre, next) => JSON.stringify(pre.data) === JSON.stringify(next.data),
+);
 
 const styles = StyleSheet.create({
   container: {

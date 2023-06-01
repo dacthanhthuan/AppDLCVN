@@ -76,7 +76,7 @@ const Recharge = ({ navigation }) => {
                 </View>
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
-            <View style={{ alignItems: 'center', bottom: WINDOW_HEIGHT * -0.2, }} >
+            <View style={{ alignItems: 'center', bottom: WINDOW_HEIGHT * - 0.17, }} >
                 <Button text='Tiếp theo'
                     style={{ width: '90%' }} />
             </View>

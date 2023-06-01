@@ -2,10 +2,13 @@ import {StyleSheet} from 'react-native';
 import Carousel from '../AnimatedCarousel';
 import ImageButton from './ImageButton';
 import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../global';
-import {memo, useState, useCallback} from 'react';
+import {memo, useContext, useCallback} from 'react';
 import {interpolate} from 'react-native-reanimated';
+import {ScrollContext} from '../../screens/Home';
 
-const TopProductItem = ({item}) => {
+const Trophy = ({item}) => {
+  const isScroll = useContext(ScrollContext);
+
   const animationStyle = useCallback(value => {
     'worklet';
     const scale = interpolate(value, [-1, 0, 1], [1, 1.15, 1]);
@@ -40,15 +43,19 @@ const TopProductItem = ({item}) => {
       }}
       width={WINDOW_WIDTH / 3}
       height={WINDOW_HEIGHT * 0.12}
-      autoPlay={true}
+      autoPlay={!isScroll}
       autoPlayInterval={3000}
       scrollAnimationDuration={600}
       customAnimation={animationStyle}
+      windowSize={5}
     />
   );
 };
 
-export default memo(TopProductItem);
+export default memo(
+  Trophy,
+  (pre, next) => JSON.stringify(pre) === JSON.stringify(next),
+);
 
 const styles = StyleSheet.create({
   topProduct: {

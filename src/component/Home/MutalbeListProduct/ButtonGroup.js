@@ -20,24 +20,32 @@ const ButtonGroup = ({button, checked, onSelect}) => {
   );
 };
 
-const StackButton = memo(({item, isSelected}) => {
-  return (
-    <>
-      <Image
-        source={item.source}
-        style={styles.imageButton}
-        resizeMode="contain"
-      />
-      <Text
-        style={[styles.textButton, isSelected ? {color: '#005AA9'} : null]}
-        numberOfLines={1}>
-        {item.title}
-      </Text>
-    </>
-  );
-});
+const StackButton = memo(
+  ({item, isSelected}) => {
+    return (
+      <>
+        <Image
+          source={item.source}
+          style={styles.imageButton}
+          resizeMode="contain"
+        />
+        <Text
+          style={[styles.textButton, isSelected ? {color: '#005AA9'} : null]}
+          numberOfLines={1}>
+          {item.title}
+        </Text>
+      </>
+    );
+  },
+  (pre, next) => JSON.stringify(pre) === JSON.stringify(next),
+);
 
-export default memo(ButtonGroup);
+export default memo(
+  ButtonGroup,
+  (pre, next) =>
+    JSON.stringify(pre.button) === JSON.stringify(next.button) &&
+    JSON.stringify(pre.checked) === JSON.stringify(next.checked),
+);
 
 const styles = StyleSheet.create({
   container: {

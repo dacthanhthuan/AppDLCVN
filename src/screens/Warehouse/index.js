@@ -45,6 +45,9 @@ const data = [
 ];
 
 const Warehouse = ({ navigation }) => {
+
+  // Định dạng giá thành với dấu phẩy ngăn cách
+
   const [filteredUser, setFilteredUser] = useState(data);
   const [keywork, setKeywork] = useState('');
 
@@ -101,6 +104,7 @@ const Warehouse = ({ navigation }) => {
           </>
         )}
         renderItem={({ item, index }) => {
+          const formattedPrice = item.price.toLocaleString();
           return (
             <CardProduct
               style={index % 2 === 0
@@ -110,7 +114,7 @@ const Warehouse = ({ navigation }) => {
               image={item.source}
               title={item.title}
               categori={item.categori}
-              price={item.price}
+              price={formattedPrice}
               onPress={() => navigation.navigate('DetailProduct', { item })} />
           )
         }}

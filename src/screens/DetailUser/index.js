@@ -14,7 +14,7 @@ const Detail_User = () => {
             <ScrollView style={Style_User.scrollview} showsVerticalScrollIndicator={false}>
                 <View style={Style_User.container_1}>
                     <TouchableOpacity>
-                        <Image style={Style_User.imgUser} source={require('../../assets/imgSupplier/Ellipse_88.png')} />
+                        <Image style={Style_User.imgUser} source={require('../../assets/Rectangle312.png')} />
                         <Image style={Style_User.iconCamera} source={require('../../assets/imgSupplier/Rectangle_310.png')} />
                     </TouchableOpacity>
                     <Text style={Style_User.nameUser}>Nguyễn Thái Năng</Text>

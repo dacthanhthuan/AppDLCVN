@@ -21,7 +21,10 @@ const SlideHalf = ({item}) => {
   );
 };
 
-export default memo(SlideHalf);
+export default memo(
+  SlideHalf,
+  (pre, next) => JSON.stringify(pre.item) === JSON.stringify(next.item),
+);
 
 const styles = StyleSheet.create({
   container: {
