@@ -67,6 +67,7 @@ const App = () => {
         <Stack.Screen name="WithDraw" component={WithDraw} />
         <Stack.Screen name="Recharge" component={Recharge} />
         <Stack.Screen name="TransferMoney" component={TransferMoney} />
+        <Stack.Screen name="TranferMoneyTwo" component={TranferMoneyTwo} />
         <Stack.Screen name="SuccPayment" component={SuccPayment} />
         <Stack.Screen name="SearchProduct" component={SearchProduct} />
         <Stack.Screen name="SearchRecent" component={SearchRecent} />
@@ -88,7 +89,6 @@ const App = () => {
         <Stack.Screen name="Sales" component={Sales} />
         <Stack.Screen name="Sales_2" component={Sales_2} />
         <Stack.Screen name="Sales_3" component={Sales_3} />
-        <Stack.Screen name="TranferMoneyTwo" component={TranferMoneyTwo} />
         <Stack.Screen name="Walk" component={Walk} />
         <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
         <Stack.Screen name='MainTab' component={MainTab} />

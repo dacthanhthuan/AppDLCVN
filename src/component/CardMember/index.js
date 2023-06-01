@@ -13,7 +13,7 @@ const CardMember = ({ name, image, phone, style, onPress }) => {
     return (
         <View style={[styles.container, style]}>
             <View style={{ flexDirection: 'row' }}>
-                <Image style={styles.icon} source={image} />
+                <Image style={styles.icon} resizeMode="contain" source={image} />
                 <View style={{
                     flexDirection: 'column', marginLeft: 10, justifyContent: 'space-between'
                 }}>

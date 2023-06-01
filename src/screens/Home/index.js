@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './styles';
-import {SafeAreaView, StatusBar, Text, SectionList} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+import { SafeAreaView, StatusBar, Text, SectionList } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -17,7 +17,7 @@ import SplashScreen from 'react-native-splash-screen';
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 //Data
-import {data1} from './data';
+import { data1 } from './data';
 
 //Component
 import SlideLargest from '../../component/Home/SlideLargest';
@@ -30,8 +30,8 @@ import Header from '../../component/Home/HeaderTitle/HeaderTitle';
 import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 import CarouselSlide from '../../component/Home/CarouselSlide';
-import {WINDOW_WIDTH} from '../../global';
-import {HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT} from './styles';
+import { WINDOW_WIDTH } from '../../global';
+import { HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT } from './styles';
 
 const Home = () => {
   //animate header
@@ -110,7 +110,7 @@ const Home = () => {
         style={[styles.scrollview, paddingStyle]}
         initialNumToRender={8}
         sections={data1}
-        renderSectionHeader={({section}) =>
+        renderSectionHeader={({ section }) =>
           section.title.length > 0 ? (
             <SectionHeader
               title={section.title}
@@ -118,7 +118,7 @@ const Home = () => {
             />
           ) : null
         }
-        renderItem={({item, section}) => {
+        renderItem={({ item, section }) => {
           switch (true) {
             case section.type.startsWith('slide'):
               switch (true) {
