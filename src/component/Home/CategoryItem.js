@@ -1,10 +1,10 @@
 import ImageButton from './ImageButton';
-import { StyleSheet, FlatList } from 'react-native';
-import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../global';
-import { memo } from 'react';
-import { useNavigation } from "@react-navigation/native";
+import {StyleSheet, FlatList} from 'react-native';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../global';
+import {memo} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
-const CategoryItem = ({ item }) => {
+const CategoryItem = ({item}) => {
   const navigation = useNavigation();
   // const screens = [
   //   { title: 'TPCN', screen: 'ProtectHealth' },
@@ -23,7 +23,7 @@ const CategoryItem = ({ item }) => {
       horizontal={true}
       initialNumToRender={4}
       data={item}
-      renderItem={({ item }) => (
+      renderItem={({item}) => (
         <ImageButton
           // onPress={() => navigation.navigate(getScreen(item.title))}
           imagesource={item.source}
@@ -32,13 +32,15 @@ const CategoryItem = ({ item }) => {
           imageStyle={styles.categoryImage}
           textStlye={styles.categoryText}
         />
-      )
-      }
+      )}
     />
   );
 };
 
-export default memo(CategoryItem);
+export default memo(
+  CategoryItem,
+  (pre, next) => JSON.stringify(pre) === JSON.stringify(next),
+);
 
 const styles = StyleSheet.create({
   flatlist: {
