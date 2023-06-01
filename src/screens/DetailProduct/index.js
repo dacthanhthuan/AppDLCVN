@@ -121,20 +121,20 @@ const DetailProduct = ({ route }) => {
   )
 };
 
-// const data = [
-//   {
-//     img: require('../../assets/imgDetail/Rectangle_91.png'),
-//   },
-//   {
-//     img: require('../../assets/Rectangle293.png'),
-//   },
-//   {
-//     img: require('../../assets/dlcsoybean.png'),
-//   },
-//   {
-//     img: require('../../assets/dlcred.png'),
-//   },
-// ];
+const data = [
+  {
+    img: require('../../assets/imgDetail/Rectangle_91.png'),
+  },
+  {
+    img: require('../../assets/Rectangle293.png'),
+  },
+  {
+    img: require('../../assets/dlcsoybean.png'),
+  },
+  {
+    img: require('../../assets/dlcred.png'),
+  },
+];
 
 // return (
 //   <SafeAreaView style={Style_Detail.container}>
