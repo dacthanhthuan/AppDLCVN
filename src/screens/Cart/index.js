@@ -137,7 +137,7 @@ const Cart = ({ navigation, route }) => {
   // Không có đơn hàng chuyển qua trang NoOrders
   useEffect(() => {
     if (productData.length === 0) {
-      navigation.navigate('CardEmpty');
+      navigation.replace('CardEmpty');
     }
   }, [productData, navigation]);
 
