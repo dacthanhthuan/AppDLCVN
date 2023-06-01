@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     width: WINDOW_WIDTH * 0.94,
     alignSelf: 'center',
     height: WINDOW_HEIGHT * 0.2,
-    marginVertical: WINDOW_HEIGHT * 0.02,
+    marginVertical: WINDOW_HEIGHT * 0.01,
   },
 
   slideImage: {

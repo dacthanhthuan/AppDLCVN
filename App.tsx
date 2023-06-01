@@ -105,7 +105,7 @@ const MainTab = () => {
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Warehouse" component={Warehouse} />
       <Tab.Screen name="Supplier" component={Supplier} />
-      <Tab.Screen name="Menu" component={Menu} />
+      <Tab.Screen name="Order" component={Menu} />
       <Tab.Screen name="ProfileAdmin" component={ProfileAdmin} />
     </Tab.Navigator>
   )
@@ -134,7 +134,7 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
             case "Supplier":
               image = require('./src/assets/Rectangle335.png')
               break;
-            case "Menu":
+            case "Order":
               image = require('./src/assets/Rectangle336.png')
               break;
             case "ProfileAdmin":

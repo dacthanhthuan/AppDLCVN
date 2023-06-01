@@ -1,10 +1,10 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { WINDOW_WIDTH, WINDOW_HEIGHT } from '../../global';
 
 const styles = StyleSheet.create({
     container: {
         width: (WINDOW_WIDTH - 32) / 2,
-        height: (WINDOW_HEIGHT * 0.32),
+        height: (WINDOW_HEIGHT * 0.3),
         flexDirection: 'column',
         justifyContent: 'center',
         backgroundColor: '#FFFFFF',

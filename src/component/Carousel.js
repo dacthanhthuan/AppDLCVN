@@ -3,7 +3,7 @@ import {useState, useRef, useCallback, useEffect} from 'react';
 import {memo} from 'react';
 import {WINDOW_WIDTH} from '../global';
 
-const Carousel = ({
+const MyCarousel = ({
   data,
   _renderItem,
   style,
@@ -150,8 +150,8 @@ const Carousel = ({
   );
 };
 
-export default memo(Carousel, (pre, next) => {
-  return JSON.stringify(pre) === JSON.stringify(next);
+export default memo(MyCarousel, (pre, next) => {
+  return JSON.stringify(pre.data) === JSON.stringify(next.data);
 });
 
 const styles = StyleSheet.create({
