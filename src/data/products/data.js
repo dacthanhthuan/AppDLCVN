@@ -8,13 +8,13 @@ var data_product = [
         "price_2": "700,000đ",
         "quantity": "1",
     },
-    {
-        "id": "2",
-        "img": require('../../assets/imgOder/Rectangle_234.png'),
-        "name": "DLC Brazil Green Propolis",
-        "price_1": "700,000đ",
-        "price_2": "800,000đ",
-        "quantity": "1",
-    },
+//     {
+//         "id": "2",
+//         "img": require('../../assets/imgOder/Rectangle_234.png'),
+//         "name": "DLC Brazil Green Propolis",
+//         "price_1": "700,000đ",
+//         "price_2": "800,000đ",
+//         "quantity": "1",
+//     },
 ];
 module.exports = data_product;

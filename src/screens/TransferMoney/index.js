@@ -45,8 +45,36 @@ const data = [
 
 const TransferMoney = ({ navigation }) => {
   const [filteredUser, setFilteredUser] = useState(data);
+  // const [dataUser, setDatauser] = useState([]);
   const [keywork, setKeywork] = useState("");
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+
+  // const CheckBoxClick = (user) => {
+  //   const newdata = filteredUser.map((item) => {
+  //     if (item.name === user.name) {
+  //       return (
+  //         ...item, 
+  //         // isCheck: !item.isCheck,
+  //       )
+  //     }
+  //     return item;
+  //   });
+  //   setFilteredUser(newdata);
+  // };
+
+  // const Checkkkk = () => {
+  //   if (isCheck === true) {
+  //     setDatauser(dataUser.filter((item) => item.name))
+  //   }
+  // }
+
+  // const handlercheck = (user) => {
+  //   if (dataUser.map((item) => item.name === user.name)) {
+  //     setDatauser(dataUser.filter((item) => item.name !== user.name))
+  //   } else {
+  //     setDatauser([...dataUser, name])
+  //   }
+  // };
 
   useEffect(() => {
     if (keywork?.length > 0) {
@@ -115,7 +143,7 @@ const TransferMoney = ({ navigation }) => {
             </TouchableOpacity>
           </View>
 
-          <CardSurplus style={{ marginTop: 35 }} />
+          <CardSurplus onPress={() => navigation.navigate('WalletScreen')} style={{ marginTop: 35 }} />
 
           <Text style={styles.title}>Bạn muốn chuyển bao nhiêu ?</Text>
 

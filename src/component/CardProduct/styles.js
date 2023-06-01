@@ -4,7 +4,7 @@ import { WINDOW_WIDTH, WINDOW_HEIGHT } from '../../global';
 const styles = StyleSheet.create({
     container: {
         width: (WINDOW_WIDTH - 32) / 2,
-        height: (WINDOW_HEIGHT * 0.35),
+        height: (WINDOW_HEIGHT * 0.32),
         flexDirection: 'column',
         justifyContent: 'center',
         backgroundColor: '#FFFFFF',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#005AA9',
         marginTop: 22,
-        width: '80%',
+        width: '100%',
     },
     id: {
         fontSize: 13,

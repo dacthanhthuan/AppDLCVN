@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import styles from "./styles";
 
-const CardMember = ({ name, image, phone, style }) => {
+const CardMember = ({ name, image, phone, style, onPress }) => {
 
     // const check = isCheck;
     const [isCheck, setIsCheck] = useState(false)
     const onPressCheck = () => {
         setIsCheck(value => !value)
-    }
+    };
 
     return (
         <View style={[styles.container, style]}>

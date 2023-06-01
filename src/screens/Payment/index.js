@@ -7,7 +7,8 @@ import Information from "../../component/Information";
 import { Checkbox_2 } from "../../component/Checkbox/index";
 import Button from "../../component/Button";
 
-const Payment = () => {
+const Payment = ({ route }) => {
+    const { totalprice } = route?.params || {};
     const navigation = useNavigation();
     const lineWidth = useWindowDimensions().width;
 
@@ -29,8 +30,8 @@ const Payment = () => {
                 text_1={'Tổng thanh toán'}
                 text_2={'Tổng tiền hàng'}
                 text_3={'Tổng phí vận chuyển'}
-                price_1={'1,500,000đ'}
-                price_2={'1,500,000đ'}
+                price_1={totalprice}
+                price_2={totalprice}
                 price_3={'Freeship'}
                 style_1={{
                     color: '#005AA9',

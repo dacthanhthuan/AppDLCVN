@@ -112,10 +112,13 @@ const Cart = ({ navigation, route }) => {
 
   const { quantity, item } = route?.params || {};
   const price = formatprice(item?.price);
-  const totalprice = formatprice(item?.price * parseFloat(quantity));
+  const [action] = useState(false);
+  const [Isquantity, setIsquantity] = useState(quantity);
+  const totalprice = formatprice(item?.price * parseFloat(Isquantity));
 
-  console.log("item", item);
-  console.log("quantity", quantity);
+  // console.log(Isquantity);
+  // console.log("item", item);
+  // console.log("quantity", quantity);
   const [productData, setProductData] = useState(route?.params ? [item] : []);
 
 
@@ -130,8 +133,6 @@ const Cart = ({ navigation, route }) => {
     const updatedProductData = productData.filter(item => item.id !== productId);
     setProductData(updatedProductData);
   };
-
-
 
   // Không có đơn hàng chuyển qua trang NoOrders
   useEffect(() => {
@@ -182,12 +183,20 @@ const Cart = ({ navigation, route }) => {
       <FlatList
         data={productData}
         style={{ marginTop: 35 }}
-        // keyExtractor={item => String(item.id)}
         renderItem={({ item, index }) => {
           return (
             <Swipeable renderRightActions={() => clearCard(item?.id)}>
               <ProductCart
-                sl={quantity}
+                onPressMinus={() => {
+                  setIsquantity(Isquantity - 1)
+                  if (Isquantity <= 1) {
+                    setIsquantity(1)
+                  }
+                }}
+                onPressPlus={() => {
+                  setIsquantity(Isquantity + 1)
+                }}
+                sl={Isquantity}
                 onChecked={value =>
                   setListCheck(list =>
                     list.map((item, i) => {
@@ -224,21 +233,41 @@ const Cart = ({ navigation, route }) => {
           <Text style={{ fontSize: 13, color: '#000000', marginLeft: 10 }}>
             Tổng giá bán
           </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              color: '#000000',
-              marginLeft: 10,
-              fontWeight: '500',
-            }}>
-            {totalprice}
-          </Text>
+          {allCheck === true ? (
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#000000',
+                marginLeft: 10,
+                fontWeight: '500',
+              }}>
+              {totalprice}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontSize: 16,
+                color: '#000000',
+                marginLeft: 10,
+                fontWeight: '500',
+              }}>
+              {formatprice(0)}
+            </Text>
+          )
+          }
         </View>
       </View>
-      <Button
-        text="Tạo đơn"
-        onPress={() => navigation.navigate('CreateOrder', { item, quantity, })}
-      />
+      {allCheck === true ? (
+        <Button
+          text="Tạo đơn"
+          onPress={() => navigation.navigate('CreateOrder', { item, Isquantity, })}
+        />
+      ) : (
+        <Button
+          text="Tạo đơn"
+        />
+      )
+      }
     </SafeAreaView>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, View, Text, Image, useWindowDimensions, FlatList, TouchableOpacity} from "react-native";
+import { SafeAreaView, View, Text, Image, useWindowDimensions, FlatList, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../component/Header/index";
 import Style_CreateOrder from "./style";
@@ -11,13 +11,13 @@ import Button from "../../component/Button";
 import { formatprice, WINDOW_WIDTH } from "../../global";
 
 const CreateOrder = ({ route }) => {
-    const { item, quantity } = route?.params || {};
+    const { item, Isquantity } = route?.params || {};
     const price = formatprice(item.price);
-    const totalprice = formatprice(item.price * parseFloat(quantity));
-    const commission = formatprice(item.commission);
+    const totalprice = formatprice(item.price * parseFloat(Isquantity));
+    // const commission = formatprice(item.commission);
     const navigation = useNavigation();
 
-    const render_item = ({ item1 }) => {
+    const render_item = ({ }) => {
         return (
             <View style={Style_CreateOrder.flatlist}>
                 <Image style={{ width: 60, height: 60 }} source={item.source} />
@@ -25,7 +25,7 @@ const CreateOrder = ({ route }) => {
                     <Text style={Style_CreateOrder.text_1}>{item.title}</Text>
                     <Text style={Style_CreateOrder.text_3}>Giá nhà cung cấp: {price}</Text>
                     <Text style={Style_CreateOrder.text_2}>Giá bán: {price}</Text>
-                    <Text style={Style_CreateOrder.text_3}>Số lượng: {quantity}</Text>
+                    <Text style={Style_CreateOrder.text_3}>Số lượng: {Isquantity}</Text>
                 </View>
             </View>
         )
@@ -36,7 +36,7 @@ const CreateOrder = ({ route }) => {
             <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../assets/Arrow1.png')} text={'Tạo đơn hàng'} />
             <FlatList
                 style={{ width: WINDOW_WIDTH, alignSelf: "center" }}
-                data={data_product}
+                data={[item]}
                 renderItem={render_item}
                 keyExtractor={(item, title) => title.toString()}
                 showsVerticalScrollIndicator={false}
@@ -50,8 +50,8 @@ const CreateOrder = ({ route }) => {
                             <View style={{ width: '90%' }}>
                                 <View style={Style_CreateOrder.view_1}>
                                     <Text style={Style_CreateOrder.text_1}>Địa chỉ giao hàng</Text>
-                                    <TouchableOpacity onPress={()=>navigation.navigate('CustomerInformation')}>
-                                    <Text style={Style_CreateOrder.text_2}>Thay đổi</Text>
+                                    <TouchableOpacity onPress={() => navigation.navigate('CustomerInformation')}>
+                                        <Text style={Style_CreateOrder.text_2}>Thay đổi</Text>
                                     </TouchableOpacity>
                                 </View>
                                 <View style={Style_CreateOrder.view_2}>
@@ -94,7 +94,7 @@ const CreateOrder = ({ route }) => {
                                     text_1={'Tổng tiền hàng:'}
                                     text_2={'Phí vận chuyển:'}
                                     text_3={'Tổng số tiền cần thanh toán:'}
-                                    price_1={'1,500,000đ'}
+                                    price_1={totalprice}
                                     price_2={'Freeship'}
                                     price_3={totalprice}
                                     style_5={{
@@ -127,7 +127,7 @@ const CreateOrder = ({ route }) => {
                             </View>
                         </View>
                         <View style={{ flex: 1, paddingLeft: 30, paddingRight: 30, marginTop: 70, }}>
-                            <Button onPress={() => navigation.navigate('Payment')} text={'Tiến hành thanh toán'} />
+                            <Button onPress={() => navigation.navigate('Payment', { totalprice })} text={'Tiến hành thanh toán'} />
                         </View>
                     </View>
                 )}
