@@ -16,7 +16,10 @@ const SlideLargest = ({slide, backgroundColor}) => {
   );
 };
 
-export default memo(SlideLargest);
+export default memo(
+  SlideLargest,
+  (pre, next) => JSON.stringify(pre) === JSON.stringify(next),
+);
 
 const styles = StyleSheet.create({
   container: {
