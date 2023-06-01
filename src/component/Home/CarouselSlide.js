@@ -1,21 +1,21 @@
-import Carousel from '../Carousel';
+import Carousel from '../AnimatedCarousel';
 import SlideLargest from './SlideLargest';
 import {memo} from 'react';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../global';
 
 const CarouselSlide = ({data}) => {
   return (
     <Carousel
       data={data}
-      hidePagination={true}
-      _renderItem={({item}) => (
-        <SlideLargest
-          slide={item.source}
-          backgroundColor={item.backgroundColor}
-        />
-      )}
-      itemPerPage={1}
+      renderItem={({item}) => <SlideLargest slide={item.source} />}
+      width={WINDOW_WIDTH}
+      height={WINDOW_HEIGHT * 0.23}
+      windowSize={2}
+      loop={true}
       autoPlay={true}
-      autoPlayDelay={2500}
+      autoPlayInterval={3000}
+      scrollAnimationDuration={600}
+      style={{backgroundColor: '#005AA9'}}
     />
   );
 };

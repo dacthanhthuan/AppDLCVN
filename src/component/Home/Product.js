@@ -1,35 +1,35 @@
-import { WINDOW_WIDTH, WINDOW_HEIGHT, formatprice } from '../../global';
-import { memo } from 'react';
-import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {WINDOW_WIDTH, WINDOW_HEIGHT, formatprice} from '../../global';
+import {memo} from 'react';
+import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
-const Product = ({ item }) => {
+const Product = ({item}) => {
   const navigation = useNavigation();
 
   const goToDetailProduct = () => {
-    navigation.navigate('DetailProduct', { item });
+    navigation.navigate('DetailProduct', {item});
   };
-  const price = formatprice(item.price);
-  const commission = formatprice(item.commission);
+  const price = formatprice(item?.price);
+  const commission = formatprice(item?.commission);
 
   return (
     <View style={[styles.renderItem]}>
       <Pressable
         onPress={goToDetailProduct}
-        style={({ pressed }) => [
+        style={({pressed}) => [
           styles.renderPressable,
-          pressed ? { opacity: 0.2, backgroundColor: '#005AA9' } : null,
+          pressed ? {opacity: 0.8} : null,
         ]}>
         <Image
-          source={item.source}
+          source={item?.source}
           style={[styles.renderImage]}
           resizeMode="contain"
         />
         <Text style={styles.renderTitle} numberOfLines={2}>
-          {item.title}
+          {item?.title}
         </Text>
         <Text style={styles.renderProductId} numberOfLines={1}>
-          {item.idProduct}
+          {item?.idProduct}
         </Text>
         <Text style={styles.renderProductId} numberOfLines={1}>
           Giá bán: <Text style={styles.renderPrice}>{price}</Text>
@@ -42,7 +42,9 @@ const Product = ({ item }) => {
   );
 };
 
-export default memo(Product);
+export default memo(Product, (pre, next) => {
+  return JSON.stringify(pre.item) === JSON.stringify(next.item);
+});
 
 const styles = StyleSheet.create({
   renderItem: {

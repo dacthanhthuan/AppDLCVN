@@ -1,13 +1,13 @@
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
-import { WINDOW_WIDTH } from '../../../global';
-import { memo } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
+import {WINDOW_WIDTH} from '../../../global';
+import {memo} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
-const VerticalProduct = ({ data }) => {
+const VerticalProduct = ({data}) => {
   const navigation = useNavigation();
 
   const goToDetailProduct = () => {
-    navigation.navigate('DetailProduct', { item: data });
+    navigation.navigate('DetailProduct', {item: data});
   };
 
   const formatCurrency = new Intl.NumberFormat('vi-VN', {
@@ -16,15 +16,17 @@ const VerticalProduct = ({ data }) => {
   });
 
   const price = formatCurrency.format(data.price).replace(/\./g, ',');
-  const priceBefore = formatCurrency.format(data.priceBefore).replace(/\./g, ',');
+  const priceBefore = formatCurrency
+    .format(data.priceBefore)
+    .replace(/\./g, ',');
   const commission = formatCurrency.format(data.commission).replace(/\./g, ',');
 
   return (
     <View style={styles.container}>
       <Pressable
-        style={({ pressed }) => [
+        style={({pressed}) => [
           styles.containerPressable,
-          pressed ? { opacity: 0.5 } : null,
+          pressed ? {opacity: 0.85} : null,
         ]}
         onPress={() => goToDetailProduct()}>
         <Image source={data.source} style={styles.image} resizeMode="contain" />
@@ -46,7 +48,7 @@ const VerticalProduct = ({ data }) => {
                 <Text style={styles.priceStroke} numberOfLines={2}>
                   {price}
                 </Text>
-                <Text style={[styles.price, { left: 15 }]} numberOfLines={2}>
+                <Text style={[styles.price, {left: 15}]} numberOfLines={2}>
                   {priceBefore}
                 </Text>
               </>

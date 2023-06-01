@@ -8,12 +8,13 @@ const ListProduct = ({data}) => {
       style={styles.container}
       data={data}
       renderItem={({item}) => <Product item={item} />}
+      removeClippedSubviews
+      windowSize={5}
     />
   );
 };
 
 export default memo(ListProduct, (pre, next) => {
-  console.log(JSON.stringify(pre.data) === JSON.stringify(next.data));
   return JSON.stringify(pre.data) === JSON.stringify(next.data);
 });
 

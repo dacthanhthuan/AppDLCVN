@@ -1,0 +1,180 @@
+import {View} from 'react-native';
+import {AnimatedImgButton} from '../ImageButton';
+import InputSearch from '../InputSearch';
+import {memo} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import styles from './styles';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  interpolate,
+  withSpring,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
+import {
+  HEADER_EXPAND_HEIGHT,
+  HEADER_COLLAPSE_HEIGHT,
+} from '../../../screens/Home/styles';
+import {WINDOW_WIDTH} from '../../../global';
+
+const logo = require('../../../assets/Home/Rectangle2.png');
+const cart = require('../../../assets/Home/Vector.png');
+const searchSetting = require('../../../assets/Home/Rectangle313.png');
+const search = require('../../../assets/Home/ei_search.png');
+
+const Header = () => {
+  const navigation = useNavigation();
+  const headerHeight = useSharedValue(0);
+
+  //navigate to cart
+  const goToCart = () => {
+    navigation.navigate('Cart');
+  };
+
+  //navigate to search
+  const goToSearch = () => {
+    navigation.navigate('SearchRecent');
+  };
+
+  //header animate
+  const headerCollapseStyle = useAnimatedStyle(() => {
+    const marginTop = withSpring(
+      interpolate(
+        headerHeight.value,
+        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
+        [HEADER_EXPAND_HEIGHT * 0.2, HEADER_EXPAND_HEIGHT * 0.15],
+        'clamp',
+      ),
+      {
+        damping: 5000,
+        mass: 1,
+        stiffness: 50,
+      },
+    );
+
+    const marginBottom = withSpring(
+      interpolate(
+        headerHeight.value,
+        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
+        [0, 100],
+        'clamp',
+      ),
+      {
+        damping: 5000,
+        mass: 1,
+        stiffness: 50,
+      },
+    );
+
+    return {
+      marginTop,
+      marginBottom,
+    };
+  }, []);
+
+  //logo animate
+  const logoAnimatedStyle = useAnimatedStyle(() => {
+    const height = withTiming(
+      interpolate(
+        headerHeight.value,
+        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
+        [HEADER_EXPAND_HEIGHT * 0.4, HEADER_EXPAND_HEIGHT * 0.3],
+        'clamp',
+      ),
+      {
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+      },
+    );
+
+    return {
+      height,
+    };
+  });
+
+  //cart animate
+  const cartAnimatedStyle = useAnimatedStyle(() => {
+    const top = withTiming(
+      interpolate(
+        headerHeight.value,
+        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
+        [HEADER_EXPAND_HEIGHT * 0.35 * 0.1, -HEADER_COLLAPSE_HEIGHT * 0.1],
+        'clamp',
+      ),
+      {
+        duration: 100,
+        easing: Easing.bezier(0.16, 1, 0.3, 1),
+      },
+    );
+
+    return {
+      top,
+    };
+  });
+
+  //icon search animate
+  const iconSearchAnimatedStyle = useAnimatedStyle(() => {
+    const left = withSpring(
+      interpolate(
+        headerHeight.value,
+        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
+        [-50, WINDOW_WIDTH * 0.02],
+        'clamp',
+      ),
+      {
+        damping: 500,
+        mass: 1,
+        stiffness: 50,
+      },
+    );
+
+    return {
+      left,
+    };
+  });
+
+  return (
+    <View
+      style={[styles.expandsStyle]}
+      onLayout={({nativeEvent}) => {
+        headerHeight.value = nativeEvent.layout.height;
+      }}>
+      <Animated.View style={[styles.logoAndCart, headerCollapseStyle]}>
+        <Animated.Image
+          source={logo}
+          style={[styles.logo, logoAnimatedStyle]}
+          resizeMode="contain"
+        />
+
+        <AnimatedImgButton
+          containerStyle={[styles.cartPressable]}
+          imageStyle={styles.cart}
+          imagesource={cart}
+          onPress={() => goToCart()}
+          style={cartAnimatedStyle}
+        />
+
+        <AnimatedImgButton
+          containerStyle={styles.searchPressable}
+          imageStyle={styles.search}
+          imagesource={search}
+          onPress={() => goToSearch()}
+          style={iconSearchAnimatedStyle}
+        />
+      </Animated.View>
+
+      <Animated.View style={styles.searchContainer}>
+        <InputSearch style={styles.searchInput} />
+
+        <AnimatedImgButton
+          imagesource={searchSetting}
+          containerStyle={styles.searchSettingCont}
+          imageStyle={styles.searchSettingStyle}
+        />
+      </Animated.View>
+    </View>
+  );
+};
+
+export default memo(Header);
