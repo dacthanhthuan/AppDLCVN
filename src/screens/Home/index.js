@@ -17,7 +17,7 @@ import SplashScreen from 'react-native-splash-screen';
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 //Data
-import {data1} from './data';
+import {data1, data2} from './data';
 
 //Component
 import SlideLargest from '../../component/Home/SlideLargest';

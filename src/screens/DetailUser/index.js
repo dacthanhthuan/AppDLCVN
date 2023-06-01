@@ -10,7 +10,7 @@ const Detail_User = () => {
     const navigation = useNavigation();
     return (
         <SafeAreaView style={Style_User.container}>
-            <Header onPressLeft={() => navigation.goBack()} text={'Chi tiết tài khoản'} iconLeft={require('../../assets/Arrow1.png')} />
+            <Header onPressLeft={() => navigation.goBack()} text={'Chi tiết tài khoản'} iconLeft={require('../../assets/Arrow1.png')} containerStyle={{ paddingBottom: 10 }} />
             <ScrollView style={Style_User.scrollview} showsVerticalScrollIndicator={false}>
                 <View style={Style_User.container_1}>
                     <TouchableOpacity>
@@ -45,7 +45,7 @@ const Detail_User = () => {
                 <Detail_Input text={'Địa chỉ tạm trú(thuờng trú hoặc tạm trú trong trường hợp không cư trú tại nơi thường trú):'} placeholder={'Chưa có thông tin'} />
                 <Detail_Input text={'Số hợp đồng người bảo trợ'} placeholder={'Chưa có thông tin'} />
                 <View style={{ paddingLeft: 30, paddingRight: 30 }}>
-                    <Button onPress={() => navigation.navigate('Profile')} style={{ marginTop: 30, }} text={'Cập nhật'} />
+                    <Button onPress={() => navigation.navigate('ProfileAdmin')} style={{ marginTop: 30, }} text={'Cập nhật'} />
                 </View>
             </ScrollView>
         </SafeAreaView>
