@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 
   headerExpand: {
-    position: 'absolute',
+    position: 'relative',
     left: 0,
     right: 0,
     top: 0,
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     height: HEADER_EXPAND_HEIGHT,
     backgroundColor: '#005AA9',
     overflow: 'hidden',
+    height: 150,
   },
 });
 

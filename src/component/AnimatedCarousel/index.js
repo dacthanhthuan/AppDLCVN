@@ -1,7 +1,7 @@
 import Carousel from 'react-native-reanimated-carousel';
 import styles from './styles';
-import { View, Pressable } from 'react-native';
-import { useState, useCallback, useRef, useEffect } from 'react';
+import {View, Pressable} from 'react-native';
+import {useState, useCallback, useRef, useEffect} from 'react';
 
 const AnimatedCarousel = ({
   data,
@@ -23,7 +23,7 @@ const AnimatedCarousel = ({
   const [index, setIndex] = useState(0);
 
   const Pagination = useCallback(
-    ({ index }) => {
+    ({index}) => {
       return (
         <View style={styles.pageDotCont}>
           {data.map((_, i) => {
@@ -35,7 +35,7 @@ const AnimatedCarousel = ({
                   index == i ? styles.pageDotActive : styles.pageDotInactive,
                 ]}
                 onPress={() => {
-                  carouselRef.current.scrollTo({ index: i, animated: true });
+                  carouselRef.current.scrollTo({index: i, animated: true});
                 }}
               />
             );
@@ -48,7 +48,7 @@ const AnimatedCarousel = ({
 
   useEffect(() => {
     data.length > 0
-      ? carouselRef.current.scrollTo({ index: 0, animated: false })
+      ? carouselRef.current.scrollTo({index: 0, animated: false})
       : null;
     setIndex(0);
   }, [extraData]);

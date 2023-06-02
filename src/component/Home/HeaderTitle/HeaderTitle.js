@@ -42,8 +42,8 @@ const Header = () => {
     const marginTop = withSpring(
       interpolate(
         headerHeight.value,
-        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
-        [HEADER_EXPAND_HEIGHT * 0.2, HEADER_EXPAND_HEIGHT * 0.15],
+        [HEADER_COLLAPSE_HEIGHT, HEADER_EXPAND_HEIGHT],
+        [HEADER_EXPAND_HEIGHT * 0.15, HEADER_EXPAND_HEIGHT * 0.2],
         'clamp',
       ),
       {
@@ -56,8 +56,8 @@ const Header = () => {
     const marginBottom = withSpring(
       interpolate(
         headerHeight.value,
-        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
-        [0, 50],
+        [HEADER_COLLAPSE_HEIGHT, HEADER_EXPAND_HEIGHT],
+        [50, 0],
         'clamp',
       ),
       {
@@ -78,13 +78,13 @@ const Header = () => {
     const height = withTiming(
       interpolate(
         headerHeight.value,
-        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
-        [HEADER_EXPAND_HEIGHT * 0.4, HEADER_EXPAND_HEIGHT * 0.3],
+        [HEADER_COLLAPSE_HEIGHT, HEADER_EXPAND_HEIGHT],
+        [HEADER_EXPAND_HEIGHT * 0.3, HEADER_EXPAND_HEIGHT * 0.4],
         'clamp',
       ),
       {
-        duration: 300,
-        easing: Easing.out(Easing.cubic),
+        duration: 500,
+        easing: Easing.out(Easing.exp),
       },
     );
 
@@ -98,8 +98,8 @@ const Header = () => {
     const top = withTiming(
       interpolate(
         headerHeight.value,
-        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
-        [HEADER_EXPAND_HEIGHT * 0.35 * 0.1, -HEADER_COLLAPSE_HEIGHT * 0.1],
+        [HEADER_COLLAPSE_HEIGHT, HEADER_COLLAPSE_HEIGHT],
+        [-HEADER_COLLAPSE_HEIGHT * 0.1, HEADER_EXPAND_HEIGHT * 0.35 * 0.1],
         'clamp',
       ),
       {
@@ -118,13 +118,13 @@ const Header = () => {
     const left = withSpring(
       interpolate(
         headerHeight.value,
-        [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
-        [-50, WINDOW_WIDTH * 0.02],
+        [HEADER_COLLAPSE_HEIGHT, HEADER_EXPAND_HEIGHT / 2],
+        [WINDOW_WIDTH * 0.02, -50],
         'clamp',
       ),
       {
-        damping: 500,
-        mass: 1,
+        damping: 50,
+        mass: 0.5,
         stiffness: 50,
       },
     );
