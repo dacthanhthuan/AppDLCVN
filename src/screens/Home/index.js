@@ -168,9 +168,9 @@ const Home = () => {
             }
           }}
           onScroll={scrollHandler}
-          scrollEventThrottle={16}
+          scrollEventThrottle={12}
           removeClippedSubviews={true}
-          initialNumToRender={initialNum}
+          initialNumToRender={20}
           overScrollMode={'never'}
           refreshControl={
             <RefreshControl
@@ -180,6 +180,7 @@ const Home = () => {
               onRefresh={() => setRefreshing(true)}
             />
           }
+          windowSize={15}
         />
       </ScrollContext.Provider>
     </SafeAreaView>

@@ -30,13 +30,15 @@ const AnimatedCarousel = ({
             return (
               <Pressable
                 key={i}
-                style={[
+                style={({pressed}) => [
                   styles.pageDot,
                   index == i ? styles.pageDotActive : styles.pageDotInactive,
+                  pressed ? {backgroundColor: 'grey'} : null,
                 ]}
                 onPress={() => {
                   carouselRef.current.scrollTo({index: i, animated: true});
                 }}
+                hitSlop={5}
               />
             );
           })}

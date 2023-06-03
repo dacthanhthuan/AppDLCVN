@@ -138,7 +138,6 @@ const Header = () => {
     <View
       style={[styles.expandsStyle]}
       onLayout={({nativeEvent}) => {
-        // console.log(nativeEvent);
         headerHeight.value = nativeEvent.layout.height;
       }}>
       <Animated.View style={[styles.logoAndCart, headerCollapseStyle]}>
