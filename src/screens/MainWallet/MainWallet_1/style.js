@@ -24,7 +24,9 @@ const Style_WalletScreen = StyleSheet.create({
     bottomsheet: {
         height: height,
         width: width,
-        // marginTop: height,
+        borderWidth: 0.5,
+        backgroundColor: 'white',
+        borderColor: '#C2C2C2',
         borderRadius: 40,
         shadowColor: "#000000",
         shadowOffset: {
