@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import styles from './styles';
 import Checkbox from '../Checkbox';
 
@@ -24,13 +24,13 @@ const ProductCart = ({ title, price, image, onChecked, style, allCheck, sl, onPr
           <View style={styles.rowPriceSL}>
             <Text style={{ color: '#005AA9', fontSize: 16 }}>{price}</Text>
             <View style={styles.rowSL}>
-              <TouchableOpacity onPress={onPressMinus}>
+              <Pressable hitSlop={10} onPress={onPressMinus}>
                 <Text style={styles.buttonSL}>-</Text>
-              </TouchableOpacity>
+              </Pressable>
               <Text style={styles.buttonSL}>{sl}</Text>
-              <TouchableOpacity onPress={onPressPlus}>
+              <Pressable hitSlop={10} onPress={onPressPlus}>
                 <Text style={styles.buttonSL}>+</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </View>
         </View>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, SafeAreaView, Text, TouchableOpacity, View, Dimensions, FlatList } from "react-native";
+import { Image, SafeAreaView, Text, TouchableOpacity, View, FlatList, Pressable } from "react-native";
 import Style_Detail from "./style";
 import Button from "../../component/Button";
 import Header from "../../component/Header/index";
@@ -64,13 +64,13 @@ const DetailProduct = ({ route }) => {
                 loop={true}
               />
               <View style={Style_Detail.container_1}>
-                <TouchableOpacity onPress={reduce}>
+                <Pressable hitSlop={10} onPress={reduce}>
                   <Image style={Style_Detail.imgIconMinus} source={require('../../assets/imgDetail/minus.png')} />
-                </TouchableOpacity>
+                </Pressable>
                 <Text style={Style_Detail.textquantity}>{quantity}</Text>
-                <TouchableOpacity onPress={increase}>
+                <Pressable hitSlop={10} onPress={increase}>
                   <Image style={Style_Detail.imgIconPlus} source={require('../../assets/imgDetail/plus.png')} />
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
             <View style={Style_Detail.container_2}>
