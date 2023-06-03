@@ -46,7 +46,6 @@ const Home = () => {
   const [isScroll, setIsScroll] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [sections, setSections] = useState(data1);
-  let initialNum = 30;
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: event => {
@@ -96,13 +95,6 @@ const Home = () => {
 
   // StatusBar.setTranslucent(true);
   StatusBar.setBackgroundColor('#005AA9');
-
-  //Optimize
-  useEffect(() => {
-    return () => {
-      initialNum = 15;
-    };
-  }, []);
 
   //refreshing
   useEffect(() => {
@@ -170,7 +162,7 @@ const Home = () => {
           onScroll={scrollHandler}
           scrollEventThrottle={12}
           removeClippedSubviews={true}
-          initialNumToRender={initialNum}
+          initialNumToRender={30}
           overScrollMode={'never'}
           refreshControl={
             <RefreshControl
