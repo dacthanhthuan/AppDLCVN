@@ -1,6 +1,14 @@
 import React from 'react';
 import { Image, Pressable, StyleSheet, StatusBar, View } from 'react-native';
 import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  Easing,
+  interpolate,
+  withTiming,
+  cancelAnimation
+} from 'react-native-reanimated';
 import Supplier from './src/screens/Supplier';
 import Login from './src/screens/Login';
 import Register from './src/screens/Register';
@@ -95,7 +103,7 @@ const App = () => {
         <Stack.Screen name='UpdateAddress2' component={UpdateAddress2} />
       </Stack.Navigator>
     </NavigationContainer>
-  )
+  );
 
 };
 
@@ -108,14 +116,14 @@ const MainTab = () => {
       <Tab.Screen name="Order" component={Menu} />
       <Tab.Screen name="ProfileAdmin" component={ProfileAdmin} />
     </Tab.Navigator>
-  )
-}
+  );
+};
 
 
 const tabOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarShowLabel: false,
-}
+};
 
 const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
   ({ state, navigation }) => {
@@ -126,19 +134,19 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
         {state.routes.map((route, index) => {
           switch (route.name) {
             case "Home":
-              image = require('./src/assets/Rectangle347.png')
+              image = require('./src/assets/Rectangle347.png');
               break;
             case "Warehouse":
-              image = require('./src/assets/Rectangle348.png')
+              image = require('./src/assets/Rectangle348.png');
               break;
             case "Supplier":
-              image = require('./src/assets/Rectangle335.png')
+              image = require('./src/assets/Rectangle335.png');
               break;
             case "Order":
-              image = require('./src/assets/Rectangle336.png')
+              image = require('./src/assets/Rectangle336.png');
               break;
             case "ProfileAdmin":
-              image = require('./src/assets/Rectangle344.png')
+              image = require('./src/assets/Rectangle344.png');
               break;
           }
 
@@ -160,16 +168,63 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> =
             <Pressable
               key={index}
               onPress={onPress}
-              style={[styles.tabBarIconBackground,
-              { backgroundColor: isFocused ? "white" : "transparent" }]}>
-              <Image source={image} style={[styles.tabBarIcon,
-              { tintColor: isFocused ? "#005AA9" : "white", }]} />
+              style={[styles.tabBarButton,
+              ]}
+              android_ripple={{
+                color: "navy",
+              }}
+            >
+              <AnimateButton isFocused={isFocused} image={image} />
             </Pressable>
           );
         })}
       </View >
     );
-  }
+  };
+
+type AnimateButtonType = {
+  isFocused: boolean,
+  image: any,
+};
+
+const AnimateButton: React.FunctionComponent<AnimateButtonType> =
+  ({ isFocused, image }) => {
+
+    const opacityValue = useSharedValue(0);
+
+    const animate = useAnimatedStyle(() => {
+      const opacity = withTiming(
+        opacityValue.value,
+        {
+          duration: 350,
+          easing: Easing.cubic
+        }
+      );
+
+      return {
+        opacity,
+      };
+    });
+
+
+    React.useEffect(() => {
+      if (isFocused) opacityValue.value = 1;
+      else {
+        opacityValue.value = 0;
+      }
+    }, [isFocused]);
+
+    return (
+      <Animated.View style={[
+        styles.tabBarIconBackground,
+        { backgroundColor: isFocused ? "white" : "transparent" },
+        isFocused ? animate : { opacity: 1 }
+      ]}>
+        <Image source={image} style={[styles.tabBarIcon,
+        { tintColor: isFocused ? "#005AA9" : "white", }]} />
+      </Animated.View>
+    );
+  };
 
 
 const styles = StyleSheet.create({
@@ -179,6 +234,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#005AA9",
     alignItems: 'center',
     justifyContent: 'space-around'
+  },
+
+  tabBarButton: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%'
   },
 
   tabBarIconBackground: {

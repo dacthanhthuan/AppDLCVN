@@ -13,7 +13,7 @@ const ImageButton = ({
 }) => {
   return (
     <Pressable
-      style={({pressed}) => [containerStyle, pressed ? {opacity: 0.4} : null]}
+      style={({pressed}) => [containerStyle, pressed ? {opacity: 0.65} : null]}
       onPress={onPress}>
       <Image
         source={imagesource}
@@ -43,7 +43,7 @@ const AnimatedImageButton = forwardRef(
       <View style={[containerStyle, style]}>
         <Pressable
           ref={ref}
-          style={[({pressed}) => [pressed ? {opacity: 0.4} : null]]}
+          style={({pressed}) => (pressed ? {opacity: 0.4} : null)}
           onPress={onPress}>
           <Image
             source={imagesource}

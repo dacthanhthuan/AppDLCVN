@@ -1,7 +1,11 @@
-import React, { useEffect, createContext, useState, useCallback } from 'react';
+import React, {useEffect, createContext, useState} from 'react';
 import styles from './styles';
-import { SafeAreaView, StatusBar, Text, SectionList } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import {
+  SafeAreaView,
+  StatusBar,
+  RefreshControl,
+  SectionList,
+} from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -18,7 +22,7 @@ import SplashScreen from 'react-native-splash-screen';
 const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 
 //Data
-import { data1 } from './data';
+import {data1, data2} from './data';
 
 //Component
 import SlideLargest from '../../component/Home/SlideLargest';
@@ -31,20 +35,22 @@ import Header from '../../component/Home/HeaderTitle/HeaderTitle';
 import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 import CarouselSlide from '../../component/Home/CarouselSlide';
-import { WINDOW_WIDTH } from '../../global';
-import { HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT } from './styles';
+import {WINDOW_HEIGHT} from '../../global';
+import {HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT} from './styles';
 
 export const ScrollContext = createContext(false);
 
 const Home = () => {
   //animate header
-  const headerDiff = HEADER_EXPAND_HEIGHT - HEADER_COLLAPSE_HEIGHT;
   const scrollY = useSharedValue(0);
   const [isScroll, setIsScroll] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [sections, setSections] = useState(data1);
+  let initialNum = 30;
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: event => {
-      if (event.contentOffset.y < WINDOW_WIDTH / 2)
+      if (event.contentOffset.y < WINDOW_HEIGHT)
         scrollY.value = event.contentOffset.y;
     },
     onMomentumBegin: () => {
@@ -66,7 +72,7 @@ const Home = () => {
     const height = withSpring(
       interpolate(
         scrollY.value,
-        [0, headerDiff],
+        [0, HEADER_EXPAND_HEIGHT],
         [HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT],
         'clamp',
       ),
@@ -81,26 +87,6 @@ const Home = () => {
     };
   }, []);
 
-  //section list padding animate
-  const paddingStyle = useAnimatedStyle(() => {
-    const paddingTop = withSpring(
-      interpolate(
-        scrollY.value,
-        [0, headerDiff],
-        [HEADER_EXPAND_HEIGHT, 0],
-        'clamp',
-      ),
-      {
-        damping: 50,
-        mass: 0.5,
-      },
-    );
-
-    return {
-      paddingTop,
-    };
-  }, []);
-
   //Hide SplashScreen
   useEffect(() => {
     setTimeout(() => {
@@ -108,16 +94,25 @@ const Home = () => {
     }, 1000);
   }, []);
 
-  // Show/Hide statusbar
-  useFocusEffect(
-    useCallback(() => {
-      StatusBar.setHidden(true);
+  // StatusBar.setTranslucent(true);
+  StatusBar.setBackgroundColor('#005AA9');
 
-      return () => {
-        StatusBar.setHidden(false);
-      };
-    }, []),
-  );
+  //Optimize
+  useEffect(() => {
+    return () => {
+      initialNum = 15;
+    };
+  }, []);
+
+  //refreshing
+  useEffect(() => {
+    if (refreshing) {
+      if (JSON.stringify(sections) === JSON.stringify(data1))
+        setSections(data2);
+      else setSections(data1);
+      setRefreshing(false);
+    }
+  }, [refreshing]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -128,9 +123,9 @@ const Home = () => {
       <ScrollContext.Provider value={isScroll}>
         <AnimatedSectionList
           showsVerticalScrollIndicator={false}
-          style={[styles.scrollview, paddingStyle]}
-          sections={data1}
-          renderSectionHeader={({ section }) =>
+          style={[styles.scrollview]}
+          sections={sections}
+          renderSectionHeader={({section}) =>
             section.title.length > 0 ? (
               <SectionHeader
                 title={section.title}
@@ -138,7 +133,7 @@ const Home = () => {
               />
             ) : null
           }
-          renderItem={({ item, section }) => {
+          renderItem={({item, section}) => {
             switch (true) {
               case section.type.startsWith('slide'):
                 switch (true) {
@@ -173,10 +168,19 @@ const Home = () => {
             }
           }}
           onScroll={scrollHandler}
-          scrollEventThrottle={16}
+          scrollEventThrottle={12}
           removeClippedSubviews={true}
+          initialNumToRender={20}
+          overScrollMode={'never'}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              colors={['white']}
+              progressBackgroundColor={'#005AA9'}
+              onRefresh={() => setRefreshing(true)}
+            />
+          }
           windowSize={15}
-          initialNumToRender={30}
         />
       </ScrollContext.Provider>
     </SafeAreaView>
