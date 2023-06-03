@@ -50,7 +50,7 @@ const Home = () => {
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: event => {
-      if (event.contentOffset.y < WINDOW_HEIGHT)
+      if (event.contentOffset.y < WINDOW_HEIGHT / 2)
         scrollY.value = event.contentOffset.y;
     },
     onMomentumBegin: () => {
@@ -123,7 +123,7 @@ const Home = () => {
       <ScrollContext.Provider value={isScroll}>
         <AnimatedSectionList
           showsVerticalScrollIndicator={false}
-          style={[styles.scrollview]}
+          style={styles.scrollview}
           sections={sections}
           renderSectionHeader={({section}) =>
             section.title.length > 0 ? (
@@ -170,7 +170,7 @@ const Home = () => {
           onScroll={scrollHandler}
           scrollEventThrottle={12}
           removeClippedSubviews={true}
-          initialNumToRender={20}
+          initialNumToRender={initialNum}
           overScrollMode={'never'}
           refreshControl={
             <RefreshControl
@@ -180,7 +180,7 @@ const Home = () => {
               onRefresh={() => setRefreshing(true)}
             />
           }
-          windowSize={15}
+          windowSize={21}
         />
       </ScrollContext.Provider>
     </SafeAreaView>
