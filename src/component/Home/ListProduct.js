@@ -8,8 +8,8 @@ const ListProduct = ({data}) => {
       style={styles.container}
       data={data}
       renderItem={({item}) => <Product item={item} />}
-      removeClippedSubviews
-      windowSize={5}
+      removeClippedSubviews={true}
+      windowSize={11}
     />
   );
 };
