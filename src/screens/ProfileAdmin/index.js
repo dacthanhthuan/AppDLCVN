@@ -116,10 +116,12 @@ const ProfileAdmin = ({ navigation, route }) => {
         <InfoCard
           image={require('../../assets/Rectangle299.png')}
           text="Báo cáo doanh số"
+          onPress={() => navigation.navigate('TeamThree')}
         />
         <InfoCard
           image={require('../../assets/Rectangle299.png')}
           text="Báo cáo hoa hồng"
+          onPress={() => navigation.navigate('TeamThree')}
           style={{ marginBottom: 32 }}
         />
       </SafeAreaView>
