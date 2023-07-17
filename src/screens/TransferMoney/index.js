@@ -164,7 +164,7 @@ const TransferMoney = ({ navigation }) => {
           </View>
 
           <View style={{ alignItems: 'center' }}>
-            <Button onPress={() => navigation.navigate('TranferMoneyTwo')} text='Tiếp tục' style={{ width: '90%', bottom: WINDOW_HEIGHT * -0.05 }} />
+            <Button onPress={() => navigation.navigate('TranferMoneyTwo')} text='Tiếp tục' style={{ width: '90%', top: WINDOW_HEIGHT * 0.03 }} />
           </View>
 
         </View>

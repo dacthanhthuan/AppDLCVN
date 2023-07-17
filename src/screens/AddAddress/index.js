@@ -5,6 +5,8 @@ import Header from "../../component/Header";
 import InputAddress from "../../component/InputAddress";
 import Button from "../../component/Button";
 import TypeAddress from "../../component/TypeAddress";
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from "../../global";
+
 
 const AddAddress = ({ navigation }) => {
 
@@ -31,8 +33,8 @@ const AddAddress = ({ navigation }) => {
             <Text style={styles.titleAfter}>Địa chỉ giao hàng</Text>
 
             <View style={{ marginLeft: 25 }}>
-                <TouchableOpacity onPress={()=>navigation.navigate('UpdateAddress2')} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 18 }}>
-                    <Text style={{color: '#C4C4C4'}}>Tỉnh/Thành phố, Quận/Huyện, Phường/Xã</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('UpdateAddress2')} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 18 }}>
+                    <Text style={{ color: '#C4C4C4' }}>Tỉnh/Thành phố, Quận/Huyện, Phường/Xã</Text>
                     <Image source={require('../../assets/vectorRight.png')} />
                 </TouchableOpacity>
                 <View style={styles.line}></View>
@@ -48,7 +50,7 @@ const AddAddress = ({ navigation }) => {
             </View>
 
             <View style={{ alignItems: 'center' }}>
-                <Button text='Thêm' style={{ width: '90%', bottom: -130 }} />
+                <Button text='Thêm' style={{ width: '90%', top: WINDOW_HEIGHT * 0.1 }} />
             </View>
 
         </SafeAreaView >

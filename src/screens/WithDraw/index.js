@@ -63,7 +63,7 @@ const WithDraw = ({ navigation }) => {
                 <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
             </TouchableOpacity>
 
-            <View style={{ alignItems: 'center', bottom: WINDOW_HEIGHT * -0.28 }} >
+            <View style={{ alignItems: 'center', top: WINDOW_HEIGHT * 0.2 }} >
                 <Button text='Tiếp theo'
                     style={{ width: '90%' }} />
             </View>

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         margin: 0,
     },
     bottomSheetContent: {
-        height: height - 600 / 2,
+        height: height - 500 / 2,
         backgroundColor: "#FFFFFF",
         padding: 16,
         borderTopLeftRadius: 20,
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat'
     },
     value: {
+        alignItems: 'center',
         fontSize: 24,
         color: '#005AA9',
         textAlign: 'center',

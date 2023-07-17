@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, Pressable, StyleSheet, StatusBar, View } from 'react-native';
 import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import Animated, {
@@ -56,11 +56,18 @@ import AddAddress from './src/screens/AddAddress';
 import UpdateAddress1 from './src/screens/UpdateAddress1';
 import SingleMenu from './src/screens/Menu';
 import ProfileAdmin from './src/screens/ProfileAdmin';
+import { getDomain } from './src/http';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+
 const App = () => {
+
+  useEffect(() => {
+    getDomain()
+  }, [])
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='MainTab'>
