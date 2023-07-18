@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   Image,
@@ -8,13 +8,26 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Style_Login from './style';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import Text_Input from '../../component/TextInput';
 import Button from '../../component/Button';
 import Header from '../../component/Header';
+import {useDispatch, useSelector} from 'react-redux';
+import {clientLoginStart} from '../../redux/actions/clientLogin';
+import axios from 'axios';
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const login = useSelector(state => state.UserReducer.user.login);
   const navigation = useNavigation();
+  const [mobile, setMobile] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (login) {
+      navigation.dispatch(StackActions.pop());
+    }
+  }, [login]);
 
   return (
     <SafeAreaView style={Style_Login.container}>
@@ -29,13 +42,19 @@ const Login = () => {
       <View style={Style_Login.container_1}>
         <Text style={Style_Login.textLogin}>Đăng nhập tài khoản</Text>
         <View style={{marginBottom: 30}}>
-          <Text_Input placeholder="Số điện thoại" />
-          <Text_Input placeholder="Mật khẩu" />
+          <Text_Input
+            placeholder="Số điện thoại"
+            onChangetext={text => setMobile(text)}
+          />
+          <Text_Input
+            placeholder="Mật khẩu"
+            onChangetext={text => setPassword(text)}
+          />
         </View>
         <Button
-          onPress={() =>
-            navigation.navigate('ProfileAdmin', {data: {isLogin: true}})
-          }
+          onPress={() => {
+            dispatch(clientLoginStart(mobile, password));
+          }}
           text={'Đăng nhập'}
         />
         <View style={Style_Login.container_3}>

@@ -14,6 +14,7 @@ import Animated, {
   withSpring,
   runOnJS,
 } from 'react-native-reanimated';
+import {clientInitialApiStart} from '../../redux/actions/clientInitialAPI';
 
 //Splash screen
 import SplashScreen from 'react-native-splash-screen';
@@ -37,10 +38,14 @@ import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 import CarouselSlide from '../../component/Home/CarouselSlide';
 import {WINDOW_HEIGHT} from '../../global';
 import {HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT} from './styles';
+import {useDispatch} from 'react-redux';
+import {clientRegisterStart} from '../../redux/actions/clientRegister';
 
 export const ScrollContext = createContext(false);
 
 const Home = () => {
+  const dispatch = useDispatch();
+
   //animate header
   const scrollY = useSharedValue(0);
   const [isScroll, setIsScroll] = useState(false);
@@ -88,6 +93,7 @@ const Home = () => {
 
   //Hide SplashScreen
   useEffect(() => {
+    dispatch(clientInitialApiStart);
     setTimeout(() => {
       SplashScreen.hide();
     }, 1000);

@@ -12,55 +12,56 @@ import InfoCard from '../../component/InfoCard';
 import CardProfile from '../../component/CardProfile';
 import TranfersMoney from '../../component/TranfersMoney';
 import NotLogin from '../NotLogin';
+import {useSelector} from 'react-redux';
 
-const ProfileAdmin = ({ navigation, route }) => {
-  const isLogin = route.params?.data?.isLogin;
+const ProfileAdmin = ({navigation}) => {
+  const user = useSelector(state => state.UserReducer.user);
 
-  return !isLogin ? (
+  return !user?.login ? (
     <NotLogin />
   ) : (
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <CardProfile
-          style={{ marginTop: 25, borderColor: '#005AA9' }}
+          style={{marginTop: 25, borderColor: '#005AA9'}}
           image={require('../../assets/Rectangle312.png')}
-          text="Nguyễn Thái Năng "
-          id={'331550479'}
+          text={user?.fullname}
+          id={user?.userid}
           onPress={() => navigation.navigate('Detail_User')}
         />
 
         <Text style={styles.title}>Quản lí ví</Text>
 
-        <View style={[styles.wallet, { backgroundColor: '#0059A9' }]}>
-          <View style={{ flexDirection: 'row' }}>
+        <View style={[styles.wallet, {backgroundColor: '#0059A9'}]}>
+          <View style={{flexDirection: 'row'}}>
             <Image
-              style={{ width: 20, height: 20 }}
+              style={{width: 20, height: 20}}
               resizeMode="contain"
               source={require('../../assets/Rectangle326.png')}
             />
-            <Text style={{ fontSize: 16, color: '#FFFFFF', marginLeft: 10 }}>
+            <Text style={{fontSize: 16, color: '#FFFFFF', marginLeft: 10}}>
               Ví tiền
             </Text>
           </View>
-          <Text style={{ fontSize: 16, color: '#FFFFFF' }}>35.0000đ</Text>
+          <Text style={{fontSize: 16, color: '#FFFFFF'}}>35.0000đ</Text>
         </View>
 
         <View
           style={[
             styles.wallet,
-            { backgroundColor: '#FCB813', zIndex: 1, marginTop: -22 },
+            {backgroundColor: '#FCB813', zIndex: 1, marginTop: -22},
           ]}>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Image
-              style={{ width: 20, height: 20 }}
+              style={{width: 20, height: 20}}
               resizeMode="contain"
               source={require('../../assets/Rectangle326.png')}
             />
-            <Text style={{ fontSize: 16, color: '#FFFFFF', marginLeft: 10 }}>
+            <Text style={{fontSize: 16, color: '#FFFFFF', marginLeft: 10}}>
               Ví điểm
             </Text>
           </View>
-          <Text style={{ fontSize: 16, color: '#FFFFFF' }}>0đ</Text>
+          <Text style={{fontSize: 16, color: '#FFFFFF'}}>0đ</Text>
         </View>
 
         <ImageBackground
@@ -122,7 +123,7 @@ const ProfileAdmin = ({ navigation, route }) => {
           image={require('../../assets/Rectangle299.png')}
           text="Báo cáo hoa hồng"
           onPress={() => navigation.navigate('TeamThree')}
-          style={{ marginBottom: 32 }}
+          style={{marginBottom: 32}}
         />
       </SafeAreaView>
     </ScrollView>
