@@ -14,7 +14,7 @@ import Animated, {
   withSpring,
   runOnJS,
 } from 'react-native-reanimated';
-import {clientInitialApiStart} from '../../redux/actions/clientInitialAPI';
+import {clientInitialApiStart} from '../../redux/actions/appActions';
 
 //Splash screen
 import SplashScreen from 'react-native-splash-screen';

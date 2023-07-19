@@ -1,12 +1,12 @@
 import {switchMap} from 'rxjs';
 import axios from 'axios';
 import {Epic, ofType} from 'redux-observable';
-import {CLIENT_LOGIN_START} from '../actions/types';
-import {clientLoginEnd, clientLoginFail} from '../actions/clientLogin';
+import {LOGIN} from '../actions/types';
+import {clientLoginEnd, clientLoginFail} from '../actions/userActions';
 
 const loginEpic: Epic = (action$, state$) =>
   action$.pipe(
-    ofType(CLIENT_LOGIN_START),
+    ofType(LOGIN.START),
     switchMap(async action => {
       return await axios
         .post(
@@ -20,7 +20,7 @@ const loginEpic: Epic = (action$, state$) =>
         )
         .then(res => {
           if (res.data.status === 200) return clientLoginEnd(res.data.data);
-          else return clientLoginFail(res.data.data);
+          else return clientLoginFail(res.data);
         });
     }),
   );

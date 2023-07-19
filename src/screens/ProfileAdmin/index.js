@@ -15,9 +15,9 @@ import NotLogin from '../NotLogin';
 import {useSelector} from 'react-redux';
 
 const ProfileAdmin = ({navigation}) => {
-  const user = useSelector(state => state.UserReducer.user);
+  const user = useSelector(state => state.user);
 
-  return !user?.login ? (
+  return !user?.login.status ? (
     <NotLogin />
   ) : (
     <ScrollView>

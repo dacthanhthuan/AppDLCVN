@@ -1,12 +1,12 @@
 import {mergeMap} from 'rxjs';
 import axios from 'axios';
 import {Epic, ofType} from 'redux-observable';
-import {CLIENT_REGISTER_START} from '../actions/types';
-import {clientRegisterEnd, clientRegisterFail} from '../actions/clientRegister';
+import {REGISTER} from '../actions/types';
+import {clientRegisterEnd, clientRegisterFail} from '../actions/userActions';
 
 const registerEpic: Epic = (action$, state$) =>
   action$.pipe(
-    ofType(CLIENT_REGISTER_START),
+    ofType(REGISTER.START),
     mergeMap(async action => {
       return await axios
         .post(
@@ -20,7 +20,7 @@ const registerEpic: Epic = (action$, state$) =>
         )
         .then(res => {
           if (res.data.status === 200) return clientRegisterEnd(res.data.data);
-          else return clientRegisterFail(res.data.data);
+          else return clientRegisterFail(res.data);
         });
     }),
   );

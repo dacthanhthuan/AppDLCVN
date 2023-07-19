@@ -10,6 +10,8 @@ const Text_Input = ({placeholder, onChangetext, value}) => {
         placeholder={placeholder}
         onChangeText={onChangetext}
         value={value}
+        enterKeyHint={'done'}
+        returnKeyType="next"
       />
     </SafeAreaView>
   );

@@ -1,9 +1,22 @@
-export const CLIENT_INITIAL_START = 'client/Initial_API_Start';
-export const CLIENT_INITIAL_END = 'client/Initial_API_End';
-export const CLIENT_INITIAL_FAIL = 'client/Initial_API_Fail';
-export const CLIENT_LOGIN_START = 'client/Login_Start';
-export const CLIENT_LOGIN_END = 'client/Login_Success';
-export const CLIENT_LOGIN_FAIL = 'client/Login_Fail';
-export const CLIENT_REGISTER_START = 'client/Register_Start';
-export const CLIENT_REGISTER_END = 'client/Register_End';
-export const CLIENT_REGISTER_FAIL = 'client/Register_Fail';
+export enum INITIAL {
+  START = 'client/Initial_API_Start',
+  END = 'client/Initial_API_End',
+  FAIL = 'client/Initial_API_Fail',
+}
+
+export enum LOGIN {
+  START = 'client/Login_Start',
+  END = 'client/Login_Success',
+  FAIL = 'client/Login_Fail',
+}
+
+export enum REGISTER {
+  START = 'client/Register_Start',
+  END = 'client/Register_End',
+  FAIL = 'client/Register_Fail',
+}
+
+export enum CLEAR {
+  USER = 'clear/User_Data',
+  APP = 'clear/App_Data',
+}
