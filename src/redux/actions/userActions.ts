@@ -11,8 +11,6 @@ export const clientLoginStart = (mobile: string, password: string) => {
   return {
     type: LOGIN.START,
     payload: form,
-    domain: store.getState().app.domain, //domain from app
-    api: store.getState().app.api, //api from app
   };
 };
 
@@ -45,8 +43,6 @@ export const clientRegisterStart = (
   return {
     type: REGISTER.START,
     payload: form,
-    domain: store.getState().app.domain, //domain from app
-    api: store.getState().app.api, //api from app
   };
 };
 

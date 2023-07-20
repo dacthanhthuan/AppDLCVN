@@ -39,12 +39,14 @@ import CarouselSlide from '../../component/Home/CarouselSlide';
 import {WINDOW_HEIGHT} from '../../global';
 import {HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT} from './styles';
 import {useDispatch} from 'react-redux';
-import {clientRegisterStart} from '../../redux/actions/clientRegister';
+import store from '../../redux/store';
 
 export const ScrollContext = createContext(false);
 
 const Home = () => {
   const dispatch = useDispatch();
+
+  // const appstate = store.getState().
 
   //animate header
   const scrollY = useSharedValue(0);
@@ -93,10 +95,10 @@ const Home = () => {
 
   //Hide SplashScreen
   useEffect(() => {
-    dispatch(clientInitialApiStart);
     setTimeout(() => {
       SplashScreen.hide();
     }, 1000);
+    dispatch(clientInitialApiStart);
   }, []);
 
   // StatusBar.setTranslucent(true);

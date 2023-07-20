@@ -70,7 +70,7 @@ const Register = () => {
 
   return (
     <SafeAreaView style={Style_Register.container}>
-      <LoadingOverlay visible={loading} />
+      {loading ? <LoadingOverlay visible={loading} /> : null}
       <Header
         onPressLeft={() => navigation.goBack()}
         iconLeft={require('../../assets/imgSupplier/Arrow_1.png')}

@@ -37,7 +37,7 @@ const Login = () => {
 
   return (
     <SafeAreaView style={Style_Login.container}>
-      <LoadingOverlay visible={loading} />
+      {loading ? <LoadingOverlay visible={loading} /> : null}
       <Header
         onPressLeft={() => navigation.goBack()}
         iconLeft={require('../../assets/imgSupplier/Arrow_1.png')}

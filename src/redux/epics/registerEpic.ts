@@ -3,24 +3,18 @@ import axios from 'axios';
 import {Epic, ofType} from 'redux-observable';
 import {REGISTER} from '../actions/types';
 import {clientRegisterEnd, clientRegisterFail} from '../actions/userActions';
+import api_register from '../../api/api_register';
 
 const registerEpic: Epic = (action$, state$) =>
   action$.pipe(
     ofType(REGISTER.START),
     mergeMap(async action => {
-      return await axios
-        .post(
-          `${action.domain}client_init/register?apikey=${action.api}`,
-          action.payload,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
+      return await api_register(action.payload)
         .then(res => {
-          if (res.data.status === 200) return clientRegisterEnd(res.data.data);
-          else return clientRegisterFail(res.data);
+          return clientRegisterEnd(res);
+        })
+        .catch(err => {
+          return clientRegisterFail(err);
         });
     }),
   );

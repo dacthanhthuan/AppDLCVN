@@ -27,7 +27,6 @@ export default function UserReducer(state = initialState, action: AnyAction) {
         loading: false,
         login: {
           status: true,
-          message: action.payload.message,
         },
       };
     case REGISTER.END:
@@ -36,7 +35,9 @@ export default function UserReducer(state = initialState, action: AnyAction) {
         loading: false,
         register: {
           status: true,
-          message: action.payload.message,
+        },
+        login: {
+          status: true,
         },
       };
     case LOGIN.FAIL:
@@ -45,7 +46,7 @@ export default function UserReducer(state = initialState, action: AnyAction) {
         loading: false,
         login: {
           status: false,
-          message: action.payload.message,
+          message: action.payload,
         },
       };
     case REGISTER.FAIL:
@@ -54,7 +55,7 @@ export default function UserReducer(state = initialState, action: AnyAction) {
         loading: false,
         register: {
           status: false,
-          message: action.payload.message,
+          message: action.payload,
         },
       };
     case CLEAR.USER:

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   Text,
@@ -12,12 +12,34 @@ import InfoCard from '../../component/InfoCard';
 import CardProfile from '../../component/CardProfile';
 import TranfersMoney from '../../component/TranfersMoney';
 import NotLogin from '../NotLogin';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  clientClearUserData,
+  clientLoginEnd,
+} from '../../redux/actions/userActions';
+import {getData, removeData} from '../../storage';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
+// Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
+  const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const login = useSelector(state => state.user.login.status);
+  const [loadingLocal, setLoadingLocal] = useState(true); // loading local data state
 
-  return !user?.login.status ? (
+  // only run when screen render initially
+  useEffect(() => {
+    // get local data and check it
+    getData('user').then(res => {
+      // if local data not null, dispatch data to redux store
+      if (res !== null) dispatch(clientLoginEnd(res));
+      setLoadingLocal(false);
+    });
+  }, []);
+
+  return loadingLocal ? (
+    <LoadingOverlay visible />
+  ) : !login ? (
     <NotLogin />
   ) : (
     <ScrollView>
@@ -25,8 +47,8 @@ const ProfileAdmin = ({navigation}) => {
         <CardProfile
           style={{marginTop: 25, borderColor: '#005AA9'}}
           image={require('../../assets/Rectangle312.png')}
-          text={user?.fullname}
-          id={user?.userid}
+          text={user.fullname}
+          id={user.user_id}
           onPress={() => navigation.navigate('Detail_User')}
         />
 
@@ -123,7 +145,18 @@ const ProfileAdmin = ({navigation}) => {
           image={require('../../assets/Rectangle299.png')}
           text="Báo cáo hoa hồng"
           onPress={() => navigation.navigate('TeamThree')}
-          style={{marginBottom: 32}}
+        />
+        <InfoCard
+          image={require('../../assets/Rectangle270.png')}
+          text="Đăng xuất"
+          onPress={() => {
+            //clear data (both local and redux store)
+            dispatch(clientClearUserData);
+            setLoadingLocal(true);
+            removeData('user', () => {
+              setLoadingLocal(false);
+            });
+          }}
         />
       </SafeAreaView>
     </ScrollView>
