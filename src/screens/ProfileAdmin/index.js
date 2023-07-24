@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   View,
 } from 'react-native';
+import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import styles from './styles';
 import InfoCard from '../../component/InfoCard';
 import CardProfile from '../../component/CardProfile';
@@ -17,8 +18,11 @@ import {
   clientClearUserData,
   clientLoginEnd,
 } from '../../redux/actions/userActions';
-import {getData, removeData} from '../../storage';
+import {getData, multiRemoveData, removeData, storeData} from '../../storage';
 import LoadingOverlay from '../../component/LoadingOverlay';
+import {formatprice, BIOMETRIC} from '../../global';
+import {LOCALSTORAGE} from '../../storage/direct';
+import LoginSettingOverlay from '../../component/LoginSettingOverlay';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
@@ -26,11 +30,38 @@ const ProfileAdmin = ({navigation}) => {
   const user = useSelector(state => state.user);
   const login = useSelector(state => state.user.login.status);
   const [loadingLocal, setLoadingLocal] = useState(true); // loading local data state
+  // state define biometricOption show or hide
+  const [biometricOption, setBiometricOption] = useState(false);
+
+  // login options dialog toggle
+  const [loginOptions, setLoginOptions] = useState(false);
+  const toggleLoginOptions = () => {
+    setLoginOptions(!loginOptions);
+  };
+
+  // check device is support biometrics or not?
+  const isBiometricSupport = async () => {
+    const {available, biometryType} = await BIOMETRIC.isSensorAvailable();
+    await storeData(LOCALSTORAGE.biometric, {
+      available: available,
+      type: biometryType,
+    });
+    if (!available) {
+      multiRemoveData([
+        LOCALSTORAGE.biometric_login_data,
+        LOCALSTORAGE.biometric_login_option,
+      ]);
+    }
+    setBiometricOption(available);
+  };
 
   // only run when screen render initially
   useEffect(() => {
+    // check biometric is available
+    isBiometricSupport();
+
     // get local data and check it
-    getData('user').then(res => {
+    getData(LOCALSTORAGE.user).then(res => {
       // if local data not null, dispatch data to redux store
       if (res !== null) dispatch(clientLoginEnd(res));
       setLoadingLocal(false);
@@ -65,7 +96,9 @@ const ProfileAdmin = ({navigation}) => {
               Ví tiền
             </Text>
           </View>
-          <Text style={{fontSize: 16, color: '#FFFFFF'}}>35.0000đ</Text>
+          <Text style={{fontSize: 16, color: '#FFFFFF'}}>
+            {formatprice(user.lWallet[0].amount)}
+          </Text>
         </View>
 
         <View
@@ -83,7 +116,10 @@ const ProfileAdmin = ({navigation}) => {
               Ví điểm
             </Text>
           </View>
-          <Text style={{fontSize: 16, color: '#FFFFFF'}}>0đ</Text>
+          <Text style={{fontSize: 16, color: '#FFFFFF'}}>
+            {' '}
+            {formatprice(user.lWallet[1].amount)}
+          </Text>
         </View>
 
         <ImageBackground
@@ -145,6 +181,19 @@ const ProfileAdmin = ({navigation}) => {
           image={require('../../assets/Rectangle299.png')}
           text="Báo cáo hoa hồng"
           onPress={() => navigation.navigate('TeamThree')}
+        />
+        {biometricOption ? (
+          <InfoCard
+            image={require('../../assets/Rectangle270.png')}
+            text="Thiết lập đăng nhập"
+            onPress={toggleLoginOptions}
+          />
+        ) : null}
+        <LoginSettingOverlay
+          visible={loginOptions}
+          onBackdropPress={toggleLoginOptions}
+          onConfirm={toggleLoginOptions}
+          onCancel={toggleLoginOptions}
         />
         <InfoCard
           image={require('../../assets/Rectangle270.png')}

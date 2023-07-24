@@ -62,7 +62,12 @@ export async function multiStoreData(
   try {
     AsyncStorage.multiSet(data, cb);
   } catch (error) {
-    console.error('STORAGE ERROR - WHEN SAVING ', data, ' TO LOCAL. \n', error);
+    console.error(
+      'STORAGE ERROR - WHEN mSAVING ',
+      data,
+      ' TO LOCAL. \n',
+      error,
+    );
   }
 }
 
@@ -73,10 +78,20 @@ export async function multiGetData(name: string[], cb?: MultiGetCallback) {
     return ob != null ? ob : null;
   } catch (error) {
     console.error(
-      'STORAGE ERROR - WHEN READING ',
+      'STORAGE ERROR - mWHEN READING ',
       name,
       ' FROM LOCAL. \n',
       error,
+    );
+  }
+}
+
+export async function multiRemoveData(name: string[], cb?: MultiCallback) {
+  try {
+    await AsyncStorage.multiRemove(name, cb);
+  } catch (error) {
+    throw new Error(
+      'STORAGE ERROR - WHEN mREMOVE ' + name + ' FROM LOCAL \n' + error,
     );
   }
 }

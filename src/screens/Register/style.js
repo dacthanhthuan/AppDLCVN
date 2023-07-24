@@ -12,13 +12,16 @@ const Style_Register = StyleSheet.create({
     height: 50,
   },
   container_1: {
-    marginTop: 10,
+    marginVertical: 10,
     width: '90%',
+    flex: 1,
   },
   textRegister: {
     color: '#005AA9',
     fontSize: 20,
     fontWeight: '400',
+    alignSelf: 'flex-start',
+    paddingLeft: 15,
   },
   container_4: {
     flexDirection: 'row',

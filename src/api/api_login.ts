@@ -1,6 +1,7 @@
 import {storeData} from '../storage';
 import apiHelper, {NETWORK} from './apiHelper';
 import baseURL, {getUrl} from './baseURL';
+import {LOCALSTORAGE} from '../storage/direct';
 
 export default async function api_login(data: FormData) {
   return await new Promise((resolve, reject) => {
@@ -9,7 +10,7 @@ export default async function api_login(data: FormData) {
         switch (res?.code) {
           case NETWORK.SUCCESS:
             //store user data
-            storeData('user', res.data);
+            storeData(LOCALSTORAGE.user, res.data);
 
             resolve(res?.data);
           case NETWORK.ERROR403:

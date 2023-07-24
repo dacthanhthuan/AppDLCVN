@@ -40,18 +40,24 @@ const Style_Login = StyleSheet.create({
   },
   container_3: {
     width: '100%',
-    alignItems: 'flex-end',
-    marginTop: 10,
+    marginTop: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   textForgotpass: {
     color: '#8B8787',
     fontSize: 14,
     fontWeight: '400',
   },
+  textBiometricLogin: {
+    color: '#005AA9',
+    fontSize: 14,
+    fontWeight: '400',
+  },
   container_4: {
-    alignItems: 'center',
+    alignItems: 'flex-end',
+    height: '30%',
     flexDirection: 'row',
-    position: 'absolute',
     bottom: 10,
   },
   textNotuser: {
