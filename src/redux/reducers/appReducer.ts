@@ -4,7 +4,7 @@ import {AnyAction} from 'redux';
 const initialState = {
   domain: '',
   api: '',
-  state: 'start',
+  loading: true,
 };
 
 export default function AppReducer(state = initialState, action: AnyAction) {
@@ -13,7 +13,7 @@ export default function AppReducer(state = initialState, action: AnyAction) {
       return {
         domain: action.payload?.main_domain,
         api: action.payload?.apikey,
-        state: 'end',
+        loading: false,
       };
     case INITIAL.FAIL:
       return {

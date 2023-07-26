@@ -10,13 +10,15 @@ export default async function api_initial_client(data: FormData) {
         case NETWORK.SUCCESS:
           //Store data and call to getdomain and api in callback
           multiStoreData([
-            [LOCALSTORAGE.main_domain, res.data.main_domain],
-            [LOCALSTORAGE.apikey, res.data.apikey],
+            [LOCALSTORAGE.main_domain, res.data.data.main_domain],
+            [LOCALSTORAGE.apikey, res.data.data.apikey],
           ]);
 
-          resolve(res?.data);
+          resolve(res?.data.data);
+          break;
         case NETWORK.ERROR403:
           reject(res?.message);
+          break;
       }
     });
   });

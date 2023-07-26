@@ -20,3 +20,10 @@ export enum CLEAR {
   USER = 'clear/User_Data',
   APP = 'clear/App_Data',
 }
+
+export enum PRODUCT_LIST {
+  START = 'client/Product_List_Start',
+  END = 'client/Product_List_End',
+  FAIL = 'client/Product_List_Fail',
+  CLEAR = 'client/Product_List_Clear',
+}

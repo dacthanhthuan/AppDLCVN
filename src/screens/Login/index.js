@@ -28,11 +28,12 @@ const Login = () => {
   const navigation = useNavigation();
 
   //Declare state
-  const [mobile, setMobile] = useState('0123456789');
-  const [password, setPassword] = useState('123456');
+  const [mobile, setMobile] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [initialRendered, setInitialRendered] = useState(true); //Initial rendered state
   const [biometricLogin, setBiometricLogin] = useState(false); // biometric login option
+  const user = useSelector(state => state.user);
   const login = useSelector(state => state.user?.login.status);
   const message = useSelector(state => state.user?.login.message);
   const loading = useSelector(state => state.user?.loading);
@@ -96,7 +97,7 @@ const Login = () => {
         const biometricData = await getData(LOCALSTORAGE.biometric_login_data);
 
         // if user login by another account
-        if (biometricData.mobile !== mobile) {
+        if (biometricData.mobile !== user.mobile) {
           // remove biometric login data and options
           await multiRemoveData([
             LOCALSTORAGE.biometric_login_data,

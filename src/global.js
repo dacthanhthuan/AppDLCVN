@@ -44,3 +44,5 @@ export function mailCheck(value) {
 }
 
 export const BIOMETRIC = new ReactNativeBiometrics();
+
+export const showmoreImage = require('./assets/Rectangle270.png');

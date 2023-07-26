@@ -10,7 +10,7 @@ const Product = ({item}) => {
     navigation.navigate('DetailProduct', {item});
   };
   const price = formatprice(item?.price);
-  const commission = formatprice(item?.commission);
+  const commission = formatprice(item?.commission_vnd);
 
   return (
     <View style={[styles.renderItem]}>
@@ -21,15 +21,15 @@ const Product = ({item}) => {
           pressed ? {opacity: 0.8} : null,
         ]}>
         <Image
-          source={item?.source}
+          source={{uri: item?.img_1}}
           style={[styles.renderImage]}
           resizeMode="contain"
         />
-        <Text style={styles.renderTitle} numberOfLines={2}>
-          {item?.title}
+        <Text style={styles.renderTitle} numberOfLines={1}>
+          {item?.product_name}
         </Text>
         <Text style={styles.renderProductId} numberOfLines={1}>
-          {item?.idProduct}
+          {item?.product_id}
         </Text>
         <Text style={styles.renderProductId} numberOfLines={1}>
           Giá bán: <Text style={styles.renderPrice}>{price}</Text>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
 
   renderImage: {
-    height: '45%',
+    height: '50%',
     width: '90%',
     alignSelf: 'center',
   },
@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   renderTitle: {
     paddingVertical: '1%',
     fontSize: 16,
+    paddingVertical: 8,
     color: '#005AA9',
     fontWeight: '400',
   },
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   },
 
   renderPrice: {
-    fontSize: 13,
+    fontSize: 15,
     color: '#005AA9',
     fontWeight: '500',
   },

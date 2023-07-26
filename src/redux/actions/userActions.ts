@@ -1,4 +1,3 @@
-import store from '../store';
 import {LOGIN, REGISTER, CLEAR} from './types';
 
 //Login actions

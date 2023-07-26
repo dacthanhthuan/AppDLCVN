@@ -15,11 +15,13 @@ const ImageButton = ({
     <Pressable
       style={({pressed}) => [containerStyle, pressed ? {opacity: 0.65} : null]}
       onPress={onPress}>
-      <Image
-        source={imagesource}
-        style={imageStyle}
-        resizeMode={resizeMode ? resizeMode : 'contain'}
-      />
+      {imagesource ? (
+        <Image
+          source={imagesource}
+          style={imageStyle}
+          resizeMode={resizeMode ? resizeMode : 'contain'}
+        />
+      ) : null}
       <Text style={textStlye}>{text}</Text>
     </Pressable>
   );
@@ -45,11 +47,13 @@ const AnimatedImageButton = forwardRef(
           ref={ref}
           style={({pressed}) => (pressed ? {opacity: 0.4} : null)}
           onPress={onPress}>
-          <Image
-            source={imagesource}
-            style={imageStyle}
-            resizeMode={resizeMode ? resizeMode : 'contain'}
-          />
+          {imagesource !== null ? (
+            <Image
+              source={imagesource}
+              style={imageStyle}
+              resizeMode={resizeMode ? resizeMode : 'contain'}
+            />
+          ) : null}
           <Text style={textStlye}>{text}</Text>
         </Pressable>
       </View>

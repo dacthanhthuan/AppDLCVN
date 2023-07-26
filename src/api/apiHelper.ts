@@ -18,7 +18,7 @@ export default async function apiHelper(url: string, data: FormData) {
         switch (res.data.status) {
           case 200:
             return {
-              data: res.data.data,
+              data: res.data,
               code: NETWORK.SUCCESS,
             };
           case 403:
@@ -29,5 +29,7 @@ export default async function apiHelper(url: string, data: FormData) {
         }
       }
     })
-    .catch(err => {});
+    .catch(err => {
+      throw new Error(err.message);
+    });
 }

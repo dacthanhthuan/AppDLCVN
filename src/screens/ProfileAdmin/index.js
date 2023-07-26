@@ -23,14 +23,14 @@ import LoadingOverlay from '../../component/LoadingOverlay';
 import {formatprice, BIOMETRIC} from '../../global';
 import {LOCALSTORAGE} from '../../storage/direct';
 import LoginSettingOverlay from '../../component/LoginSettingOverlay';
+import {TabActions} from '@react-navigation/native';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const login = useSelector(state => state.user.login.status);
-  const [loadingLocal, setLoadingLocal] = useState(true); // loading local data state
-  // state define biometricOption show or hide
+  // state define show or hide login by biometric setting
   const [biometricOption, setBiometricOption] = useState(false);
 
   // login options dialog toggle
@@ -41,17 +41,22 @@ const ProfileAdmin = ({navigation}) => {
 
   // check device is support biometrics or not?
   const isBiometricSupport = async () => {
+    // check biometric support available (has touchid, faceid or biometric)
     const {available, biometryType} = await BIOMETRIC.isSensorAvailable();
     await storeData(LOCALSTORAGE.biometric, {
       available: available,
       type: biometryType,
     });
+
+    // if not available then remove data of biometric support before
     if (!available) {
       multiRemoveData([
         LOCALSTORAGE.biometric_login_data,
         LOCALSTORAGE.biometric_login_option,
       ]);
     }
+
+    //
     setBiometricOption(available);
   };
 
@@ -59,18 +64,9 @@ const ProfileAdmin = ({navigation}) => {
   useEffect(() => {
     // check biometric is available
     isBiometricSupport();
-
-    // get local data and check it
-    getData(LOCALSTORAGE.user).then(res => {
-      // if local data not null, dispatch data to redux store
-      if (res !== null) dispatch(clientLoginEnd(res));
-      setLoadingLocal(false);
-    });
   }, []);
 
-  return loadingLocal ? (
-    <LoadingOverlay visible />
-  ) : !login ? (
+  return !login ? (
     <NotLogin />
   ) : (
     <ScrollView>
@@ -201,10 +197,8 @@ const ProfileAdmin = ({navigation}) => {
           onPress={() => {
             //clear data (both local and redux store)
             dispatch(clientClearUserData);
-            setLoadingLocal(true);
-            removeData('user', () => {
-              setLoadingLocal(false);
-            });
+            removeData(LOCALSTORAGE.user);
+            navigation.dispatch(TabActions.jumpTo('Home'));
           }}
         />
       </SafeAreaView>

@@ -1,13 +1,24 @@
 import {memo} from 'react';
 import Product from './Product';
 import {FlatList, StyleSheet} from 'react-native';
+import ProductShowmore from './ProductShowmore';
+import {showmoreImage} from '../../global';
 
-const ListProduct = ({data}) => {
+const ListProduct = ({data, isShowmore = false}) => {
+  data = isShowmore ? [...data, {}] : data;
+  const img = showmoreImage;
+
   return (
     <FlatList
       style={styles.container}
       data={data}
-      renderItem={({item}) => <Product item={item} />}
+      renderItem={({item, index}) =>
+        isShowmore && index === data.length - 1 ? (
+          <ProductShowmore name="Xem thêm..." imageSource={img} />
+        ) : (
+          <Product item={item} />
+        )
+      }
       removeClippedSubviews={true}
       windowSize={11}
     />
