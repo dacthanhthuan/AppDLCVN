@@ -1,4 +1,4 @@
-import {WINDOW_WIDTH, WINDOW_HEIGHT, formatprice} from '../../global';
+import {WINDOW_WIDTH, WINDOW_HEIGHT, formatPrice} from '../../global';
 import {memo} from 'react';
 import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -9,8 +9,8 @@ const Product = ({item}) => {
   const goToDetailProduct = () => {
     navigation.navigate('DetailProduct', {item});
   };
-  const price = formatprice(item?.price);
-  const commission = formatprice(item?.commission_vnd);
+  const price = formatPrice(item?.price);
+  const commission = formatPrice(item?.commission_vnd);
 
   return (
     <View style={[styles.renderItem]}>

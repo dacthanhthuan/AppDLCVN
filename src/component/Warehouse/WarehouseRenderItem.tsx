@@ -1,17 +1,21 @@
 import {View} from 'react-native';
-import SectionHeader from '../SectionHeader';
-import ListProduct from '../ListProduct';
-import CarouselProduct from '../CarouselProduct';
-import SlideSmall from '../SlideSmall';
-import CategoryLandscapeBig from '../CategoryLandscapeBig';
-import Popup from '../Popup';
-import SlideBig from '../SlideBig';
-import CategoryPortrait from '../CategoryPortrait';
-import CategoryLandscapeSmall from '../CategoryLandscapeSmall';
-import CarouselSlideSmall from '../CarouselSlideSmall';
-import CarouselSlideBig from '../CarouselSlideBig';
+import SectionHeader from '../Home/SectionHeader';
+import SlideBig from '../Home/SlideBig';
+import SlideSmall from '../Home/SlideSmall';
+import CarouselSlideSmall from '../Home/CarouselSlideSmall';
+import CarouselSlideBig from '../Home/CarouselSlideBig';
+import CategoryPortrait from '../Home/CategoryPortrait';
+import CategoryLandscapeBig from '../Home/CategoryLandscapeBig';
+import CategoryLandscapeSmall from '../Home/CategoryLandscapeSmall';
+import Popup from '../Home/Popup';
+import ListProductWarehouse from './ListProductWarehouse';
+import CarouselProductWarehouse from './CarouselProductWarehouse';
 
-export default function HomeSectionRenderItem({item}: any) {
+type WarehouseRenderItemProps = {
+  item: any;
+};
+
+export default function WarehouseRenderItem({item}: WarehouseRenderItemProps) {
   const theme: any[] = item.data.theme || [];
   const productList: any[] = item.data.l || [];
   const popup = item.data.popup || null;
@@ -25,7 +29,7 @@ export default function HomeSectionRenderItem({item}: any) {
             const layout = item.layout || {};
 
             return (
-              <View key={item + index}>
+              <View key={item + index + new Date().getSeconds}>
                 {/* header item */}
                 {item.name_show == 1 ? (
                   <SectionHeader
@@ -117,13 +121,13 @@ export default function HomeSectionRenderItem({item}: any) {
                 {layout.product === 'portrait' ? (
                   <>
                     {item.product_1_list.length > 0 ? (
-                      <ListProduct
+                      <ListProductWarehouse
                         data={item.product_1_list}
                         isShowmore={layout.product_show_more == 1}
                       />
                     ) : null}
                     {item.product_2_list.length > 0 ? (
-                      <ListProduct
+                      <ListProductWarehouse
                         data={item.product_2_list}
                         isShowmore={layout.product_show_more == 1}
                       />
@@ -132,13 +136,13 @@ export default function HomeSectionRenderItem({item}: any) {
                 ) : (
                   <>
                     {item.product_1_list.length > 0 ? (
-                      <CarouselProduct
+                      <CarouselProductWarehouse
                         data={item.product_1_list}
                         isShowmore={layout.product_show_more == 1}
                       />
                     ) : null}
                     {item.product_2_list.length > 0 ? (
-                      <CarouselProduct
+                      <CarouselProductWarehouse
                         data={item.product_2_list}
                         isShowmore={layout.product_show_more == 1}
                       />
@@ -157,7 +161,7 @@ export default function HomeSectionRenderItem({item}: any) {
           {page > 1 ? null : (
             <SectionHeader title={'Gợi ý hôm nay'} isMore={false} />
           )}
-          <ListProduct data={productList} />
+          <ListProductWarehouse data={productList} isShowmore={false} />
         </>
       ) : null}
 

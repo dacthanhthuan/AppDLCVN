@@ -18,7 +18,6 @@
 
 // const Cart = ({ navigation, route }) => {
 
-
 //   const [agreed, setAgreed] = useState(false);
 
 // const Cart = ({ navigation, route }) => {
@@ -31,10 +30,6 @@
 //   const onCheckboxAll = () => {
 //     setAgreed(value => !value);
 //   };
-
-
-
-
 
 //   return (
 //     <SafeAreaView style={styles.container}>
@@ -75,8 +70,7 @@
 //       </View>
 //       <Button text='Tạo đơn' onPress={() => navigation.navigate('CreateOrder')} />
 
-
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -89,11 +83,12 @@ import styles from './styles';
 import ProductCart from '../../component/ProductCart';
 import Checkbox from '../../component/Checkbox';
 import Button from '../../component/Button';
-import { Swipeable } from 'react-native-gesture-handler';
+import {Swipeable} from 'react-native-gesture-handler';
 import Header from '../../component/Header';
-import { formatprice } from "../../global";
+import {formatPrice} from '../../global';
 
-{/* const data = [
+{
+  /* const data = [
   {
     id: 1,
     title: 'Nước rửa chén sinh học True - Bio Natural Dishwashing Liquid',
@@ -106,21 +101,20 @@ import { formatprice } from "../../global";
     price: '610,000',
     image: require('../../assets/Group135.png'),
   },
-]; */}
+]; */
+}
 
-const Cart = ({ navigation, route }) => {
-
-  const { quantity, item } = route?.params || {};
-  const price = formatprice(item?.price);
+const Cart = ({navigation, route}) => {
+  const {quantity, item} = route?.params || {};
+  const price = formatPrice(item?.price);
   const [action] = useState(false);
   const [Isquantity, setIsquantity] = useState(quantity);
-  const totalprice = formatprice(item?.price * parseFloat(Isquantity));
+  const totalprice = formatPrice(item?.price * parseFloat(Isquantity));
 
   // console.log(Isquantity);
   // console.log("item", item);
   // console.log("quantity", quantity);
   const [productData, setProductData] = useState(route?.params ? [item] : []);
-
 
   const [allCheck, setallCheck] = useState(false);
   const [forceChange, setForceChange] = useState(false);
@@ -129,8 +123,10 @@ const Cart = ({ navigation, route }) => {
   );
   const [check, setCheck] = useState(-1);
 
-  const onPressClearCard = (productId) => {
-    const updatedProductData = productData.filter(item => item.id !== productId);
+  const onPressClearCard = productId => {
+    const updatedProductData = productData.filter(
+      item => item.id !== productId,
+    );
     setProductData(updatedProductData);
   };
 
@@ -162,10 +158,16 @@ const Cart = ({ navigation, route }) => {
     setCheck(check);
   }, [listCheck]);
 
-  const clearCard = (productId) => {
+  const clearCard = productId => {
     return (
-      <TouchableOpacity onPress={() => onPressClearCard(productId)} style={{ alignItems: 'center', justifyContent: 'center', padding: 12 }}>
-        <Image style={{ width: 22, height: 24 }} resizeMode="contain" source={require('../../assets/clearCart.png')} />
+      <TouchableOpacity
+        onPress={() => onPressClearCard(productId)}
+        style={{alignItems: 'center', justifyContent: 'center', padding: 12}}>
+        <Image
+          style={{width: 22, height: 24}}
+          resizeMode="contain"
+          source={require('../../assets/clearCart.png')}
+        />
       </TouchableOpacity>
     );
   };
@@ -182,19 +184,19 @@ const Cart = ({ navigation, route }) => {
 
       <FlatList
         data={productData}
-        style={{ marginTop: 35 }}
-        renderItem={({ item, index }) => {
+        style={{marginTop: 35}}
+        renderItem={({item, index}) => {
           return (
             <Swipeable renderRightActions={() => clearCard(item?.id)}>
               <ProductCart
                 onPressMinus={() => {
-                  setIsquantity(Isquantity - 1)
+                  setIsquantity(Isquantity - 1);
                   if (Isquantity <= 1) {
-                    setIsquantity(1)
+                    setIsquantity(1);
                   }
                 }}
                 onPressPlus={() => {
-                  setIsquantity(Isquantity + 1)
+                  setIsquantity(Isquantity + 1);
                 }}
                 sl={Isquantity}
                 onChecked={value =>
@@ -222,15 +224,15 @@ const Cart = ({ navigation, route }) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Checkbox
             onChecked={onCheckboxAll}
             text={'Chọn tất cả'}
             forceChangeState={forceChange}
           />
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ fontSize: 13, color: '#000000', marginLeft: 10 }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style={{fontSize: 13, color: '#000000', marginLeft: 10}}>
             Tổng giá bán
           </Text>
           {allCheck === true ? (
@@ -251,23 +253,19 @@ const Cart = ({ navigation, route }) => {
                 marginLeft: 10,
                 fontWeight: '500',
               }}>
-              {formatprice(0)}
+              {formatPrice(0)}
             </Text>
-          )
-          }
+          )}
         </View>
       </View>
       {allCheck === true ? (
         <Button
           text="Tạo đơn"
-          onPress={() => navigation.navigate('CreateOrder', { item, Isquantity, })}
+          onPress={() => navigation.navigate('CreateOrder', {item, Isquantity})}
         />
       ) : (
-        <Button
-          text="Tạo đơn"
-        />
-      )
-      }
+        <Button text="Tạo đơn" />
+      )}
     </SafeAreaView>
   );
 };

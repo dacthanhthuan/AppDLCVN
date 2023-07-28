@@ -20,7 +20,7 @@ import {
 } from '../../redux/actions/userActions';
 import {getData, multiRemoveData, removeData, storeData} from '../../storage';
 import LoadingOverlay from '../../component/LoadingOverlay';
-import {formatprice, BIOMETRIC} from '../../global';
+import {formatPrice, BIOMETRIC} from '../../global';
 import {LOCALSTORAGE} from '../../storage/direct';
 import LoginSettingOverlay from '../../component/LoginSettingOverlay';
 import {TabActions} from '@react-navigation/native';
@@ -93,7 +93,7 @@ const ProfileAdmin = ({navigation}) => {
             </Text>
           </View>
           <Text style={{fontSize: 16, color: '#FFFFFF'}}>
-            {formatprice(user.lWallet[0].amount)}
+            {formatPrice(user.lWallet[0].amount)}
           </Text>
         </View>
 
@@ -114,7 +114,7 @@ const ProfileAdmin = ({navigation}) => {
           </View>
           <Text style={{fontSize: 16, color: '#FFFFFF'}}>
             {' '}
-            {formatprice(user.lWallet[1].amount)}
+            {formatPrice(user.lWallet[1].amount)}
           </Text>
         </View>
 

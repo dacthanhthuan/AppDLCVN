@@ -33,7 +33,7 @@ export default function Popup({popupData}: PopupProps) {
         // get and compare day
         let today = new Date().toLocaleDateString();
         if (today === todayPopup.day) {
-          // if today, filter popup is seen
+          // if today, popup is filtered
           let filterPopup: any[] = popupData.filter(
             p => !todayPopup.popup.some((td: any) => p.id === td.id),
           );
@@ -50,6 +50,9 @@ export default function Popup({popupData}: PopupProps) {
           // set data to save in local and popuplength to invoked useeffect
           setPopupList(todayPopup.popup);
           setPopupLength(filterPopup.length);
+        } else {
+          // otherwise, if not today, visible popup
+          setVisible(true);
         }
       } else {
         setVisible(true);

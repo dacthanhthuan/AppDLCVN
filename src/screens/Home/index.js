@@ -27,6 +27,10 @@ const AnimatedSectionList = Animated.createAnimatedComponent(SectionList);
 import {data1, data2, product, product2} from './data';
 
 //Component
+import CarouselSlideBig from '../../component/Home/CarouselSlideBig';
+import SlideBig from '../../component/Home/SlideBig';
+import CategoryLandscapeSmall from '../../component/Home/CategoryLandscapeSmall';
+import Popup from '../../component/Home/Popup';
 import SlideSmall from '../../component/Home/SlideSmall';
 import SectionHeader from '../../component/Home/SectionHeader';
 import CategoryLandscapeBig from '../../component/Home/CategoryLandscapeBig';
@@ -37,7 +41,7 @@ import Header from '../../component/Home/HeaderTitle/HeaderTitle';
 import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 import CarouselSlideSmall from '../../component/Home/CarouselSlideSmall';
-import {WINDOW_HEIGHT} from '../../global';
+import {WINDOW_HEIGHT, modifyData} from '../../global';
 import {HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT} from './styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -49,6 +53,7 @@ import {getData} from '../../storage';
 import HomeSectionRenderItem from '../../component/Home/HomeSectionRenderItem';
 import HomeSkeleton from '../../component/Home/HomeSkeleton';
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
+import {PRODUCT_LIST} from '../../redux/actions/types';
 
 export const ScrollContext = createContext(false);
 
@@ -89,7 +94,7 @@ const Home = () => {
   // get product list from server
   const getProductListApi = (page = 1) => {
     try {
-      dispatch(clientProductListStart(page, 0, session_token));
+      dispatch(clientProductListStart(page, '0', session_token));
     } catch (error) {
       throw new Error(error);
     }
@@ -99,7 +104,7 @@ const Home = () => {
   // clear product list data and call api to get data from server
   useEffect(() => {
     if (!loadingApp) {
-      dispatch(clientProductListClear);
+      dispatch(clientProductListClear(PRODUCT_LIST.CLEAR));
       getProductListApi();
     }
   }, [loadingApp, isLogin]);
@@ -107,6 +112,7 @@ const Home = () => {
   // set data for section list after get data from api
   // and set refreshing state is false after get data
   useEffect(() => {
+    // const data = modifyData(mProduct.data);
     setSections([mProduct]);
     if (!mProduct.loading) {
       setRefreshing(false);
@@ -117,8 +123,9 @@ const Home = () => {
   // refreshing feature
   useEffect(() => {
     if (refreshing) {
-      dispatch(clientProductListClear);
+      dispatch(clientProductListClear(PRODUCT_LIST.CLEAR));
       getProductListApi();
+      setLoadmore(false);
     }
   }, [refreshing]);
 
@@ -208,41 +215,71 @@ const Home = () => {
             //   switch (true) {
             //     case section.type.startsWith('slide'):
             //       switch (true) {
-            //         case section.type.includes('/half'):
-            //           return <SlideHalf item={item} />;
             //         case section.type.includes('/carousel'):
-            //           return <CarouselSlide data={item} />;
-            //         default:
-            //           return (
-            //             <SlideLargest
-            //               slide={item.source}
-            //               backgroundColor={item.backgroundColor}
-            //             />
-            //           );
+            //           switch (true) {
+            //             case section.type.includes('/small'):
+            //               return <CarouselSlideSmall data={item} />;
+            //             case section.type.includes('/big'):
+            //               return <CarouselSlideBig data={item} />;
+            //           }
+            //         case section.type.includes('/small'):
+            //           return <SlideSmall slide={{uri: item.banner}} />;
+            //         case section.type.includes('/big'):
+            //           return <SlideBig slide={{uri: item.banner}} />;
             //       }
             //     case section.type.startsWith('category'): {
-            //       return <CategoryItem item={item} />;
-            //     }
-            //     case section.type.startsWith('tropy'): {
-            //       return <TrophyOf3 item={item} />;
+            //       switch (true) {
+            //         case section.type.includes('/portrait'):
+            //           return (
+            //             <CategoryPortrait
+            //               item={item}
+            //               isShowmore={section.type.includes('/showmore')}
+            //             />
+            //           );
+            //         case section.type.includes('/landscape'):
+            //           if (section.type.includes('/small'))
+            //             return (
+            //               <CategoryLandscapeSmall
+            //                 item={item}
+            //                 isShowmore={section.type.includes('/showmore')}
+            //               />
+            //             );
+            //           else
+            //             return (
+            //               <CategoryLandscapeBig
+            //                 item={item}
+            //                 isShowmore={section.type.includes('/showmore')}
+            //               />
+            //             );
+            //       }
             //     }
             //     case section.type.startsWith('product'): {
             //       switch (true) {
-            //         case section.type.includes('/carousel'):
-            //           return <CarouselProduct data={item} />;
-            //         case section.type.includes('/mutable'):
-            //           return <MutableList item={item} checked={1} />;
-            //         default:
-            //           return <ListProduct data={item} />;
+            //         case section.type.includes('/portrait'):
+            //           return (
+            //             <ListProduct
+            //               data={item}
+            //               isShowmore={section.type.includes('/showmore')}
+            //             />
+            //           );
+            //         case section.type.includes('/landscape'):
+            //           return (
+            //             <CarouselProduct
+            //               item={item}
+            //               checked={1}
+            //               isShowmore={section.type.includes('/showmore')}
+            //             />
+            //           );
             //       }
             //     }
+            //     case section.type.startsWith('popup'):
+            //       return <Popup popupData={item} />;
             //   }
             // }}
             onScroll={scrollHandler}
             scrollEventThrottle={16}
             removeClippedSubviews={true}
             initialNumToRender={20}
-            overScrollMode={'never'}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 
   scrollview: {
     flex: 1,
-    height: WINDOW_HEIGHT * 0.92,
+    // height: WINDOW_HEIGHT * 0.92,
   },
 
   headerExpand: {

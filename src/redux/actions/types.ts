@@ -27,3 +27,10 @@ export enum PRODUCT_LIST {
   FAIL = 'client/Product_List_Fail',
   CLEAR = 'client/Product_List_Clear',
 }
+
+export enum CHANGE_POINT_LIST {
+  START = 'client/Change_Point_List_Start',
+  END = 'client/Change_Point_List_End',
+  FAIL = 'client/Change_Point_List_Fail',
+  CLEAR = 'client/Change_Point_List_Clear',
+}

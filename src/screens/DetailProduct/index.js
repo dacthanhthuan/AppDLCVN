@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   SafeAreaView,
@@ -14,19 +14,19 @@ import Button from '../../component/Button';
 import Header from '../../component/Header/index';
 import Information from '../../component/Information';
 import Line from '../../component/Line';
-import { useNavigation } from '@react-navigation/native';
-import { formatprice } from '../../global';
+import {useNavigation} from '@react-navigation/native';
+import {formatPrice} from '../../global';
 // import Carousel from "react-native-snap-carousel";
 import Carousel from 'react-native-reanimated-carousel';
 
-const DetailProduct = ({ route }) => {
-  const { item } = route?.params || {};
+const DetailProduct = ({route}) => {
+  const {item} = route?.params || {};
 
   // console.log('item :>> ', item);
   const navigation = useNavigation();
   const [quantity, setQuantity] = useState(1);
-  const price = formatprice(item?.price);
-  const commission = formatprice(item?.commission);
+  const price = formatPrice(item?.price);
+  const commission = formatPrice(item?.commission);
 
   // Tăng số lượng
   const increase = () => {
@@ -40,7 +40,7 @@ const DetailProduct = ({ route }) => {
     }
   };
 
-  const render_item = ({ }) => {
+  const render_item = ({}) => {
     return (
       <View>
         <Image style={Style_Detail.imgProduct} source={item.source} />
@@ -57,13 +57,13 @@ const DetailProduct = ({ route }) => {
         iconLeft={require('../../assets/Arrow1.png')}
         onPressRight={() => navigation.navigate('NoOrders')}
         iconRight={require('../../assets/Vector.png')}
-        containerStyle={{ paddingBottom: 10 }}
+        containerStyle={{paddingBottom: 10}}
       />
       <FlatList
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View>
-            <View style={{ alignItems: 'center', marginTop: 15 }}>
+            <View style={{alignItems: 'center', marginTop: 15}}>
               <Carousel
                 data={data}
                 renderItem={render_item}
@@ -77,7 +77,7 @@ const DetailProduct = ({ route }) => {
                 <Pressable
                   onPress={reduce}
                   hitSlop={12}
-                  style={({ pressed }) => (pressed ? { opacity: 0.8 } : null)}>
+                  style={({pressed}) => (pressed ? {opacity: 0.8} : null)}>
                   <Image
                     style={Style_Detail.imgIconMinus}
                     source={require('../../assets/imgDetail/minus.png')}
@@ -87,7 +87,7 @@ const DetailProduct = ({ route }) => {
                 <Pressable
                   onPress={increase}
                   hitSlop={12}
-                  style={({ pressed }) => (pressed ? { opacity: 0.8 } : null)}>
+                  style={({pressed}) => (pressed ? {opacity: 0.8} : null)}>
                   <Image
                     style={Style_Detail.imgIconPlus}
                     source={require('../../assets/imgDetail/plus.png')}
@@ -155,7 +155,7 @@ const DetailProduct = ({ route }) => {
       />
       <View style={Style_Detail.container_7}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Cart', { item, quantity })}>
+          onPress={() => navigation.navigate('Cart', {item, quantity})}>
           <View style={Style_Detail.container_8}>
             <Image
               style={Style_Detail.imgCart}
@@ -163,11 +163,11 @@ const DetailProduct = ({ route }) => {
             />
           </View>
         </TouchableOpacity>
-        <View style={{ flex: 1, paddingLeft: 15 }}>
+        <View style={{flex: 1, paddingLeft: 15}}>
           <Button
-            onPress={() => navigation.navigate('Cart', { item, quantity })}
+            onPress={() => navigation.navigate('Cart', {item, quantity})}
             text={'Chọn mua'}
-            style={{ marginTop: 0 }}
+            style={{marginTop: 0}}
           />
         </View>
       </View>

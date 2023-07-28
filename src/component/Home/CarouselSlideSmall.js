@@ -15,7 +15,7 @@ const CarouselSlideSmall = ({data}) => {
       }}
       width={WINDOW_WIDTH}
       height={WINDOW_HEIGHT * 0.23}
-      windowSize={1}
+      windowSize={2}
       loop={true}
       autoPlay={!isScroll}
       autoPlayInterval={3000}

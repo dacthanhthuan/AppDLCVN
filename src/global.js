@@ -9,9 +9,19 @@ const formatCurrency = new Intl.NumberFormat('vi-VN', {
   currency: 'VND',
 });
 
-export const formatprice = value => {
+const formatDecimal = new Intl.NumberFormat('vi-VN', {
+  style: 'decimal',
+  currency: 'VND',
+});
+
+export const formatPrice = value => {
   if (typeof value == 'string') value = parseInt(value);
-  return formatCurrency.format(value).replace(/\./g, ',');
+  return formatCurrency.format(value).replace(/\./g, '.');
+};
+
+export const formatPoint = value => {
+  if (typeof value == 'string') value = parseInt(value);
+  return formatDecimal.format(value) + ' Point';
 };
 
 export function mobileCheck(value) {
@@ -44,5 +54,172 @@ export function mailCheck(value) {
 }
 
 export const BIOMETRIC = new ReactNativeBiometrics();
+
+export function modifyData(item) {
+  const modifyData = [];
+
+  item.forEach(respone => {
+    const theme = respone?.data?.theme || [];
+    const productList = respone?.data?.l || [];
+    const popup = respone?.data.popup;
+    const page = respone?.data.page;
+
+    if (page == 1) {
+      theme.forEach(item => {
+        const themeLayout = item?.layout;
+
+        let slide = {
+          type: '',
+          title: '',
+          data: [],
+        };
+        let category1 = {
+          type: '',
+          title: '',
+          data: [],
+        };
+        let category2 = {
+          type: '',
+          title: '',
+          data: [],
+        };
+        let product1 = {
+          type: '',
+          title: '',
+          data: [],
+        };
+        let product2 = {
+          type: '',
+          title: '',
+          data: [],
+        };
+
+        // check data exist
+        if (item.slide_list.length > 0) {
+          slide.data = item.slide_list;
+          slide.type = 'slide';
+        }
+
+        if (item.category_1_list.length > 0) {
+          category1.data = [item.category_1_list];
+          category1.type = 'category';
+        }
+
+        if (item.category_2_list.length > 0) {
+          category2.type = 'category';
+          category2.data = [item.category_2_list];
+        }
+
+        if (item.product_1_list.length > 0) {
+          product1.data = [item.product_1_list];
+          product1.type = 'product';
+        }
+
+        if (item.product_2_list.length > 0) {
+          product2.data = [item.product_2_list];
+          product2.type = 'product';
+        }
+
+        // slide theme
+        if (slide.data.length > 1) {
+          slide.type += '/carousel';
+          slide.data = [slide.data];
+        }
+        if (themeLayout.slide_size == 'big') {
+          slide.type += '/big';
+        } else {
+          slide.type += '/small';
+        }
+
+        // cate theme
+        if (themeLayout.cate == 'portrait') {
+          category1.type += '/portrait';
+          category2.type += '/portrait';
+        } else {
+          category1.type += '/landscape';
+          category2.type += '/landscape';
+          if (themeLayout.slide_cate == 'small') {
+            category1.type += '/small';
+            category2.type += '/small';
+          } else {
+            category1.type += '/big';
+            category2.type += '/big';
+          }
+        }
+
+        if (themeLayout.cate_show_more == 1) {
+          category1.type += '/showmore';
+          category2.type += '/showmore';
+        }
+
+        // product theme
+        if (themeLayout.product == 'portrait') {
+          product1.type += '/portrait';
+          product2.type += '/portrait';
+        } else {
+          product1.type += '/landscape';
+          product2.type += '/landscape';
+        }
+
+        if (themeLayout.product_show_more == 1) {
+          product1.type += '/showmore';
+          product2.type += '/showmore';
+        }
+
+        if (item.name_show == 1) {
+          if (slide.data.length > 0) {
+            slide.title = item.name;
+          } else if (category1.data.length > 0) {
+            category1.title = item.name;
+          } else if (product1.data.length > 0) {
+            product1.title = item.name;
+          }
+        }
+
+        if (slide.data.length > 0) {
+          modifyData.push(slide);
+        }
+        if (category1.data.length > 0) {
+          modifyData.push(category1);
+        }
+        if (category2.data.length > 0) {
+          modifyData.push(category2);
+        }
+        if (product1.data.length > 0) {
+          modifyData.push(product1);
+        }
+        if (product2.data.length > 0) {
+          modifyData.push(product2);
+        }
+      });
+    }
+
+    if (productList.length > 0) {
+      if (page == 1) {
+        modifyData.push({
+          type: 'product/portrait',
+          title: 'GỢI Ý HÔM NAY',
+          data: [productList],
+        });
+      } else {
+        modifyData.push({
+          type: 'product/portrait',
+          title: '',
+          data: [productList],
+        });
+      }
+    }
+
+    if (popup != null && popup.length > 0) {
+      modifyData.push({
+        title: '',
+        type: 'popup',
+        data: [popup],
+      });
+    }
+  });
+
+  return modifyData;
+}
 
 export const showmoreImage = require('./assets/Rectangle270.png');

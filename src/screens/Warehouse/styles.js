@@ -1,11 +1,15 @@
 import {StyleSheet} from 'react-native';
+import {WINDOW_HEIGHT} from '../../global';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    padding: 16,
   },
+  flatlist: {
+    flex: 1,
+  },
+
   rowHeader: {
     width: '100%',
     flexDirection: 'row',

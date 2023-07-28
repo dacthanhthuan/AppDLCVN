@@ -1,32 +1,31 @@
-import Carousel from '../AnimatedCarousel';
-import {StyleSheet, View} from 'react-native';
-import Product from './Product';
+import Carousel from '../../AnimatedCarousel';
+import {View} from 'react-native';
 import {useEffect, useState, memo, useContext} from 'react';
-import {WINDOW_WIDTH, WINDOW_HEIGHT, showmoreImage} from '../../global';
-import {ScrollContext} from '../../screens/Home';
-import ProductShowmore from './ProductShowmore';
+import {WINDOW_WIDTH, WINDOW_HEIGHT, showmoreImage} from '../../../global';
 const img = showmoreImage;
+import styles from './style';
+import CardProduct from '../CardProduct';
+import CardShowmore from '../CardShowmore';
 
-const CarouselProduct = ({data, isShowmore = false}) => {
-  const [dataSpilit, setDataSpilit] = useState([]);
-  const isScroll = useContext(ScrollContext);
+const CarouselProduct = ({data, isShowmore = false}: any) => {
+  const [dataSpilit, setDataSpilit] = useState<any>([]);
   const mData = isShowmore ? [...data, {}] : data;
 
   useEffect(() => {
     setDataSpilit([]);
     for (let i = 0; i < mData.length; i += 2) {
-      setDataSpilit(value => [...value, mData.slice(i, i + 2)]);
+      setDataSpilit((value: any) => [...value, mData.slice(i, i + 2)]);
     }
   }, [data]);
 
-  const isOdd = number => {
+  const isOdd = (number: number) => {
     return number % 2 !== 0;
   };
 
   return (
     <Carousel
       data={dataSpilit}
-      renderItem={({item, index}) =>
+      renderItem={({item, index}: any) =>
         isShowmore && isOdd(mData.length) && index === dataSpilit.length - 1 ? (
           <ProductShowmore name="Xem thêm..." imageSource={img} />
         ) : isShowmore &&
@@ -39,26 +38,36 @@ const CarouselProduct = ({data, isShowmore = false}) => {
       }
       width={WINDOW_WIDTH}
       height={WINDOW_HEIGHT * 0.35}
-      autoPlay={!isScroll}
+      autoPlay={true}
       loop={false}
       autoPlayInterval={2500}
       scrollAnimationDuration={600}
       showPagination={true}
       style={styles.container}
       windowSize={2}
+      extraData={undefined}
+      defaultIndex={undefined}
+      customAnimation={undefined}
     />
   );
 };
 
 const DoubleProduct = memo(
-  ({data, lastIsShowmore = false}) => {
+  ({data, lastIsShowmore = false}: any) => {
     return (
       <View style={styles.doubleContainer}>
-        {data.map((item, index) =>
+        {data.map((item: any, index: number) =>
           lastIsShowmore && index === data.length - 1 ? (
-            <ProductShowmore key={index} name="Xem thêm..." imageSource={img} />
+            <CardShowmore key={index} name="Xem thêm..." imageSource={img} />
           ) : (
-            <Product key={index} item={item} />
+            <CardProduct
+              title={item.product_name}
+              categori={item.product_id}
+              price={formatPoint(item.price)}
+              style={undefined}
+              image={{uri: item.img_1}}
+              onPress={undefined}
+            />
           ),
         )}
       </View>
@@ -71,16 +80,3 @@ export default memo(
   CarouselProduct,
   (pre, next) => JSON.stringify(pre.data) === JSON.stringify(next.data),
 );
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: '1%',
-  },
-
-  doubleContainer: {
-    flexDirection: 'row',
-    width: WINDOW_WIDTH * 0.94,
-    alignSelf: 'center',
-    justifyContent: 'center',
-  },
-});

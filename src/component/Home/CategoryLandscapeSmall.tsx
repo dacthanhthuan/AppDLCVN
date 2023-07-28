@@ -68,6 +68,7 @@ export default memo(
 const styles = StyleSheet.create({
   flatlist: {
     marginHorizontal: WINDOW_WIDTH * 0.02,
+    maxHeight: WINDOW_HEIGHT * 0.06,
     // marginBottom: '3%',
     // marginTop: '2%',
   },

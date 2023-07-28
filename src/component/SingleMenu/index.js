@@ -2,7 +2,7 @@ import React from 'react';
 import {Pressable, Image, View, Text, FlatList} from 'react-native';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {WINDOW_WIDTH, formatprice} from '../../global';
+import {WINDOW_WIDTH, formatPrice} from '../../global';
 
 const SingleMenu = ({data, style}) => {
   const isMore = data.slSp > 1;
@@ -95,7 +95,7 @@ const SingleMenu = ({data, style}) => {
           </Text>
           <Text style={styles.textName}>
             <Text style={{color: '#000000', fontWeight: '400'}}>Giá bán:</Text>{' '}
-            {formatprice(data.goods[0].price)}
+            {formatPrice(data.goods[0].price)}
           </Text>
         </>
       ) : (
@@ -124,7 +124,7 @@ const SingleMenu = ({data, style}) => {
                 <Text style={{color: '#000000', fontWeight: '400'}}>
                   Giá bán:
                 </Text>{' '}
-                {formatprice(data.goods[0].price)}
+                {formatPrice(data.goods[0].price)}
               </Text>
             </View>
           </View>
@@ -138,7 +138,7 @@ const SingleMenu = ({data, style}) => {
           style={{fontSize: 12, color: '#000000', fontFamily: 'Montserrat'}}>
           {data.slSp} sản phẩm
         </Text>
-        <Text style={styles.textTotal}>{formatprice(data.total)}</Text>
+        <Text style={styles.textTotal}>{formatPrice(data.total)}</Text>
       </View>
     </Pressable>
   );

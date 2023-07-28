@@ -1,5 +1,5 @@
-import React from 'react';
-import {Image, Pressable, StyleSheet, StatusBar, View} from 'react-native';
+import React, {useState} from 'react';
+import {Image, Pressable, StyleSheet, Keyboard, View} from 'react-native';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import Animated, {
   useSharedValue,
@@ -60,6 +60,7 @@ import AddAddress from './src/screens/AddAddress';
 import UpdateAddress1 from './src/screens/UpdateAddress1';
 import SingleMenu from './src/screens/Menu';
 import ProfileAdmin from './src/screens/ProfileAdmin';
+import {useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -119,12 +120,13 @@ const App = () => {
 };
 
 const MainTab = () => {
+  const login = useSelector((state: any) => state.user.login.status);
   return (
     <Tab.Navigator
       tabBar={prop => <MyTabBar {...prop} />}
       screenOptions={tabOptions}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Warehouse" component={Warehouse} />
+      {login ? <Tab.Screen name="Warehouse" component={Warehouse} /> : null}
       <Tab.Screen name="Supplier" component={Supplier} />
       <Tab.Screen name="Order" component={Menu} />
       <Tab.Screen name="ProfileAdmin" component={ProfileAdmin} />
@@ -143,8 +145,28 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> = ({
 }) => {
   let image: any;
 
+  const yAxis = useSharedValue(0);
+  const height = useSharedValue(65);
+
+  const tabBarAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateY: yAxis.value}],
+      height: height.value,
+    };
+  });
+
+  Keyboard.addListener('keyboardDidShow', e => {
+    yAxis.value = withTiming(e.endCoordinates.height, {duration: 800});
+    height.value = withTiming(0, {duration: 600});
+  });
+
+  Keyboard.addListener('keyboardDidHide', () => {
+    yAxis.value = withTiming(0, {duration: 800});
+    height.value = withTiming(65, {duration: 600});
+  });
+
   return (
-    <View style={styles.tabBar}>
+    <Animated.View style={[styles.tabBar, tabBarAnimatedStyle]}>
       {state.routes.map((route, index) => {
         switch (route.name) {
           case 'Home':
@@ -190,7 +212,7 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> = ({
           </Pressable>
         );
       })}
-    </View>
+    </Animated.View>
   );
 };
 

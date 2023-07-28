@@ -6,7 +6,7 @@ import Header from '../../component/Header';
 import Line from '../../component/Line';
 import Information from '../../component/Information';
 import Detail_Input from '../../component/Detail_Input';
-import {formatprice, WINDOW_WIDTH} from '../../global';
+import {formatPrice, WINDOW_WIDTH} from '../../global';
 
 const DetailOrder = ({route}) => {
   const navigation = useNavigation();
@@ -64,8 +64,8 @@ const DetailOrder = ({route}) => {
             text_1={'Tổng tiền hàng:'}
             text_2={'Phí vận chuyển:'}
             text_3={'Tổng số tiền cần thanh toán:'}
-            price_1={formatprice(data?.total)}
-            price_3={formatprice(data?.total) || '1,500,000đ'}
+            price_1={formatPrice(data?.total)}
+            price_3={formatPrice(data?.total) || '1,500,000đ'}
             style_6={{
               color: '#005AA9',
             }}
@@ -84,9 +84,9 @@ const DetailOrder = ({route}) => {
             text_1={'Tổng giá nhà cung cấp:'}
             text_2={'Tổng giá bán của bạn:'}
             text_3={'Tổng hoa hồng của bạn:'}
-            price_1={formatprice(data?.producerTotal)}
-            price_2={formatprice(data?.total)}
-            price_3={formatprice(data?.total - data?.producerTotal)}
+            price_1={formatPrice(data?.producerTotal)}
+            price_2={formatPrice(data?.total)}
+            price_3={formatPrice(data?.total - data?.producerTotal)}
             style_5={{
               color: '#000000',
             }}
@@ -141,7 +141,7 @@ const DetailOrder = ({route}) => {
                   Giá nhà cung cấp: 600,000đ
                 </Text>
                 <Text style={Style_DetailOrder.text_3}>
-                  Giá bán: {formatprice(item.price)}
+                  Giá bán: {formatPrice(item.price)}
                 </Text>
                 <Text style={Style_DetailOrder.text_4}>Số lượng: 1</Text>
               </View>
