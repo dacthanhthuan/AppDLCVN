@@ -22,7 +22,9 @@ const ImageButton = ({
           resizeMode={resizeMode ? resizeMode : 'contain'}
         />
       ) : null}
-      <Text style={textStlye}>{text}</Text>
+      <Text style={textStlye} numberOfLines={1}>
+        {text}
+      </Text>
     </Pressable>
   );
 };

@@ -39,7 +39,7 @@ const CarouselProduct = ({data, isShowmore = false}) => {
       }
       width={WINDOW_WIDTH}
       height={WINDOW_HEIGHT * 0.35}
-      autoPlay={!isScroll}
+      autoPlay={false}
       loop={false}
       autoPlayInterval={2500}
       scrollAnimationDuration={600}

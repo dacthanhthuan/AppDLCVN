@@ -35,7 +35,7 @@ const Register = () => {
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
-  const [referral, setReferral] = useState('0933791016');
+  const [referral, setReferral] = useState('');
   const [error, setError] = useState('');
   const register = useSelector(state => state.user.register.status);
   const message = useSelector(state => state.user.register.message);
@@ -94,7 +94,11 @@ const Register = () => {
           keyboardVerticalOffset={0}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View>
-              <Text_Input placeholder="Họ và tên" onChangetext={setFullname} />
+              <Text_Input
+                placeholder="Họ và tên"
+                onChangetext={setFullname}
+                focus
+              />
               <Text_Input placeholder="Email" onChangetext={setEmail} />
               <Text_Input
                 placeholder="Số điện thoại"

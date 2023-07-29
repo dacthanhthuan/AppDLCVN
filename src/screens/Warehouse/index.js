@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, startTransition} from 'react';
 import styles from './styles';
 import {
   Image,
@@ -7,44 +7,63 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  StatusBar,
+  Keyboard,
   RefreshControl,
 } from 'react-native';
 import Input from '../../component/Input';
 import CardProduct from '../../component/Warehouse/CardProduct';
 import Header from '../../component/Header';
-import {formatPoint} from '../../global';
+import {formatPoint, nomarlizeVietNamese} from '../../global';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   clientProductListClear,
   clientProductListStart,
 } from '../../redux/actions/productListActions';
-import WarehouseRenderItem from '../../component/Warehouse/WarehouseRenderItem';
 import {CHANGE_POINT_LIST} from '../../redux/actions/types';
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
 import WarehouseSkeleton from '../../component/Warehouse/WarehouseSkeleton';
 
 const Warehouse = ({navigation}) => {
   const dispatch = useDispatch();
-  const changePointList = useSelector(state => state.changePoint);
+  const changePointList = useSelector(state => state.changePoint.data);
+  const totalRecord = useSelector(state => state.changePoint.total_record);
+  const currentRecord = useSelector(state => state.changePoint.current_record);
+  const listLoading = useSelector(state => state.changePoint.loading);
+  const nextpage = useSelector(state => state.changePoint.nextpage);
   const user = useSelector(state => state.user);
 
   const [filterData, setFilterData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loadmore, setLoadmore] = useState(false);
   const [skeletonVisible, setSekeletonVisible] = useState(true);
-  const [keywork, setKeywork] = useState('');
+  const [keyword, setKeyword] = useState('');
+  let debounceTimeout;
 
-  // useEffect(() => {
-  //   if (keywork?.length > 0) {
-  //     const filteredItems = data?.filter(rec =>
-  //       rec?.title?.toLocaleLowerCase()?.includes(keywork?.toLocaleLowerCase()),
-  //     );
-  //     setFilterData(filteredItems);
-  //   } else {
-  //     setFilterData(data);
-  //   }
-  // }, [keywork]);
+  //debounce setting keyword
+  const debounceSetkeyword = keyword => {
+    // clear timeout whenever this function is invoked
+    clearTimeout(debounceTimeout);
+
+    // if keyword's length is greater 0 then debouncing setKeyword,
+    // otherwise setKeyword immediately
+    if (keyword.length > 0) {
+      debounceTimeout = setTimeout(() => {
+        setKeyword(keyword);
+      }, 400);
+    } else {
+      setKeyword(keyword);
+    }
+  };
+
+  // feature search
+  useEffect(() => {
+    const filteredItems = changePointList?.filter(rec =>
+      nomarlizeVietNamese(rec?.product_name)?.includes(
+        nomarlizeVietNamese(keyword),
+      ),
+    );
+    setFilterData(filteredItems);
+  }, [keyword]);
 
   // get product list from server
   const getChangePointListApi = (page = 1) => {
@@ -62,12 +81,12 @@ const Warehouse = ({navigation}) => {
 
   // set data from redux to flatlist data
   useEffect(() => {
-    setFilterData(changePointList.data);
-    if (!changePointList.loading) {
+    setFilterData(changePointList);
+    if (!listLoading) {
       setRefreshing(false);
       setLoadmore(false);
     }
-  }, [changePointList]);
+  }, [changePointList, listLoading]);
 
   // refreshing feature
   useEffect(() => {
@@ -75,14 +94,21 @@ const Warehouse = ({navigation}) => {
       dispatch(clientProductListClear(CHANGE_POINT_LIST.CLEAR));
       getChangePointListApi();
       setLoadmore(false);
+      setKeyword('');
+      Keyboard.dismiss();
     }
   }, [refreshing]);
 
   // loadmore feature
   const onLoadmore = () => {
-    if (!changePointList.loading) {
-      getChangePointListApi(changePointList.data.length + 1);
+    if (!listLoading) {
+      getChangePointListApi(nextpage);
     }
+  };
+
+  // check loadmore data
+  const checkListRecord = () => {
+    return currentRecord < totalRecord;
   };
 
   // when user login, clear changepoint list data
@@ -95,10 +121,10 @@ const Warehouse = ({navigation}) => {
 
   // skeleton visible handler
   useEffect(() => {
-    if (changePointList.loading && !loadmore) {
+    if (listLoading && !loadmore) {
       setSekeletonVisible(true);
     } else setSekeletonVisible(false);
-  }, [changePointList]);
+  }, [listLoading]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -127,9 +153,8 @@ const Warehouse = ({navigation}) => {
           </View>
         </View>
         <Input
-          onChangeText={setKeywork}
+          onChangeText={debounceSetkeyword}
           placeholder="Bạn cần tìm gì ?"
-          value={keywork}
         />
         {/* <Text
           style={{
@@ -147,10 +172,10 @@ const Warehouse = ({navigation}) => {
       ) : (
         <FlatList
           data={filterData}
-          // numColumns={2}
           style={styles.flatlist}
+          contentContainerStyle={styles.flatlistContent}
+          numColumns={2}
           showsVerticalScrollIndicator={false}
-          removeClippedSubviews
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -160,22 +185,26 @@ const Warehouse = ({navigation}) => {
             />
           }
           onEndReached={() => {
-            if (
-              changePointList.data.length + 1 <
-              changePointList.data[0].data.perpage
-            ) {
+            if (checkListRecord()) {
               setLoadmore(true);
               onLoadmore();
             }
           }}
           onEndReachedThreshold={0.1}
-          // ListHeaderComponent={<View style={{marginTop: 12}}></View>}
-          // ListEmptyComponent={
-          //   <>
-          //     <Text style={{textAlign: 'center'}}>Không tìm thấy sản phẩm.</Text>
-          //   </>
-          // }
-          renderItem={({item}) => <WarehouseRenderItem item={item} />}
+          renderItem={({item}) => {
+            return (
+              <CardProduct
+                title={item.product_name}
+                categori={item.product_id}
+                price={formatPoint(item.price)}
+                style={undefined}
+                image={{uri: item.img_1}}
+                onPress={undefined}
+              />
+            );
+          }}
+          removeClippedSubviews={true}
+          windowSize={11}
         />
       )}
       {loadmore ? <LoadmoreIndicator /> : null}

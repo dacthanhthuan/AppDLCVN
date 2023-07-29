@@ -7,7 +7,7 @@ const style = StyleSheet.create({
 
   text: {
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: 13,
     color: 'black',
     textAlign: 'center',
   },

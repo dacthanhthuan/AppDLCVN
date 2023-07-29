@@ -94,20 +94,23 @@ export default function LoginSettingOverlay({
               LOCALSTORAGE.biometric_login_option,
             ]);
           }
+        } else {
+          ToastAndroid.show(
+            'Xác thực vân tay không thành công',
+            ToastAndroid.LONG,
+          );
         }
       })
       .catch(err => {
-        ToastAndroid.show(
-          err.message + ', Vui lòng đăng ký vân tay và thử lại',
-          ToastAndroid.LONG,
-        );
-        Linking.sendIntent('android.settings.SECURITY_SETTINGS')
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        ToastAndroid.show(err.message, ToastAndroid.LONG);
+        // -- Go to biometric setting on android devide
+        // Linking.sendIntent('android.settings.SECURITY_SETTINGS')
+        //   .then(res => {
+        //     console.log(res);
+        //   })
+        //   .catch(err => {
+        //     console.log(err);
+        //   });
       })
       .finally(() => {
         onConfirm();

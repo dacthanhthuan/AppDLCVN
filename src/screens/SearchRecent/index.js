@@ -54,6 +54,7 @@ const SearchRecent = ({navigation}) => {
             ? navigation.navigate('SearchProduct', {text: nativeEvent.text})
             : null
         }
+        focus
       />
 
       <Text

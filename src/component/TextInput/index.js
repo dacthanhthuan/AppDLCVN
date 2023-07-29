@@ -11,6 +11,7 @@ const Text_Input = ({
   secure: isPassword,
   inputStyle,
   onSubmitEditing,
+  focus,
 }) => {
   const [hidePassword, setHidePassword] = useState(true);
 
@@ -30,6 +31,7 @@ const Text_Input = ({
         returnKeyType="next"
         secureTextEntry={isPassword ? hidePassword : false}
         onSubmitEditing={onSubmitEditing}
+        autoFocus={focus}
       />
       {isPassword ? (
         <TouchableOpacity

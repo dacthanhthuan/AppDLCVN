@@ -54,6 +54,7 @@ import HomeSectionRenderItem from '../../component/Home/HomeSectionRenderItem';
 import HomeSkeleton from '../../component/Home/HomeSkeleton';
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
 import {PRODUCT_LIST} from '../../redux/actions/types';
+import ThemeListHeaderComponent from '../../component/Home/ThemeListHeaderComponent';
 
 export const ScrollContext = createContext(false);
 
@@ -62,9 +63,12 @@ const Home = () => {
   const loadingApp = useSelector(state => state.app.loading); // loading domain and api state
   const isLogin = useSelector(state => state.user?.login.status); // login state
   const session_token = useSelector(state => state.user?.session_token); // session_token of user
-  const mProduct = useSelector(state => state.product); // loading product data
-  const totalPage = useSelector(state => state.product.data[0]?.data.perpage);
-  const [sections, setSections] = useState([]);
+  const productData = useSelector(state => state.product); // product list data
+  const totalRecord = useSelector(state => state.product.total_record); // total record
+  const currentRecord = useSelector(state => state.product.current_record); //current record
+  const nextpage = useSelector(state => state.product.nextpage); //current record
+
+  const [sections, setSections] = useState([]); // section for
   const [refreshing, setRefreshing] = useState(false);
   const [loadmore, setLoadmore] = useState(false);
   const [skeletonVisible, setSekeletonVisible] = useState(true);
@@ -113,12 +117,12 @@ const Home = () => {
   // and set refreshing state is false after get data
   useEffect(() => {
     // const data = modifyData(mProduct.data);
-    setSections([mProduct]);
-    if (!mProduct.loading) {
+    setSections([productData]);
+    if (!productData.loading) {
       setRefreshing(false);
       setLoadmore(false);
     }
-  }, [mProduct]);
+  }, [productData]);
 
   // refreshing feature
   useEffect(() => {
@@ -131,17 +135,22 @@ const Home = () => {
 
   // loadmore feature
   const onLoadmore = () => {
-    if (!mProduct.loading) {
-      getProductListApi(mProduct.data.length + 1);
+    if (!productData.loading) {
+      getProductListApi(nextpage);
     }
+  };
+
+  // check loadmore data
+  const checkListRecord = () => {
+    return currentRecord < totalRecord;
   };
 
   // skeleton visible handler
   useEffect(() => {
-    if ((mProduct.loading || loadingApp) && !loadmore) {
+    if ((productData.loading || loadingApp) && !loadmore) {
       setSekeletonVisible(true);
     } else setSekeletonVisible(false);
-  }, [loadingApp, mProduct]);
+  }, [loadingApp, productData]);
 
   // ANIMATION-----------------------------------
   // animate header
@@ -202,80 +211,17 @@ const Home = () => {
             showsVerticalScrollIndicator={false}
             style={styles.scrollview}
             sections={sections}
-            renderItem={({item}) => <HomeSectionRenderItem item={item} />}
-            // renderSectionHeader={({section}) =>
-            //   section.title.length > 0 ? (
-            //     <SectionHeader
-            //       title={section.title}
-            //       isMore={section.type.endsWith('/more')}
-            //     />
-            //   ) : null
-            // }
-            // renderItem={({item, section}) => {
-            //   switch (true) {
-            //     case section.type.startsWith('slide'):
-            //       switch (true) {
-            //         case section.type.includes('/carousel'):
-            //           switch (true) {
-            //             case section.type.includes('/small'):
-            //               return <CarouselSlideSmall data={item} />;
-            //             case section.type.includes('/big'):
-            //               return <CarouselSlideBig data={item} />;
-            //           }
-            //         case section.type.includes('/small'):
-            //           return <SlideSmall slide={{uri: item.banner}} />;
-            //         case section.type.includes('/big'):
-            //           return <SlideBig slide={{uri: item.banner}} />;
-            //       }
-            //     case section.type.startsWith('category'): {
-            //       switch (true) {
-            //         case section.type.includes('/portrait'):
-            //           return (
-            //             <CategoryPortrait
-            //               item={item}
-            //               isShowmore={section.type.includes('/showmore')}
-            //             />
-            //           );
-            //         case section.type.includes('/landscape'):
-            //           if (section.type.includes('/small'))
-            //             return (
-            //               <CategoryLandscapeSmall
-            //                 item={item}
-            //                 isShowmore={section.type.includes('/showmore')}
-            //               />
-            //             );
-            //           else
-            //             return (
-            //               <CategoryLandscapeBig
-            //                 item={item}
-            //                 isShowmore={section.type.includes('/showmore')}
-            //               />
-            //             );
-            //       }
-            //     }
-            //     case section.type.startsWith('product'): {
-            //       switch (true) {
-            //         case section.type.includes('/portrait'):
-            //           return (
-            //             <ListProduct
-            //               data={item}
-            //               isShowmore={section.type.includes('/showmore')}
-            //             />
-            //           );
-            //         case section.type.includes('/landscape'):
-            //           return (
-            //             <CarouselProduct
-            //               item={item}
-            //               checked={1}
-            //               isShowmore={section.type.includes('/showmore')}
-            //             />
-            //           );
-            //       }
-            //     }
-            //     case section.type.startsWith('popup'):
-            //       return <Popup popupData={item} />;
-            //   }
-            // }}
+            renderSectionHeader={({section}) => (
+              <ThemeListHeaderComponent data={section.theme} />
+            )}
+            renderItem={({item}) => {
+              return <ListProduct data={item} />;
+            }}
+            renderSectionFooter={({section}) =>
+              section.popup.length > 0 ? (
+                <Popup popupData={section.popup} />
+              ) : null
+            }
             onScroll={scrollHandler}
             scrollEventThrottle={16}
             removeClippedSubviews={true}
@@ -290,7 +236,7 @@ const Home = () => {
             }
             windowSize={31}
             onEndReached={() => {
-              if (mProduct.data.length + 1 < totalPage) {
+              if (checkListRecord()) {
                 setLoadmore(true);
                 onLoadmore();
               }
@@ -303,3 +249,79 @@ const Home = () => {
   );
 };
 export default React.memo(Home);
+
+// ----------- Using modify data
+
+// renderSectionHeader={({section}) =>
+//   section.title.length > 0 ? (
+//     <SectionHeader
+//       title={section.title}
+//       isMore={section.type.endsWith('/more')}
+//     />
+//   ) : null
+// }
+// renderItem={({item, section}) => {
+//   switch (true) {
+//     case section.type.startsWith('slide'):
+//       switch (true) {
+//         case section.type.includes('/carousel'):
+//           switch (true) {
+//             case section.type.includes('/small'):
+//               return <CarouselSlideSmall data={item} />;
+//             case section.type.includes('/big'):
+//               return <CarouselSlideBig data={item} />;
+//           }
+//         case section.type.includes('/small'):
+//           return <SlideSmall slide={{uri: item.banner}} />;
+//         case section.type.includes('/big'):
+//           return <SlideBig slide={{uri: item.banner}} />;
+//       }
+//     case section.type.startsWith('category'): {
+//       switch (true) {
+//         case section.type.includes('/portrait'):
+//           return (
+//             <CategoryPortrait
+//               item={item}
+//               isShowmore={section.type.includes('/showmore')}
+//             />
+//           );
+//         case section.type.includes('/landscape'):
+//           if (section.type.includes('/small'))
+//             return (
+//               <CategoryLandscapeSmall
+//                 item={item}
+//                 isShowmore={section.type.includes('/showmore')}
+//               />
+//             );
+//           else
+//             return (
+//               <CategoryLandscapeBig
+//                 item={item}
+//                 isShowmore={section.type.includes('/showmore')}
+//               />
+//             );
+//       }
+//     }
+//     case section.type.startsWith('product'): {
+//       switch (true) {
+//         case section.type.includes('/portrait'):
+//           return (
+//             <ListProduct
+//               data={item}
+//               isShowmore={section.type.includes('/showmore')}
+//             />
+//           );
+//         case section.type.includes('/landscape'):
+//           return (
+//             <CarouselProduct
+//               item={item}
+//               checked={1}
+//               isShowmore={section.type.includes('/showmore')}
+//             />
+//           );
+//       }
+//     }
+//     case section.type.startsWith('popup'):
+//       return <Popup popupData={item} />;
+//   }
+// }}

@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     height: WINDOW_HEIGHT * 0.2,
     marginHorizontal: WINDOW_WIDTH * 0.01,
     marginVertical: WINDOW_WIDTH * 0.01,
-    backgroundColor: 'grey',
+    backgroundColor: '#f6f6f6',
     borderRadius: 10,
   },
 
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: 'rgba(0, 90, 169, 0.6)',
+    backgroundColor: '#f6f6f6',
   },
 
   showmoreText: {

@@ -73,7 +73,7 @@ export default function PasswordConfirmOverlay({
   return (
     <Dialog
       isVisible={visible}
-      onBackdropPress={onBackdropPress}
+      // onBackdropPress={onBackdropPress}
       overlayStyle={style.container}>
       <LoadingOverlay visible={confirming}></LoadingOverlay>
       <Dialog.Title
@@ -88,6 +88,7 @@ export default function PasswordConfirmOverlay({
         secure={true}
         onSubmitEditing={onConfirmHandler}
         value={undefined}
+        focus={undefined}
       />
       {error ? <Text children={error} style={style.confirmError} /> : null}
       <Dialog.Actions>

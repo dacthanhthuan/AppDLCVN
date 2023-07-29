@@ -1,5 +1,6 @@
 import {memo} from 'react';
 import {FlatList, StyleSheet} from 'react-native';
+import ProductShowmore from '../../Home/ProductShowmore';
 import {formatPoint, showmoreImage} from '../../../global';
 import CardProduct from '../CardProduct';
 import styles from './styles';

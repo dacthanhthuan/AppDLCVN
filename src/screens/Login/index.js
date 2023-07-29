@@ -55,22 +55,25 @@ const Login = () => {
 
   // whenever button Login by biometric is pressed
   async function onBiometricLoginPress() {
-    try {
-      const {success} = await BIOMETRIC.simplePrompt({
-        promptMessage: 'Đăng nhập bằng vân tay',
-        cancelButtonText: 'Huỷ',
-      });
-
-      if (success) {
-        // get data from local and login
-        const {mobile, password} = await getData(
-          LOCALSTORAGE.biometric_login_data,
+    BIOMETRIC.simplePrompt({
+      promptMessage: 'Đăng nhập bằng vân tay',
+      cancelButtonText: 'Huỷ',
+    })
+      .then(async res => {
+        if (res.success) {
+          // get data from local and login
+          const {mobile, password} = await getData(
+            LOCALSTORAGE.biometric_login_data,
+          );
+          dispatch(clientLoginStart(mobile, password));
+        }
+      })
+      .catch(err => {
+        setBiometricLogin(false);
+        setError(
+          'Xác nhận vân tay không thành công, vui lòng đăng nhập bằng tài khoản',
         );
-        dispatch(clientLoginStart(mobile, password));
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
+      });
   }
 
   //Clear latest data when come-in this screen
@@ -140,6 +143,7 @@ const Login = () => {
             <Text_Input
               placeholder="Số điện thoại"
               onChangetext={text => setMobile(text)}
+              focus
             />
             <Text_Input
               placeholder="Mật khẩu"

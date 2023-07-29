@@ -75,16 +75,16 @@ const styles = StyleSheet.create({
 
   categoryCont: {
     flexDirection: 'row',
-    width: (WINDOW_WIDTH * 0.88) / 2,
     height: WINDOW_HEIGHT * 0.05,
     marginHorizontal: WINDOW_WIDTH * 0.01,
     justifyContent: 'space-around',
     backgroundColor: '#F6F6F6',
-    borderRadius: 3,
+    borderRadius: 6,
   },
 
   categoryImage: {
     height: '80%',
+    width: WINDOW_HEIGHT * 0.06,
     alignSelf: 'center',
     flex: 1,
   },
@@ -94,5 +94,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     alignSelf: 'center',
     flex: 3,
+    paddingHorizontal: 10,
+    maxWidth: 150,
   },
 });

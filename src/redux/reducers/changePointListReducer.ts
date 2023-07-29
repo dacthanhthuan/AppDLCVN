@@ -3,7 +3,11 @@ import {AnyAction} from 'redux';
 
 const initialState = {
   loading: false,
+  total_record: 0,
+  current_record: 0,
+  nextpage: 1,
   data: [],
+  message: '',
 };
 
 export default function ChangePointListReducer(
@@ -20,7 +24,10 @@ export default function ChangePointListReducer(
       return {
         ...state,
         loading: false,
-        data: [...state.data, action.payload],
+        data: [...state.data, ...action.payload.data.l],
+        total_record: action.payload.data.total_record,
+        current_record: state.current_record + action.payload.data.l.length,
+        nextpage: state.nextpage + 1,
       };
     case CHANGE_POINT_LIST.FAIL:
       return {

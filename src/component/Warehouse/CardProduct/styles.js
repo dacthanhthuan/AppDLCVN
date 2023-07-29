@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     //Andorid
     elevation: 3,
     justifyContent: 'center',
+    alignSelf: 'center',
   },
   image: {
     width: 131,

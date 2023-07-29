@@ -10,6 +10,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  flatlistContent: {
+    alignSelf: 'center',
+  },
+
   rowHeader: {
     width: '100%',
     flexDirection: 'row',

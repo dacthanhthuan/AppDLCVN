@@ -161,8 +161,8 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> = ({
   });
 
   Keyboard.addListener('keyboardDidHide', () => {
-    yAxis.value = withTiming(0, {duration: 800});
-    height.value = withTiming(65, {duration: 600});
+    yAxis.value = withTiming(0, {duration: 700});
+    height.value = withTiming(65, {duration: 500});
   });
 
   return (
