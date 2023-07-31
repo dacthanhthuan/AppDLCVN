@@ -11,7 +11,7 @@ const SectionHeader = ({title, isMore}) => {
             styles.textPressable,
             pressed ? {opacity: 0.5} : null,
           ]}>
-          <Text style={styles.textButton}>Xem tất cả</Text>
+          <Text style={styles.textButton}>Xem thêm</Text>
         </Pressable>
       ) : null}
     </View>
@@ -48,5 +48,6 @@ const styles = StyleSheet.create({
   textButton: {
     color: '#005AA9',
     fontSize: 14,
+    fontWeight: '400',
   },
 });

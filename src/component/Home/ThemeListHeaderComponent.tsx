@@ -23,7 +23,9 @@ function ThemeListHeaderComponent({data}: any) {
             {item.name_show == 1 ? (
               <SectionHeader
                 title={item.name}
-                isMore={item.name_show_more == 1}
+                isMore={
+                  layout.product_show_more == 1 || layout.cate_show_more == 1
+                }
               />
             ) : null}
 

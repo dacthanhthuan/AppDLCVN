@@ -10,7 +10,9 @@ const ListProduct = ({data, isShowmore = false}) => {
 
   return (
     <FlatList
-      style={styles.container}
+      style={styles.flatlist}
+      contentContainerStyle={styles.flatlistContent}
+      numColumns={2}
       data={data}
       renderItem={({item, index}) =>
         isShowmore && index === data.length - 1 ? (
@@ -30,9 +32,12 @@ export default memo(ListProduct, (pre, next) => {
 });
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+  flatlist: {
+    flex: 1,
+    alignSelf: 'center',
+  },
+
+  flatlistContent: {
+    alignSelf: 'center',
   },
 });

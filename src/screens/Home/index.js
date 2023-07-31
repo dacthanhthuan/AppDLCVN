@@ -218,7 +218,7 @@ const Home = () => {
               return <ListProduct data={item} />;
             }}
             renderSectionFooter={({section}) =>
-              section.popup.length > 0 ? (
+              section.popup?.length > 0 ? (
                 <Popup popupData={section.popup} />
               ) : null
             }
