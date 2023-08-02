@@ -17,6 +17,7 @@ import {
   HEADER_COLLAPSE_HEIGHT,
 } from '../../../screens/Home/styles';
 import {WINDOW_WIDTH} from '../../../global';
+import CartBadge from '../../CartBadge';
 
 const logo = require('../../../assets/Home/Rectangle2.png');
 const cart = require('../../../assets/Home/Vector.png');
@@ -98,13 +99,13 @@ const Header = () => {
     const top = withTiming(
       interpolate(
         headerHeight.value,
-        [HEADER_COLLAPSE_HEIGHT, HEADER_COLLAPSE_HEIGHT],
-        [-HEADER_COLLAPSE_HEIGHT * 0.1, HEADER_EXPAND_HEIGHT * 0.35 * 0.1],
+        [HEADER_COLLAPSE_HEIGHT, HEADER_EXPAND_HEIGHT],
+        [-HEADER_COLLAPSE_HEIGHT * 0.2, HEADER_EXPAND_HEIGHT * 0.35 * 0.05],
         'clamp',
       ),
       {
-        duration: 100,
-        easing: Easing.bezier(0.16, 1, 0.3, 1),
+        duration: 500,
+        easing: Easing.out(Easing.exp),
       },
     );
 
@@ -159,6 +160,7 @@ const Header = () => {
           imagesource={cart}
           onPress={() => goToCart()}
           style={cartAnimatedStyle}
+          children={<CartBadge style={styles.cartBadge} />}
         />
 
         <AnimatedImgButton

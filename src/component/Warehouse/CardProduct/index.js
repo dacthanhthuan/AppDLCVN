@@ -1,22 +1,34 @@
 import React from 'react';
 import {Image, Text, Pressable, View} from 'react-native';
 import styles from './styles';
+import {useNavigation} from '@react-navigation/native';
+import {formatPoint} from '../../../global';
 
-const CardProduct = ({title, categori, price, style, image, onPress}) => {
+const CardProduct = ({item}) => {
+  const navigation = useNavigation();
+
+  const navigateToDetailProduct = () => {
+    navigation.navigate('DetailProduct', {product: item, type: 'point'});
+  };
+
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container]}>
       <Pressable
         style={({pressed}) => [
           styles.containerView,
           pressed ? {opacity: 0.8} : {opacity: 1},
         ]}
-        onPress={onPress}>
-        <Image style={styles.image} resizeMode="contain" source={image} />
+        onPress={navigateToDetailProduct}>
+        <Image
+          style={styles.image}
+          resizeMode="contain"
+          source={{uri: item.img_1}}
+        />
         <Text style={styles.title} numberOfLines={1}>
-          {title}
+          {item.product_name}
         </Text>
-        <Text style={styles.id}>{categori}</Text>
-        <Text style={styles.price}>{price}</Text>
+        <Text style={styles.id}>{item.product_id}</Text>
+        <Text style={styles.price}>{formatPoint(item.price)}</Text>
       </Pressable>
     </View>
   );

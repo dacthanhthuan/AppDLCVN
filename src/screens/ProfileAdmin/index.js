@@ -24,6 +24,7 @@ import {formatPrice, BIOMETRIC, formatPoint} from '../../global';
 import {LOCALSTORAGE} from '../../storage/direct';
 import LoginSettingOverlay from '../../component/LoginSettingOverlay';
 import {TabActions} from '@react-navigation/native';
+import {removeAllCartProduct} from '../../redux/actions/cartActions';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
@@ -195,9 +196,11 @@ const ProfileAdmin = ({navigation}) => {
           image={require('../../assets/Rectangle270.png')}
           text="Đăng xuất"
           onPress={() => {
-            //clear data (both local and redux store)
+            //clear user and cart data (both local and redux store)
             dispatch(clientClearUserData);
+            dispatch(removeAllCartProduct);
             removeData(LOCALSTORAGE.user);
+            removeData(LOCALSTORAGE.cart);
             navigation.dispatch(TabActions.jumpTo('Home'));
           }}
         />

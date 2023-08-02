@@ -55,6 +55,10 @@ import HomeSkeleton from '../../component/Home/HomeSkeleton';
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
 import {PRODUCT_LIST} from '../../redux/actions/types';
 import ThemeListHeaderComponent from '../../component/Home/ThemeListHeaderComponent';
+import {
+  addProduct2Cart,
+  mergeProductData,
+} from '../../redux/actions/cartActions';
 
 export const ScrollContext = createContext(false);
 
@@ -84,10 +88,20 @@ const Home = () => {
       .catch(err => {});
   };
 
+  // get cart data from local and dispatch to redux
+  const getCartDataFromLocal = async () => {
+    await getData(LOCALSTORAGE.cart)
+      .then(res => {
+        if (res != null) dispatch(mergeProductData(res.data));
+      })
+      .catch(err => {});
+  };
+
   // Initial rendered of app
   useEffect(() => {
-    // get user data from local and dispatch to redux
+    // get data from local and dispatch to redux
     getUserDatafromLocal();
+    getCartDataFromLocal();
     // start call api to get new domain and apikey
     dispatch(clientInitialApiStart);
     // hide splash screen and set color for status bar

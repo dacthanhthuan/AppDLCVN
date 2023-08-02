@@ -5,36 +5,34 @@ const Style_Information = StyleSheet.create({
     width: '100%',
   },
   text_1: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#000000',
-    fontWeight: '300',
+    fontWeight: '400',
+  },
+  price_1: {
+    fontSize: 14,
+    color: '#000000',
+    fontWeight: '400',
+    textAlign: 'right',
   },
   container_2: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingVertical: 5,
   },
+
   container_3: {
     justifyContent: 'space-between',
-    height: 70,
   },
   container_4: {
     justifyContent: 'space-between',
-    height: 70,
+    height: 40,
     alignItems: 'flex-end',
   },
-  price_1: {
-    color: '#000000',
-    fontSize: 13,
-    fontWeight: '400',
-  },
-  price_2: {
-    color: '#005AA9',
-    fontSize: 13,
-    fontWeight: '400',
-  },
+
   price_3: {
     color: '#0FA027',
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '400',
   },
 });

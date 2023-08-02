@@ -141,6 +141,7 @@ const Warehouse = ({navigation}) => {
           onPressRight={() => {
             navigation.navigate('Cart');
           }}
+          showCartBadge={true}
         />
         <View style={styles.rowPoint}>
           <Text style={styles.helloText}>Chào {user.fullname}</Text>
@@ -192,16 +193,7 @@ const Warehouse = ({navigation}) => {
           }}
           onEndReachedThreshold={0.1}
           renderItem={({item}) => {
-            return (
-              <CardProduct
-                title={item.product_name}
-                categori={item.product_id}
-                price={formatPoint(item.price)}
-                style={undefined}
-                image={{uri: item.img_1}}
-                onPress={undefined}
-              />
-            );
+            return <CardProduct item={item} />;
           }}
           removeClippedSubviews={true}
           windowSize={11}

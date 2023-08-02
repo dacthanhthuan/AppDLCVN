@@ -11,6 +11,9 @@ export enum LOCALSTORAGE {
   // store product list data
   product_list = 'product_list',
 
+  // store user cart {data: *cart data}
+  cart = 'user_cart',
+
   // store biometric sensor information on device {available: true/false, type: BiometricsType}
   biometric = 'biometric',
 

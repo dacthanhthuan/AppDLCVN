@@ -51,7 +51,7 @@ import TransferMoney from './src/screens/TransferMoney';
 import SuccPayment from './src/screens/SuccPayment';
 import NoOrders from './src/screens/NoOrders';
 import TeamThree from './src/screens/TeamThree';
-import CardEmpty from './src/screens/CardEmpty';
+import CartEmpty from './src/screens/CartEmpty';
 import Notifications from './src/screens/Notifications';
 import SearchProduct from './src/screens/SearchProduct';
 import SearchRecent from './src/screens/SearchRecent';
@@ -75,7 +75,7 @@ const App = () => {
         <Stack.Screen name="NoOrders" component={NoOrders} />
         <Stack.Screen name="Team" component={Team} />
         <Stack.Screen name="TeamThree" component={TeamThree} />
-        <Stack.Screen name="CardEmpty" component={CardEmpty} />
+        <Stack.Screen name="CardEmpty" component={CartEmpty} />
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="SearchTeam" component={SearchTeam} />
         <Stack.Screen

@@ -40,6 +40,7 @@ const AnimatedImageButton = forwardRef(
       onPress,
       resizeMode,
       style,
+      children,
     },
     ref,
   ) => {
@@ -57,6 +58,7 @@ const AnimatedImageButton = forwardRef(
             />
           ) : null}
           <Text style={textStlye}>{text}</Text>
+          {children ? children : null}
         </Pressable>
       </View>
     );

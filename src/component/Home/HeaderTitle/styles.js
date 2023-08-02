@@ -34,11 +34,17 @@ export default styles = StyleSheet.create({
     height: '100%',
   },
 
+  cartBadge: {
+    position: 'absolute',
+    bottom: '10%',
+    right: '15%',
+  },
+
   cartPressable: {
-    width: '10%',
-    height: '50%',
+    width: 40,
+    height: 20,
     marginTop: '1%',
-    top: HEADER_EXPAND_HEIGHT * 0.35 * 0.1,
+    top: HEADER_EXPAND_HEIGHT * 0.35 * 0.05,
     position: 'absolute',
     left: '89.5%',
   },

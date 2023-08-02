@@ -7,7 +7,7 @@ const Product = ({item}) => {
   const navigation = useNavigation();
 
   const goToDetailProduct = () => {
-    navigation.navigate('DetailProduct', {item});
+    navigation.navigate('DetailProduct', {product: item, type: 'money'});
   };
   const price = formatPrice(item?.price);
   const commission = formatPrice(item?.commission_vnd);

@@ -4,38 +4,49 @@ import {
   View,
   Text,
   Image,
-  useWindowDimensions,
   FlatList,
   TouchableOpacity,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '../../component/Header/index';
 import Style_CreateOrder from './style';
-import data_product from '../../data/products/data';
 import Detail_Input from '../../component/Detail_Input';
 import Information from '../../component/Information';
 import Line from '../../component/Line';
 import Button from '../../component/Button';
-import {formatPrice, WINDOW_WIDTH} from '../../global';
+import {formatPoint, formatPrice, WINDOW_WIDTH} from '../../global';
+import {useSelector} from 'react-redux';
 
 const CreateOrder = ({route}) => {
-  const {item, Isquantity} = route?.params || {};
-  const price = formatPrice(item.price);
-  const totalprice = formatPrice(item.price * parseFloat(Isquantity));
-  // const commission = formatprice(item.commission);
+  const {products, totalPoint, totalPrices} = route?.params || {};
   const navigation = useNavigation();
 
-  const render_item = ({}) => {
+  const user = useSelector(state => state.user);
+
+  const render_item = ({item}) => {
     return (
       <View style={Style_CreateOrder.flatlist}>
-        <Image style={{width: 60, height: 60}} source={item.source} />
+        <Image
+          style={{width: 80, height: 80}}
+          source={{uri: item.product.img_1}}
+        />
         <View style={Style_CreateOrder.view_3}>
-          <Text style={Style_CreateOrder.text_1}>{item.title}</Text>
-          <Text style={Style_CreateOrder.text_3}>
-            Giá nhà cung cấp: {price}
+          <Text style={Style_CreateOrder.text_1} numberOfLines={2}>
+            {item.product.product_name}
           </Text>
-          <Text style={Style_CreateOrder.text_2}>Giá bán: {price}</Text>
-          <Text style={Style_CreateOrder.text_3}>Số lượng: {Isquantity}</Text>
+          <Text
+            style={[
+              Style_CreateOrder.text_2,
+              item.pType === 'point' ? {color: 'green'} : null,
+            ]}>
+            Giá bán:{' '}
+            {item.pType === 'money'
+              ? formatPrice(item.product.price)
+              : formatPoint(item.product.price)}
+          </Text>
+          <Text style={Style_CreateOrder.text_3}>
+            Số lượng: {item.quantity}
+          </Text>
         </View>
       </View>
     );
@@ -50,9 +61,9 @@ const CreateOrder = ({route}) => {
       />
       <FlatList
         style={{width: WINDOW_WIDTH, alignSelf: 'center'}}
-        data={[item]}
+        data={products}
         renderItem={render_item}
-        keyExtractor={(item, title) => title.toString()}
+        // keyExtractor={(item, title) => title.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View style={Style_CreateOrder.container}>
@@ -62,6 +73,7 @@ const CreateOrder = ({route}) => {
                 source={require('../../assets/imgOder/Group_203.png')}
               />
             </View>
+
             <View style={{flexDirection: 'row'}}>
               <Image
                 style={Style_CreateOrder.icon}
@@ -78,14 +90,15 @@ const CreateOrder = ({route}) => {
                   </TouchableOpacity>
                 </View>
                 <View style={Style_CreateOrder.view_2}>
-                  <Text style={Style_CreateOrder.text_2}>Chị Huyên</Text>
-                  <Text style={Style_CreateOrder.text_3}>+ 84864456545</Text>
+                  <Text style={Style_CreateOrder.text_2}>{user.fullname}</Text>
+                  <Text style={Style_CreateOrder.text_3}>{user.mobile}</Text>
                   <Text style={Style_CreateOrder.text_3}>
-                    28E Tăng Bạt Hổ, Phường 11, Quận Bình Thạnh, TP.Hồ Chí Minh
+                    {user.address ? user.address : 'Chưa có địa chỉ'}
                   </Text>
                 </View>
               </View>
             </View>
+
             <View
               style={{alignItems: 'center', marginTop: 15, marginBottom: 15}}>
               <Image
@@ -93,6 +106,7 @@ const CreateOrder = ({route}) => {
                 source={require('../../assets/imgOder/Group_203.png')}
               />
             </View>
+
             <View style={{flexDirection: 'row'}}>
               <Image
                 style={Style_CreateOrder.icon}
@@ -135,43 +149,33 @@ const CreateOrder = ({route}) => {
                   Thông tin sản phẩm
                 </Text>
                 <Information
-                  title_1={'Thông tin cho khách'}
                   text_1={'Tổng tiền hàng:'}
                   text_2={'Phí vận chuyển:'}
                   text_3={'Tổng số tiền cần thanh toán:'}
-                  price_1={totalprice}
+                  price_1={totalPrices ? formatPrice(totalPrices) : undefined}
+                  price_11={totalPoint ? formatPoint(totalPoint) : undefined}
                   price_2={'Freeship'}
-                  price_3={totalprice}
-                  style_5={{
+                  price_3={totalPrices ? formatPrice(totalPrices) : undefined}
+                  price_33={totalPoint ? formatPoint(totalPoint) : undefined}
+                  style_p2={{
                     color: '#000000',
                     fontStyle: 'italic',
                   }}
-                  style_6={{
-                    color: '#005AA9',
+                  style_p1={{
+                    fontSize: 15,
+                    color: '#005aa9',
                   }}
-                />
-              </View>
-            </View>
-            <Line />
-            <View style={{flexDirection: 'row'}}>
-              <Image
-                style={Style_CreateOrder.icon}
-                source={require('../../assets/imgOder/Rectangle_230.png')}
-              />
-              <View style={{width: '85%', marginLeft: 20}}>
-                <Text style={Style_CreateOrder.title_1}>
-                  Thông tin sản phẩm
-                </Text>
-                <Information
-                  title_1={'Thông tin cho bạn'}
-                  text_1={'Tổng giá nhà cung cấp:'}
-                  text_2={'Tổng giá bán của bạn:'}
-                  text_3={'Tổng hoa hồng của bạn:'}
-                  price_1={'800,000đ'}
-                  price_2={'1,500,000đ'}
-                  price_3={'700,000đ'}
-                  style_5={{
-                    color: '#000000',
+                  style_p11={{
+                    fontSize: 15,
+                    color: 'green',
+                  }}
+                  style_p3={{
+                    color: '#005aa9',
+                    fontSize: 15,
+                  }}
+                  style_p33={{
+                    color: 'green',
+                    fontSize: 15,
                   }}
                 />
               </View>
@@ -181,10 +185,10 @@ const CreateOrder = ({route}) => {
                 flex: 1,
                 paddingLeft: 30,
                 paddingRight: 30,
-                marginTop: 70,
+                marginTop: 50,
               }}>
               <Button
-                onPress={() => navigation.navigate('Payment', {totalprice})}
+                onPress={() => navigation.navigate('Payment')}
                 text={'Tiến hành thanh toán'}
               />
             </View>

@@ -34,3 +34,11 @@ export enum CHANGE_POINT_LIST {
   FAIL = 'client/Change_Point_List_Fail',
   CLEAR = 'client/Change_Point_List_Clear',
 }
+
+export enum CART {
+  ADD = 'Cart_Add',
+  REMOVE = 'Cart_Remove',
+  CHANGE_QTY = 'Cart_Change_Quantity',
+  MERGE = 'Cart_Merge',
+  REMOVE_ALL = 'Cart_Remove_All',
+}
