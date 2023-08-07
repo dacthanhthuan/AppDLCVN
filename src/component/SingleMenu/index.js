@@ -2,7 +2,7 @@ import React from 'react';
 import {Pressable, Image, View, Text, FlatList} from 'react-native';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {WINDOW_WIDTH, formatPrice} from '../../global';
+import {WINDOW_WIDTH, formatPrice} from '../../MyGlobal';
 
 const SingleMenu = ({data, style}) => {
   const isMore = data.slSp > 1;

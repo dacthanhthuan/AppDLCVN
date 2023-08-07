@@ -1,77 +1,100 @@
-import React, { useState } from "react";
-import styles from "./styles";
-import { SafeAreaView, Text, View, Image } from "react-native";
-import Header from "../../component/Header/index";
-import CardSurplus from "../../component/CardSurplus";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import Button from "../../component/Button";
-import { WINDOW_HEIGHT } from "../../global";
+import React, {useState} from 'react';
+import styles from './styles';
+import {SafeAreaView, Text, View, Image} from 'react-native';
+import Header from '../../component/Header/index';
+import CardSurplus from '../../component/CardSurplus';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import Button from '../../component/Button';
+import {WINDOW_HEIGHT} from '../../MyGlobal';
 
-const WithDraw = ({ navigation }) => {
+const WithDraw = ({navigation}) => {
+  const [selectedAmount, setSelectedAmount] = useState('');
 
-    const [selectedAmount, setSelectedAmount] = useState("");
+  const selectAmount = amount => {
+    setSelectedAmount(amount);
+  };
 
-    const selectAmount = (amount) => {
-        setSelectedAmount(amount);
-    };
+  return (
+    <SafeAreaView style={styles.container}>
+      <Header
+        iconLeft={require('../../assets/Arrow1.png')}
+        text="Rút tiền"
+        onPressLeft={() => {
+          navigation.goBack();
+        }}
+      />
 
+      <CardSurplus
+        onPress={() => navigation.navigate('WalletScreen')}
+        style={{marginTop: 35}}
+      />
 
-    return (
-        <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Nhập số tiền cần rút</Text>
 
-            <Header
-                iconLeft={require('../../assets/Arrow1.png')}
-                text='Rút tiền'
-                onPressLeft={() => { navigation.goBack() }}
-            />
+      <TextInput
+        style={styles.value}
+        placeholder="0Đ"
+        placeholderTextColor="#C2C2C2"
+        keyboardType="number-pad"
+        value={selectedAmount}
+        onChangeText={selectAmount}
+      />
 
-            <CardSurplus onPress={() => navigation.navigate('WalletScreen')} style={{ marginTop: 35 }} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 25,
+        }}>
+        <TouchableOpacity
+          style={styles.numberContainerMoney}
+          onPress={() => selectAmount('50 000')}>
+          <Text style={styles.numberMoney}>50 000</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.numberContainerMoney}
+          onPress={() => selectAmount('500 000')}>
+          <Text style={styles.numberMoney}>500 000</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.numberContainerMoney}
+          onPress={() => selectAmount('5 000 000')}>
+          <Text style={styles.numberMoney}>5 000 000</Text>
+        </TouchableOpacity>
+      </View>
 
-            <Text style={styles.title}>Nhập số tiền cần rút</Text>
+      <TouchableOpacity style={styles.card}>
+        <Text style={styles.textCard}>Hướng dẫn rút tiền</Text>
+        <Image
+          style={styles.iconRight}
+          source={require('../../assets/vectorRight.png')}
+        />
+      </TouchableOpacity>
 
-            <TextInput
-                style={styles.value}
-                placeholder="0Đ"
-                placeholderTextColor='#C2C2C2'
-                keyboardType="number-pad"
-                value={selectedAmount}
-                onChangeText={selectAmount}
-            />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('WithdrawHistory')}
+        style={[styles.card, {marginTop: 12}]}>
+        <View style={{flexDirection: 'row'}}>
+          <Image
+            style={styles.iconLeft}
+            source={require('../../assets/Rectangle331.png')}
+          />
+          <Text style={[styles.textCard, {marginLeft: 8}]}>
+            Lịch sử rút tiền
+          </Text>
+        </View>
+        <Image
+          style={styles.iconRight}
+          source={require('../../assets/vectorRight.png')}
+        />
+      </TouchableOpacity>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 25 }}>
-                <TouchableOpacity style={styles.numberContainerMoney} onPress={() => selectAmount("50 000")}>
-                    <Text style={styles.numberMoney}>50 000</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.numberContainerMoney} onPress={() => selectAmount("500 000")}>
-                    <Text style={styles.numberMoney}>500 000</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.numberContainerMoney} onPress={() => selectAmount("5 000 000")}>
-                    <Text style={styles.numberMoney}>5 000 000</Text>
-                </TouchableOpacity>
-            </View>
+      <View style={{alignItems: 'center', bottom: WINDOW_HEIGHT * -0.28}}>
+        <Button text="Tiếp theo" style={{width: '90%'}} />
+      </View>
+    </SafeAreaView>
+  );
+};
 
-            <TouchableOpacity style={styles.card}>
-                <Text style={styles.textCard}>Hướng dẫn rút tiền</Text>
-                <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => navigation.navigate('WithdrawHistory')} style={[styles.card, { marginTop: 12 }]}>
-                <View style={{ flexDirection: 'row' }}>
-                    <Image style={styles.iconLeft} source={require('../../assets/Rectangle331.png')} />
-                    <Text style={[styles.textCard, { marginLeft: 8 }]}>Lịch sử rút tiền</Text>
-                </View>
-                <Image style={styles.iconRight} source={require('../../assets/vectorRight.png')} />
-            </TouchableOpacity>
-
-            <View style={{ alignItems: 'center', bottom: WINDOW_HEIGHT * -0.28 }} >
-                <Button text='Tiếp theo'
-                    style={{ width: '90%' }} />
-            </View>
-
-        </SafeAreaView>
-    )
-}
-
-export default React.memo(WithDraw)
-
-
+export default React.memo(WithDraw);

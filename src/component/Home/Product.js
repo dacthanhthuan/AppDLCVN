@@ -1,4 +1,4 @@
-import {WINDOW_WIDTH, WINDOW_HEIGHT, formatPrice} from '../../global';
+import {WINDOW_WIDTH, WINDOW_HEIGHT, formatPrice} from '../../MyGlobal';
 import {memo} from 'react';
 import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';

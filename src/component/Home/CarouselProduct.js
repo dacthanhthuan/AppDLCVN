@@ -2,7 +2,7 @@ import Carousel from '../AnimatedCarousel';
 import {StyleSheet, View} from 'react-native';
 import Product from './Product';
 import {useEffect, useState, memo, useContext} from 'react';
-import {WINDOW_WIDTH, WINDOW_HEIGHT, showmoreImage} from '../../global';
+import {WINDOW_WIDTH, WINDOW_HEIGHT, showmoreImage} from '../../MyGlobal';
 import {ScrollContext} from '../../screens/Home';
 import ProductShowmore from './ProductShowmore';
 const img = showmoreImage;

@@ -7,7 +7,12 @@ type CartBadgeProps = {
 };
 
 export default function CartBadge({style}: CartBadgeProps) {
-  const total_quantity = useSelector((state: any) => state.cart.total_quantity);
+  const cartData = useSelector((state: any) => state.cart.data);
+  const total_quantity = cartData.reduce(
+    (total: any, next: any) => total + next.quantity,
+    0,
+  );
+
   return total_quantity < 1 ? null : (
     <View style={[styles.badgeContainer, style]}>
       <Text style={styles.badgeText}>

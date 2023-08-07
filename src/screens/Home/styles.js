@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {WINDOW_HEIGHT} from '../../global';
+import {WINDOW_HEIGHT} from '../../MyGlobal';
 
 const HEADER_EXPAND_HEIGHT = 150;
 const HEADER_COLLAPSE_HEIGHT = 60;

@@ -20,7 +20,7 @@ import {
 } from '../../redux/actions/userActions';
 import {getData, multiRemoveData, removeData, storeData} from '../../storage';
 import LoadingOverlay from '../../component/LoadingOverlay';
-import {formatPrice, BIOMETRIC, formatPoint} from '../../global';
+import {formatPrice, BIOMETRIC, formatPoint, useIsReady} from '../../MyGlobal';
 import {LOCALSTORAGE} from '../../storage/direct';
 import LoginSettingOverlay from '../../component/LoginSettingOverlay';
 import {TabActions} from '@react-navigation/native';
@@ -28,6 +28,8 @@ import {removeAllCartProduct} from '../../redux/actions/cartActions';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
+  const isReady = useIsReady();
+
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const login = useSelector(state => state.user.login.status);
@@ -67,7 +69,9 @@ const ProfileAdmin = ({navigation}) => {
     isBiometricSupport();
   }, []);
 
-  return !login ? (
+  return !isReady ? (
+    <LoadingOverlay />
+  ) : !login ? (
     <NotLogin />
   ) : (
     <ScrollView>

@@ -6,6 +6,8 @@ import SingleMenu from '../../component/SingleMenu';
 import StatusMenu from '../../component/StatusMenu';
 import StatusWallet from '../../component/StatusWallet';
 import {FlatList} from 'react-native-gesture-handler';
+import {useIsReady} from '../../MyGlobal';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 const data = [
   {
@@ -113,6 +115,8 @@ const ALL = 'Tất cả';
 const CTT = 'Chờ thanh toán';
 
 const Menu = ({navigation}) => {
+  const isReady = useIsReady();
+
   const [selectedCategory, setSelectedCategory] = useState(ALL);
   const [selectedCategori, setSelectedCategori] = useState(CTT);
   const [filterData, setFilterData] = useState(data);
@@ -148,7 +152,9 @@ const Menu = ({navigation}) => {
     }
   };
 
-  return (
+  return !isReady ? (
+    <LoadingOverlay />
+  ) : (
     <SafeAreaView style={styles.container}>
       <Header
         text="Đơn hàng"

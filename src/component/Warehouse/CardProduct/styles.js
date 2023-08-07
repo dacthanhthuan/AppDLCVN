@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../../global';
+import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../../MyGlobal';
 
 const styles = StyleSheet.create({
   container: {

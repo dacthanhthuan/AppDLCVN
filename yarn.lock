@@ -5148,6 +5148,11 @@
   dependencies:
     "js-tokens" "^3.0.0 || ^4.0.0"
 
+"lottie-react-native@^6.0.1":
+  "integrity" "sha512-XOVBiDcLLRZVwcXk4cBfyAOZTaXj8dD8iL932Fu+NEdsEpvLACta1YheZmq+tVGo8fLCGJfOlva+gpDfo09k4Q=="
+  "resolved" "https://registry.npmjs.org/lottie-react-native/-/lottie-react-native-6.0.1.tgz"
+  "version" "6.0.1"
+
 "lru-cache@^5.1.1":
   "integrity" "sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w=="
   "resolved" "https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz"
@@ -6317,10 +6322,10 @@
   "resolved" "https://registry.npmjs.org/react-native-reanimated-carousel/-/react-native-reanimated-carousel-3.3.2.tgz"
   "version" "3.3.2"
 
-"react-native-reanimated@^3.1.0", "react-native-reanimated@>=2.0.0", "react-native-reanimated@>=2.2.0", "react-native-reanimated@>=2.7.0":
-  "integrity" "sha512-8YJR7yHnrqK6yKWzkGLVEawi1WZqJ9bGIehKEnE8zG58yLrSwUZe1T220XTbftpkA3r37Sy0kJJ/HOOiaIU+HQ=="
-  "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.1.0.tgz"
-  "version" "3.1.0"
+"react-native-reanimated@^3.4.2", "react-native-reanimated@>=2.0.0", "react-native-reanimated@>=2.2.0", "react-native-reanimated@>=2.7.0":
+  "integrity" "sha512-FbtG+f1PB005vDTJSv4zAnTK7nNXi+FjFgbAM5gOzIZDajfph2BFMSUstzIsN8T77+OKuugUBmcTqLnQ24EBVg=="
+  "resolved" "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-3.4.2.tgz"
+  "version" "3.4.2"
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.16.7"
     "@babel/preset-typescript" "^7.16.7"
@@ -6392,7 +6397,7 @@
     "prop-types" "^15.7.2"
     "yargs" "^16.1.1"
 
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>=0.25.1", "react-native@>=0.41.2", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.59", "react-native@>=0.6.0", "react-native@>=0.60.0", "react-native@>=0.65.0", "react-native@0.71.8":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", "react-native@>=0.25.1", "react-native@>=0.41.2", "react-native@>=0.46", "react-native@>=0.57", "react-native@>=0.57.0", "react-native@>=0.59", "react-native@>=0.6.0", "react-native@>=0.60.0", "react-native@>=0.65.0", "react-native@0.71.8":
   "integrity" "sha512-ftMAuhpgTkbHU9brrqsEyxcNrpYvXKeATY+if22Nfhhg1zW+6wn95w9otwTnA3xHkljPCbng8mUhmmERjGEl7g=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.71.8.tgz"
   "version" "0.71.8"

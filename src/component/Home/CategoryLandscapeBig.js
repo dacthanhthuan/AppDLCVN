@@ -1,6 +1,6 @@
 import ImageButton from './ImageButton';
 import {StyleSheet, FlatList} from 'react-native';
-import {WINDOW_HEIGHT, WINDOW_WIDTH, showmoreImage} from '../../global';
+import {WINDOW_HEIGHT, WINDOW_WIDTH, showmoreImage} from '../../MyGlobal';
 import {memo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 

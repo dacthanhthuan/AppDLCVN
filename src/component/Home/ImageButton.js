@@ -41,6 +41,7 @@ const AnimatedImageButton = forwardRef(
       resizeMode,
       style,
       children,
+      disablePress = false,
     },
     ref,
   ) => {
@@ -49,7 +50,8 @@ const AnimatedImageButton = forwardRef(
         <Pressable
           ref={ref}
           style={({pressed}) => (pressed ? {opacity: 0.4} : null)}
-          onPress={onPress}>
+          onPress={onPress}
+          disabled={disablePress}>
           {imagesource !== null ? (
             <Image
               source={imagesource}
@@ -57,7 +59,7 @@ const AnimatedImageButton = forwardRef(
               resizeMode={resizeMode ? resizeMode : 'contain'}
             />
           ) : null}
-          <Text style={textStlye}>{text}</Text>
+          {text ? <Text style={textStlye}>{text}</Text> : null}
           {children ? children : null}
         </Pressable>
       </View>

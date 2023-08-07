@@ -5,27 +5,55 @@ import {
   Text,
   Pressable,
   View,
-  TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import Style_Detail from './style';
+import styles from './style';
 import Button from '../../component/Button';
 import Header from '../../component/Header/index';
 import Information from '../../component/Information';
 import Line from '../../component/Line';
 import {useNavigation} from '@react-navigation/native';
-import {formatPrice, formatPoint} from '../../global';
+import {
+  formatPrice,
+  formatPoint,
+  WINDOW_HEIGHT,
+  WINDOW_WIDTH,
+  useIsReady,
+} from '../../MyGlobal';
 // import Carousel from "react-native-snap-carousel";
 import Carousel from 'react-native-reanimated-carousel';
 import {useDispatch, useSelector} from 'react-redux';
-import {addProduct2Cart} from '../../redux/actions/cartActions';
+import {
+  addProduct2Cart,
+  changeProductQuantity,
+  rmProductFromCart,
+} from '../../redux/actions/cartActions';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withTiming,
+  interpolate,
+  interpolateColor,
+  withRepeat,
+  runOnJS,
+  useDerivedValue,
+} from 'react-native-reanimated';
+import {AnimatedImgButton} from '../../component/Home/ImageButton';
+import assets from '../../assets';
+import LottieView from 'lottie-react-native';
+import {GestureDetector, Gesture} from 'react-native-gesture-handler';
+import LoadingOverlay from '../../component/LoadingOverlay';
+const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 const RenderImage = ({item}) => {
-  return <Image style={Style_Detail.imgProduct} source={{uri: item}} />;
+  return <Image style={styles.imgProduct} source={{uri: item}} />;
 };
 
 const DetailProduct = ({route}) => {
   // declare variable
+  const isReady = useIsReady();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {product, type} = route?.params || {}; // get product data from route and product type
@@ -54,12 +82,22 @@ const DetailProduct = ({route}) => {
   // Tăng số lượng
   const increase = () => {
     setQty(qty + 1);
+    if (!isExist) {
+      addToCart(1);
+    } else {
+      changeInCart(qty + 1);
+    }
   };
 
   // Giảm số lượng
   const reduce = () => {
-    if (qty > 1) {
-      setQty(qty - 1);
+    if (isExist) {
+      if (qty - 1 > 0) {
+        setQty(qty - 1);
+        changeInCart(qty - 1);
+      } else {
+        removeInCart();
+      }
     }
   };
 
@@ -70,7 +108,7 @@ const DetailProduct = ({route}) => {
         return true;
     });
     setIsExist(filter ? true : false);
-    setQty(filter ? filter.quantity : qty);
+    setQty(filter ? filter.quantity : 1);
   };
 
   // whenever cart data has change
@@ -79,8 +117,141 @@ const DetailProduct = ({route}) => {
     filterProductInCart();
   }, [cartData]);
 
-  return (
-    <SafeAreaView style={Style_Detail.container}>
+  // *-------Animation---------
+  // declare shared value
+  const zRotateValue = useSharedValue(0); // rotate value
+  const pressedValue = useSharedValue(0); // pressed value
+  const fireworkProgress = useSharedValue(0); //firework animation progress
+
+  // function add product to cart
+  const addToCart = quantity => {
+    dispatch(
+      addProduct2Cart({
+        product: product,
+        quantity: quantity,
+        pType: type,
+      }),
+    );
+  };
+
+  // function change product quantity
+  const changeInCart = quantity => {
+    dispatch(
+      changeProductQuantity({
+        productId: product.product_id,
+        quantity: quantity,
+        pType: type,
+      }),
+    );
+  };
+
+  const removeInCart = () => {
+    dispatch(
+      rmProductFromCart({
+        productId: product.product_id,
+        pType: type,
+        quantity: -1,
+      }),
+    );
+  };
+
+  // define gesture for cart button
+  const cartTapGesutre = Gesture.Tap()
+    .maxDuration(1200) // this make tap gesture has 600ms before long press is active
+    // onStart function is invoked when gesture is active
+    .onStart(() => {
+      // start animation pressed when tap gesture is active
+      pressedValue.value = withSequence(
+        withTiming(1, {duration: 300}),
+        withTiming(0, {duration: 150}),
+      );
+
+      zRotateValue.value = withSequence(
+        withTiming(-10, {duration: 150}),
+        withTiming(10, {duration: 150}),
+        withTiming(0, {duration: 150}),
+      );
+
+      fireworkProgress.value = withSequence(
+        withTiming(0.7, {duration: 4000}),
+        withTiming(0, {duration: 0}),
+      );
+
+      // dispatch redux store
+      runOnJS(addToCart)(1);
+    });
+
+  const cartLongPressGresture = Gesture.LongPress()
+    // onBegin function is invoked when user's finger has touched screen
+    .onBegin(() => {
+      // start animation
+      pressedValue.value = withTiming(1, {duration: 1000});
+      zRotateValue.value = withTiming(-10, {duration: 1000});
+    })
+    .onStart(() => {
+      // dispatch redux store 10 products
+      runOnJS(addToCart)(10);
+      // end animation
+      pressedValue.value = withTiming(0, {duration: 300});
+
+      zRotateValue.value = withSequence(
+        withTiming(10, {duration: 300}),
+        withTiming(0, {duration: 150}),
+      );
+
+      fireworkProgress.value = withSequence(
+        withTiming(0.0025, {duration: 0}),
+        withTiming(0.7, {duration: 4000}),
+        withTiming(0, {duration: 0}),
+      );
+    });
+
+  // composing above gestures into one gesture
+  const cartGesture = Gesture.Exclusive(cartTapGesutre, cartLongPressGresture);
+
+  // create animation for cart button
+  const cartAnimatedStyle = useAnimatedStyle(() => {
+    // on pressed animation
+    const backgroundColor = interpolateColor(
+      pressedValue.value,
+      [0, 1],
+      ['rgba(255,255,255,1)', 'rgba(255,200,50,0.7)'],
+    );
+    const borderWidth = interpolate(pressedValue.value, [0, 1], [1, 2.5]);
+    const scale = interpolate(pressedValue.value, [0, 1], [1, 1.2]);
+
+    return {
+      backgroundColor,
+      borderWidth,
+      transform: [{scale}],
+    };
+  });
+
+  // create animation for cart image
+  const cartImageAnimatedStyle = useAnimatedStyle(() => {
+    const rotateZ = `${zRotateValue.value}deg`;
+    const scale = interpolate(pressedValue.value, [0, 1], [1, 1.5]);
+
+    return {
+      transform: [{rotateZ}, {scale}],
+    };
+  });
+
+  // create animation for firework lottie view
+  const fireworkAnimatedStyle = useAnimatedStyle(() => {
+    const width = fireworkProgress.value > 0 ? WINDOW_WIDTH : 0;
+    const height = fireworkProgress.value > 0 ? WINDOW_HEIGHT : 0;
+
+    return {
+      width,
+      height,
+    };
+  });
+
+  return !isReady ? (
+    <LoadingOverlay />
+  ) : (
+    <SafeAreaView style={styles.container}>
       <Header
         onPressLeft={() => navigation.goBack()}
         text={'Chi tiết sản phẩm'}
@@ -105,35 +276,35 @@ const DetailProduct = ({route}) => {
             windowSize={2}
             pagingEnabled
           />
-          <View style={Style_Detail.container_1}>
+          <View style={styles.container_1}>
             <Pressable
               onPress={reduce}
-              hitSlop={12}
+              hitSlop={20}
               style={({pressed}) => (pressed ? {opacity: 0.8} : null)}>
               <Image
-                style={Style_Detail.imgIconMinus}
+                style={styles.imgIconMinus}
                 source={require('../../assets/imgDetail/minus.png')}
               />
             </Pressable>
-            <Text style={Style_Detail.textquantity}>{qty}</Text>
+            <Text style={styles.textquantity}>{qty}</Text>
             <Pressable
               onPress={increase}
-              hitSlop={12}
+              hitSlop={20}
               style={({pressed}) => (pressed ? {opacity: 0.8} : null)}>
               <Image
-                style={Style_Detail.imgIconPlus}
+                style={styles.imgIconPlus}
                 source={require('../../assets/imgDetail/plus.png')}
               />
             </Pressable>
           </View>
         </View>
-        <View style={Style_Detail.container_2}>
-          <Text style={Style_Detail.nameproduct}>{product.product_name}</Text>
-          <Text style={Style_Detail.price_1}>{price}</Text>
-          <Text style={Style_Detail.text_1}>Giá nhà cung cấp</Text>
+        <View style={styles.container_2}>
+          <Text style={styles.nameproduct}>{product.product_name}</Text>
+          <Text style={styles.price_1}>{price}</Text>
+          <Text style={styles.text_1}>Giá nhà cung cấp</Text>
         </View>
         <Line />
-        <Text style={Style_Detail.title_1}>Thông tin sản phẩm</Text>
+        <Text style={styles.title_1}>Thông tin sản phẩm</Text>
         <Information
           text_1={'Giá nhà cung cấp:'}
           text_3={'Hoa hồng:'}
@@ -143,42 +314,33 @@ const DetailProduct = ({route}) => {
             color: 'green',
           }}
         />
-        <View style={Style_Detail.container_3}>
-          <Text style={Style_Detail.title_2}>Giới thiệu sản phẩm</Text>
-          <Text style={Style_Detail.text_1}>{product.short_description}</Text>
+        <View style={styles.container_3}>
+          <Text style={styles.title_2}>Giới thiệu sản phẩm</Text>
+          <Text style={styles.text_1}>{product.short_description}</Text>
         </View>
       </ScrollView>
 
-      <View style={Style_Detail.container_7}>
-        <TouchableOpacity
-          onPress={() =>
-            dispatch(
-              addProduct2Cart({
-                product: product,
-                quantity: 1,
-                pType: type,
-              }),
-            )
-          }>
-          <View style={Style_Detail.container_8}>
-            <Image
-              style={Style_Detail.imgCart}
+      <AnimatedLottieView
+        source={assets.LottieAnimation.firework}
+        style={[styles.fireworkLottieView, fireworkAnimatedStyle]}
+        resizeMode="cover"
+        progress={fireworkProgress}
+      />
+
+      <View style={styles.container_7}>
+        <GestureDetector gesture={cartGesture}>
+          <Animated.View style={[styles.container_8, cartAnimatedStyle]}>
+            <Animated.Image
+              style={[styles.imgCart, cartImageAnimatedStyle]}
               source={require('../../assets/imgDetail/Vector.png')}
             />
-          </View>
-        </TouchableOpacity>
+          </Animated.View>
+        </GestureDetector>
+
         <View style={{flex: 1, paddingLeft: 15}}>
           <Button
             onPress={() => {
-              !isExist
-                ? dispatch(
-                    addProduct2Cart({
-                      product: product,
-                      quantity: qty,
-                      pType: type,
-                    }),
-                  )
-                : null;
+              !isExist ? addToCart(1) : null;
               navigation.navigate('Cart');
             }}
             text={'Chọn mua'}

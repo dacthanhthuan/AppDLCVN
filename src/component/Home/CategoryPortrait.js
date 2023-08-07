@@ -1,6 +1,6 @@
 import {FlatList, StyleSheet} from 'react-native';
 import ImageButton from './ImageButton';
-import {WINDOW_HEIGHT, WINDOW_WIDTH, showmoreImage} from '../../global';
+import {WINDOW_HEIGHT, WINDOW_WIDTH, showmoreImage} from '../../MyGlobal';
 import {memo} from 'react';
 
 const CategoryPortrait = ({item, isShowmore = false}) => {

@@ -1,59 +1,66 @@
-import React, { useState, useEffect } from "react";
-import styles from "./styles";
-import { FlatList, SafeAreaView, View, TouchableOpacity, Text, Image, TextInput } from "react-native";
-import Header from "../../component/Header/index";
-import Input from "../../component/Input";
-import CardMember from "../../component/CardMember";
-import Button from "../../component/Button";
-import Modal from "react-native-modal";
-import CardSurplus from "../../component/CardSurplus";
-import { WINDOW_HEIGHT } from "../../global";
+import React, {useState, useEffect} from 'react';
+import styles from './styles';
+import {
+  FlatList,
+  SafeAreaView,
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  TextInput,
+} from 'react-native';
+import Header from '../../component/Header/index';
+import Input from '../../component/Input';
+import CardMember from '../../component/CardMember';
+import Button from '../../component/Button';
+import Modal from 'react-native-modal';
+import CardSurplus from '../../component/CardSurplus';
+import {WINDOW_HEIGHT} from '../../MyGlobal';
 
 const data = [
   {
     image: require('../../assets/member.png'),
     name: 'Lê Thành Tín',
-    phone: '0839020007'
+    phone: '0839020007',
   },
   {
     image: require('../../assets/member1.png'),
     name: 'Trần Thiện Lâm',
-    phone: '0839020007'
+    phone: '0839020007',
   },
   {
     image: require('../../assets/member2.png'),
     name: 'Lê Văn Long',
-    phone: '0839020007'
+    phone: '0839020007',
   },
   {
     image: require('../../assets/member3.png'),
     name: 'Lê Thu Mai',
-    phone: '0839020007'
+    phone: '0839020007',
   },
   {
     image: require('../../assets/member1.png'),
     name: 'Nguyễn Văn A',
-    phone: '0839020007'
+    phone: '0839020007',
   },
   {
     image: require('../../assets/member2.png'),
     name: 'Lê Như Ngọc Mai',
-    phone: '0839020007'
+    phone: '0839020007',
   },
-
 ];
 
-const TransferMoney = ({ navigation }) => {
+const TransferMoney = ({navigation}) => {
   const [filteredUser, setFilteredUser] = useState(data);
   // const [dataUser, setDatauser] = useState([]);
-  const [keywork, setKeywork] = useState("");
+  const [keywork, setKeywork] = useState('');
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
   // const CheckBoxClick = (user) => {
   //   const newdata = filteredUser.map((item) => {
   //     if (item.name === user.name) {
   //       return (
-  //         ...item, 
+  //         ...item,
   //         // isCheck: !item.isCheck,
   //       )
   //     }
@@ -78,9 +85,8 @@ const TransferMoney = ({ navigation }) => {
 
   useEffect(() => {
     if (keywork?.length > 0) {
-      const filteredItems = data?.filter(
-        (rec) =>
-          rec?.name?.toLocaleLowerCase()?.includes(keywork?.toLocaleLowerCase())
+      const filteredItems = data?.filter(rec =>
+        rec?.name?.toLocaleLowerCase()?.includes(keywork?.toLocaleLowerCase()),
       );
       setFilteredUser(filteredItems);
     } else {
@@ -99,9 +105,11 @@ const TransferMoney = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        iconLeft={require("../../assets/Arrow1.png")}
+        iconLeft={require('../../assets/Arrow1.png')}
         text="Chuyển tiền"
-        onPressLeft={() => { navigation.goBack() }}
+        onPressLeft={() => {
+          navigation.goBack();
+        }}
       />
 
       <Input
@@ -112,18 +120,22 @@ const TransferMoney = ({ navigation }) => {
 
       <FlatList
         data={filteredUser}
-        style={{ marginTop: 15, flex: 1 }}
-        renderItem={({ item }) => {
+        style={{marginTop: 15, flex: 1}}
+        renderItem={({item}) => {
           return (
-            <CardMember image={item.image} name={item.name} phone={item.phone} />
+            <CardMember
+              image={item.image}
+              name={item.name}
+              phone={item.phone}
+            />
           );
         }}
       />
 
-      <View style={{ alignItems: "center" }}>
+      <View style={{alignItems: 'center'}}>
         <Button
           text="Tiếp theo"
-          style={{ bottom: WINDOW_HEIGHT * 0, width: "90%" }}
+          style={{bottom: WINDOW_HEIGHT * 0, width: '90%'}}
           onPress={openBottomSheet}
         />
       </View>
@@ -131,42 +143,53 @@ const TransferMoney = ({ navigation }) => {
       <Modal
         isVisible={showBottomSheet}
         onBackdropPress={closeBottomSheet}
-        style={styles.bottomSheet}
-      >
+        style={styles.bottomSheet}>
         <View style={styles.bottomSheetContent}>
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
             <Text></Text>
-            <Text style={{ fontSize: 20, color: '#005AA9' }}>Chuyển tiền</Text>
+            <Text style={{fontSize: 20, color: '#005AA9'}}>Chuyển tiền</Text>
             <TouchableOpacity onPress={closeBottomSheet}>
-              <Image style={{ width: 24, height: 24 }} source={require('../../assets/Rectangle328.png')} />
+              <Image
+                style={{width: 24, height: 24}}
+                source={require('../../assets/Rectangle328.png')}
+              />
             </TouchableOpacity>
           </View>
 
-          <CardSurplus onPress={() => navigation.navigate('WalletScreen')} style={{ marginTop: 35 }} />
+          <CardSurplus
+            onPress={() => navigation.navigate('WalletScreen')}
+            style={{marginTop: 35}}
+          />
 
           <Text style={styles.title}>Bạn muốn chuyển bao nhiêu ?</Text>
 
           <TextInput
             style={styles.value}
             placeholder="0Đ"
-            placeholderTextColor='#C2C2C2'
+            placeholderTextColor="#C2C2C2"
             keyboardType="number-pad"
-
           />
 
           <View style={styles.messContainer}>
             <Text style={styles.textMessage}>Lời nhắn</Text>
             <TextInput
               style={styles.messInput}
-              placeholderTextColor='#C2C2C2'
+              placeholderTextColor="#C2C2C2"
             />
           </View>
 
-          <View style={{ alignItems: 'center' }}>
-            <Button onPress={() => navigation.navigate('TranferMoneyTwo')} text='Tiếp tục' style={{ width: '90%', bottom: WINDOW_HEIGHT * -0.05 }} />
+          <View style={{alignItems: 'center'}}>
+            <Button
+              onPress={() => navigation.navigate('TranferMoneyTwo')}
+              text="Tiếp tục"
+              style={{width: '90%', bottom: WINDOW_HEIGHT * -0.05}}
+            />
           </View>
-
         </View>
       </Modal>
     </SafeAreaView>

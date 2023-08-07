@@ -1,5 +1,5 @@
 import {ImageSourcePropType, StyleSheet, View} from 'react-native';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../global';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../MyGlobal';
 import {memo} from 'react';
 import ImageButton from './ImageButton';
 

@@ -22,7 +22,7 @@ import {
   clientClearUserData,
   clientRegisterStart,
 } from '../../redux/actions/userActions';
-import {mailCheck, mobileCheck, passwordCheck} from '../../global';
+import {mailCheck, mobileCheck, passwordCheck} from '../../MyGlobal';
 
 const Register = () => {
   const dispatch = useDispatch();

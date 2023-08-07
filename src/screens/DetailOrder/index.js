@@ -6,7 +6,7 @@ import Header from '../../component/Header';
 import Line from '../../component/Line';
 import Information from '../../component/Information';
 import Detail_Input from '../../component/Detail_Input';
-import {formatPrice, WINDOW_WIDTH} from '../../global';
+import {formatPrice, WINDOW_WIDTH} from '../../MyGlobal';
 
 const DetailOrder = ({route}) => {
   const navigation = useNavigation();

@@ -1,7 +1,7 @@
 import {Skeleton, LinearProgress} from '@rneui/themed';
 import {ScrollView, ActivityIndicator, View, Image} from 'react-native';
 import style from './style';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../../global';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../../MyGlobal';
 const logo = require('../../../assets/Home/Rectangle2.png');
 
 export default function HomeSkeleton() {

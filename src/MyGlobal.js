@@ -1,5 +1,7 @@
+import {useFocusEffect} from '@react-navigation/native';
 import {Dimensions} from 'react-native';
-import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
+import ReactNativeBiometrics from 'react-native-biometrics';
+import {useCallback, useState} from 'react';
 
 export const WINDOW_HEIGHT = Dimensions.get('screen').height;
 export const WINDOW_WIDTH = Dimensions.get('screen').width;
@@ -248,6 +250,21 @@ export function modifyData(item) {
   });
 
   return modifyData;
+}
+
+export function useIsReady() {
+  const [isReady, setIsReady] = useState(false);
+
+  useCallback(
+    useFocusEffect(() => {
+      setTimeout(() => {
+        setIsReady(true);
+      }, 10);
+    }),
+    [],
+  );
+
+  return isReady;
 }
 
 export const showmoreImage = require('./assets/Rectangle270.png');

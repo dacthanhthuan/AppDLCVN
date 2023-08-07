@@ -16,8 +16,8 @@ import {
   HEADER_EXPAND_HEIGHT,
   HEADER_COLLAPSE_HEIGHT,
 } from '../../../screens/Home/styles';
-import {WINDOW_WIDTH} from '../../../global';
-import CartBadge from '../../CartBadge';
+import {WINDOW_WIDTH} from '../../../MyGlobal';
+import CartBadge from '../../Cart/CartBadge';
 
 const logo = require('../../../assets/Home/Rectangle2.png');
 const cart = require('../../../assets/Home/Vector.png');

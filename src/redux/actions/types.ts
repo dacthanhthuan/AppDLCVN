@@ -42,3 +42,9 @@ export enum CART {
   MERGE = 'Cart_Merge',
   REMOVE_ALL = 'Cart_Remove_All',
 }
+
+export enum SEARCH_RECENT {
+  ADD = 'Search_Recent_Add',
+  REMOVE = 'Search_Recent_Remove',
+  MERGE = 'Search_Recent_Merge',
+}

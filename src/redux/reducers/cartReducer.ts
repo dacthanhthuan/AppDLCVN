@@ -5,7 +5,6 @@ import {AnyAction} from 'redux';
 
 const initialState = {
   data: [],
-  total_quantity: 0,
 };
 
 export default function CartReducer(state = initialState, action: AnyAction) {
@@ -14,18 +13,12 @@ export default function CartReducer(state = initialState, action: AnyAction) {
   const going_quantity = action.payload?.quantity;
   const going_product_id = action.payload?.productId;
   let filterData;
-  let calculate_quantity = state.total_quantity;
   switch (action.type) {
     // merge data from local
     case CART.MERGE:
-      calculate_quantity = 0;
-      action?.payload?.map(
-        (item: any) => (calculate_quantity += item.quantity),
-      );
       return {
         ...state,
         data: [...action.payload],
-        total_quantity: calculate_quantity,
       };
 
     // case add product
@@ -48,9 +41,6 @@ export default function CartReducer(state = initialState, action: AnyAction) {
         filterData = [...filterData, action.payload];
       }
 
-      // change calculate quantity
-      calculate_quantity += going_quantity;
-
       // store datat to local
       storeData(LOCALSTORAGE.cart, {
         data: filterData,
@@ -59,7 +49,6 @@ export default function CartReducer(state = initialState, action: AnyAction) {
       return {
         ...state,
         data: [...filterData],
-        total_quantity: calculate_quantity,
       };
 
     // case remove product
@@ -72,8 +61,6 @@ export default function CartReducer(state = initialState, action: AnyAction) {
             item?.product?.product_id == going_product_id)
         ) {
           return true;
-        } else {
-          calculate_quantity -= item.quantity;
         }
       });
 
@@ -85,7 +72,6 @@ export default function CartReducer(state = initialState, action: AnyAction) {
       return {
         ...state,
         data: [...filterData],
-        total_quantity: calculate_quantity,
       };
 
     // case change quantity product
@@ -97,8 +83,6 @@ export default function CartReducer(state = initialState, action: AnyAction) {
           item?.product?.product_id == going_product_id &&
           item?.pType === going_type
         ) {
-          calculate_quantity -= item.quantity;
-          calculate_quantity += going_quantity;
           item.quantity = going_quantity;
         }
         // return item
@@ -113,7 +97,6 @@ export default function CartReducer(state = initialState, action: AnyAction) {
       return {
         ...state,
         data: [...filterData],
-        total_quantity: calculate_quantity,
       };
 
     case CART.REMOVE_ALL:

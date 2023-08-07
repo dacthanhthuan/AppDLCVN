@@ -1,66 +1,65 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import styles from './styles';
 import {FlatList, SafeAreaView, Text, View} from 'react-native';
 import Header from '../../component/Header';
 import Input from '../../component/Input';
 import Product from '../../component/Home/Product';
-import {WINDOW_WIDTH} from '../../global';
-
-const data = [
-  {
-    id: 1,
-    source: require('../../assets/Home/Rectangle293.png'),
-    title: 'Auslac Lactoferrin (Giá Ưu Đãi)',
-    idProduct: 'AUS01',
-    price: 1080000,
-    commission: 380000,
-  },
-  {
-    id: 2,
-    title: 'DLC Soybean Germ Formula',
-    idProduct: 'AUS01',
-    price: 1361000,
-    commission: 380000,
-    source: require('../../assets/dlcsoybean.png'),
-  },
-  {
-    id: 3,
-    title: 'DLC Red Yeast Rice Formula',
-    idProduct: 'AUS01',
-    price: 1089000,
-    commission: 380000,
-    source: require('../../assets/dlcred.png'),
-  },
-  {
-    id: 4,
-    title: 'DLC Brazil Green Propolis',
-    idProduct: 'AUS01',
-    price: 1361000,
-    commission: 380000,
-    source: require('../../assets/dlcbrazil.png'),
-  },
-];
+import {WINDOW_WIDTH, nomarlizeVietNamese} from '../../MyGlobal';
+import {useSelector} from 'react-redux';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 const SearchProduct = ({navigation, route}) => {
-  const [filteredUser, setFilteredUser] = useState(data);
-  const [keywork, setKeywork] = useState(
-    route.params?.text ? route.params?.text : '',
+  const productData = useSelector(state => state.product.data);
+  const [filterProduct, setFilterProduct] = useState([]);
+  const [keyword, setKeyword] = useState(route.params?.text || '');
+  const [searching, setSearching] = useState(true);
+
+  let debounceTimeout;
+
+  //debounce setting keyword
+  const debounceSetkeyword = useCallback(
+    keyword => {
+      // clear timeout whenever this function is invoked
+      clearTimeout(debounceTimeout);
+
+      // if keyword's length is greater 0 then debouncing setKeyword,
+      // otherwise setKeyword immediately
+      if (keyword.length > 0) {
+        debounceTimeout = setTimeout(() => {
+          let pData = [];
+          productData.map(item => {
+            pData = [...pData, ...item];
+          });
+
+          let filter = pData.filter(item => {
+            return nomarlizeVietNamese(item?.product_name).includes(
+              nomarlizeVietNamese(keyword),
+            );
+          });
+
+          setFilterProduct(filter);
+          setSearching(false);
+        }, 300);
+      } else {
+        let pData = [];
+        productData.map(item => {
+          pData = [...pData, ...item];
+        });
+
+        setFilterProduct(pData);
+      }
+    },
+    [productData],
   );
 
+  // feature search
   useEffect(() => {
-    if (keywork?.length > 0) {
-      const filteredItems = data?.filter(rec =>
-        rec?.title?.toLocaleLowerCase()?.includes(keywork?.toLocaleLowerCase()),
-      );
-      setFilteredUser(filteredItems);
-    } else {
-      setFilteredUser(data);
-    }
+    debounceSetkeyword(keyword);
+  }, [keyword]);
 
-    console.log(filteredUser);
-  }, [keywork]);
-
-  return (
+  return searching ? (
+    <LoadingOverlay />
+  ) : (
     <SafeAreaView style={styles.container}>
       <Header
         iconLeft={require('../../assets/Arrow1.png')}
@@ -73,30 +72,36 @@ const SearchProduct = ({navigation, route}) => {
 
       <Input
         placeholder="Tìm kiếm sản phẩm"
-        onChangeText={setKeywork}
-        value={keywork}
+        onChangeText={setKeyword}
+        value={keyword}
+        onFocus={() => {
+          setKeyword('');
+        }}
       />
 
       <Text
         style={{
           marginTop: 25,
-          fontSize: 16,
           color: '#000000',
-          fontWeight: '500',
+          fontSize: 16,
+          fontWeight: '400',
+          paddingBottom: 10,
         }}>
-        Tìm thấy 25 sản phẩm
+        {filterProduct.length} sản phẩm phù hợp
       </Text>
 
       <FlatList
         style={{width: WINDOW_WIDTH}}
-        data={filteredUser}
+        data={filterProduct}
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        keyExtractor={item => String(item?.id)}
+        keyExtractor={item => String(item.unique_id)}
         ListHeaderComponent={<View style={{marginTop: 20}}></View>}
         ListEmptyComponent={
           <>
-            <Text style={{textAlign: 'center'}}>No items found.</Text>
+            <Text style={{textAlign: 'center'}}>
+              Không có sản phẩm phù hợp.
+            </Text>
           </>
         }
         renderItem={({item}) => <Product item={item} />}

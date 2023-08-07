@@ -1,35 +1,62 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import styles from './styles';
 import {FlatList, SafeAreaView, Text} from 'react-native';
 import Header from '../../component/Header';
 import Input from '../../component/Input';
 import CardRecent from '../../component/CardRecent';
-
-const data = [
-  {name: 'Auslac Lactoferrin (Giá Ưu Đãi)'},
-  {name: 'DLC Brazil Green Propolis'},
-  {name: 'DLC Diamond Lip Balm No.1'},
-];
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addSearchRecent,
+  mergeSearch,
+  removeSearchRecent,
+} from '../../redux/actions/searchRecentActions';
 
 const SearchRecent = ({navigation}) => {
-  const [filteredUser, setFilteredUser] = useState(data);
+  const dispatch = useDispatch();
+  const searchData = useSelector(state => state.search.data);
+  const [filterSearch, setFilterSearch] = useState([]);
   const [keyword, setKeyword] = useState('');
+  let searchRecentDebounceTimer;
 
+  // function debounce search input
+  const searchRecentDebounce = useCallback(
+    search => {
+      clearTimeout(searchRecentDebounceTimer);
+
+      if (search.length == 0) {
+        setFilterSearch(searchData);
+      } else {
+        searchRecentDebounceTimer = setTimeout(() => {
+          const filterData = searchData.filter(item => {
+            return item.includes(search.toLowerCase());
+          });
+
+          setFilterSearch(filterData);
+        }, 300);
+      }
+    },
+    [searchData],
+  );
+
+  // fucntion add search to search recent data
+  const addSearch = search => {
+    dispatch(addSearchRecent(search));
+  };
+
+  // function remove search from search recent data
+  const removeSearch = search => {
+    dispatch(removeSearchRecent(search));
+  };
+
+  // search feature
   useEffect(() => {
-    if (keyword?.length > 0) {
-      const filteredItems = data?.filter(rec =>
-        rec?.name?.toLocaleLowerCase()?.includes(keyword?.toLocaleLowerCase()),
-      );
-      setFilteredUser(filteredItems);
-    } else {
-      setFilteredUser(data);
-    }
+    searchRecentDebounce(keyword);
   }, [keyword]);
 
-  const deleteSearch = index => {
-    const updatedData = filteredUser.filter((item, idx) => idx !== index);
-    setFilteredUser(updatedData);
-  };
+  // update search whenever search data has changed
+  useEffect(() => {
+    setFilterSearch(searchData);
+  }, [searchData]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -49,30 +76,54 @@ const SearchRecent = ({navigation}) => {
         placeholder="Bạn cần tìm gì"
         onChangeText={setKeyword}
         value={keyword}
-        onEndEditing={({nativeEvent}) =>
-          nativeEvent.text.length > 0
-            ? navigation.navigate('SearchProduct', {text: nativeEvent.text})
-            : null
-        }
+        onSubmitEditing={({nativeEvent}) => {
+          if (nativeEvent?.text?.length > 0) {
+            addSearch(nativeEvent.text);
+          }
+          navigation.navigate('SearchProduct', {text: nativeEvent?.text});
+        }}
         focus
+        onFocus={() => {
+          setKeyword('');
+        }}
       />
 
-      <Text
-        style={{
-          marginTop: 25,
-          fontSize: 16,
-          color: '#000000',
-          fontWeight: '500',
-        }}>
-        Đã tìm gần đây
-      </Text>
-
       <FlatList
-        data={filteredUser}
+        data={filterSearch}
         style={{marginTop: 15}}
         renderItem={({item, index}) => (
-          <CardRecent text={item.name} onPress={() => deleteSearch(index)} />
+          <CardRecent
+            text={item}
+            onClose={() => {
+              removeSearch(item);
+            }}
+            onPress={() => {
+              navigation.navigate('SearchProduct', {text: item});
+            }}
+          />
         )}
+        ListEmptyComponent={
+          <Text
+            style={{
+              paddingVertical: 15,
+              fontSize: 14,
+              color: '#000000',
+              fontWeight: '400',
+            }}>
+            Không có tìm kiếm gần đây!
+          </Text>
+        }
+        ListHeaderComponent={
+          <Text
+            style={{
+              paddingVertical: 15,
+              fontSize: 16,
+              color: '#000000',
+              fontWeight: '500',
+            }}>
+            Đã tìm gần đây
+          </Text>
+        }
       />
     </SafeAreaView>
   );

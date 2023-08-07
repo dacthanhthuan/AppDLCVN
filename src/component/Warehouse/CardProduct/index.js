@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, Text, Pressable, View} from 'react-native';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {formatPoint} from '../../../global';
+import {formatPoint} from '../../../MyGlobal';
 
 const CardProduct = ({item}) => {
   const navigation = useNavigation();

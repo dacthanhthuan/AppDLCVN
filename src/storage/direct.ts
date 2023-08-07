@@ -14,6 +14,9 @@ export enum LOCALSTORAGE {
   // store user cart {data: *cart data}
   cart = 'user_cart',
 
+  // store state user is seen popup in today {popup: object[], day: Date()}
+  today_popup = 'today_popup',
+
   // store biometric sensor information on device {available: true/false, type: BiometricsType}
   biometric = 'biometric',
 
@@ -26,6 +29,6 @@ export enum LOCALSTORAGE {
   // store data to login by biometric {mobile: string, password: string}
   biometric_login_data = 'biometric_login_data',
 
-  // store state user is seen popup in today {popup: object[], day: Date()}
-  today_popup = 'today_popup',
+  // store search recent data (max 10 search recent) {data: string[]}
+  search_recent = 'search_recent',
 }

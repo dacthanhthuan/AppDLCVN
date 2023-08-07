@@ -42,7 +42,7 @@ export default styles = StyleSheet.create({
 
   cartPressable: {
     width: 40,
-    height: 20,
+    height: 40,
     marginTop: '1%',
     top: HEADER_EXPAND_HEIGHT * 0.35 * 0.05,
     position: 'absolute',
@@ -68,7 +68,6 @@ export default styles = StyleSheet.create({
     position: 'absolute',
     left: '89.5%',
     alignSelf: 'center',
-    top: '10%',
   },
 
   searchSettingStyle: {
@@ -77,10 +76,9 @@ export default styles = StyleSheet.create({
   },
 
   search: {
-    width: '100%',
-    height: '100%',
+    width: 35,
+    height: 35,
     tintColor: 'white',
-    transform: [{scale: 1.2}],
   },
 
   searchPressable: {

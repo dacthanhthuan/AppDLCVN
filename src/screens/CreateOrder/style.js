@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {WINDOW_WIDTH} from '../../global';
+import {WINDOW_WIDTH} from '../../MyGlobal';
 
 const Style_CreateOrder = StyleSheet.create({
   container: {

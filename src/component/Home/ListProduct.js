@@ -2,7 +2,7 @@ import {memo} from 'react';
 import Product from './Product';
 import {FlatList, StyleSheet} from 'react-native';
 import ProductShowmore from './ProductShowmore';
-import {showmoreImage} from '../../global';
+import {showmoreImage} from '../../MyGlobal';
 
 const ListProduct = ({data, isShowmore = false}) => {
   data = isShowmore ? [...data, {}] : data;

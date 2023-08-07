@@ -1,4 +1,4 @@
-import React, {useState, useEffect, startTransition} from 'react';
+import React, {useState, useEffect, startTransition, useCallback} from 'react';
 import styles from './styles';
 import {
   Image,
@@ -6,14 +6,13 @@ import {
   Text,
   View,
   FlatList,
-  TouchableOpacity,
   Keyboard,
   RefreshControl,
 } from 'react-native';
 import Input from '../../component/Input';
 import CardProduct from '../../component/Warehouse/CardProduct';
 import Header from '../../component/Header';
-import {formatPoint, nomarlizeVietNamese} from '../../global';
+import {useIsReady, nomarlizeVietNamese} from '../../MyGlobal';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   clientProductListClear,
@@ -22,8 +21,13 @@ import {
 import {CHANGE_POINT_LIST} from '../../redux/actions/types';
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
 import WarehouseSkeleton from '../../component/Warehouse/WarehouseSkeleton';
+import LottieView from 'lottie-react-native';
+import assets from '../../assets';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 const Warehouse = ({navigation}) => {
+  const isReady = useIsReady();
+
   const dispatch = useDispatch();
   const changePointList = useSelector(state => state.changePoint.data);
   const totalRecord = useSelector(state => state.changePoint.total_record);
@@ -40,29 +44,32 @@ const Warehouse = ({navigation}) => {
   let debounceTimeout;
 
   //debounce setting keyword
-  const debounceSetkeyword = keyword => {
-    // clear timeout whenever this function is invoked
-    clearTimeout(debounceTimeout);
+  const debounceSetkeyword = useCallback(
+    keyword => {
+      // clear timeout whenever this function is invoked
+      clearTimeout(debounceTimeout);
 
-    // if keyword's length is greater 0 then debouncing setKeyword,
-    // otherwise setKeyword immediately
-    if (keyword.length > 0) {
-      debounceTimeout = setTimeout(() => {
-        setKeyword(keyword);
-      }, 400);
-    } else {
-      setKeyword(keyword);
-    }
-  };
+      // if keyword's length is greater 0 then debouncing setKeyword,
+      // otherwise setKeyword immediately
+      if (keyword.length > 0) {
+        debounceTimeout = setTimeout(() => {
+          const filteredItems = changePointList?.filter(rec =>
+            nomarlizeVietNamese(rec?.product_name)?.includes(
+              nomarlizeVietNamese(keyword),
+            ),
+          );
+          setFilterData(filteredItems);
+        }, 400);
+      } else {
+        setFilterData(changePointList);
+      }
+    },
+    [changePointList],
+  );
 
   // feature search
   useEffect(() => {
-    const filteredItems = changePointList?.filter(rec =>
-      nomarlizeVietNamese(rec?.product_name)?.includes(
-        nomarlizeVietNamese(keyword),
-      ),
-    );
-    setFilterData(filteredItems);
+    debounceSetkeyword(keyword);
   }, [keyword]);
 
   // get product list from server
@@ -126,6 +133,10 @@ const Warehouse = ({navigation}) => {
     } else setSekeletonVisible(false);
   }, [listLoading]);
 
+  if (!isReady) {
+    return <LoadingOverlay />;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View
@@ -154,18 +165,21 @@ const Warehouse = ({navigation}) => {
           </View>
         </View>
         <Input
-          onChangeText={debounceSetkeyword}
+          onChangeText={setKeyword}
           placeholder="Bạn cần tìm gì ?"
+          value={keyword}
         />
-        {/* <Text
-          style={{
-            marginTop: 25,
-            color: '#000000',
-            fontSize: 16,
-            fontWeight: '400',
-          }}>
-          {filterData.length} sản phẩm phù hợp
-        </Text> */}
+        {keyword.length > 0 && filterData.length !== changePointList.length ? (
+          <Text
+            style={{
+              marginTop: 25,
+              color: '#000000',
+              fontSize: 16,
+              fontWeight: '400',
+            }}>
+            {filterData.length} sản phẩm phù hợp
+          </Text>
+        ) : null}
       </View>
 
       {skeletonVisible ? (
@@ -192,11 +206,19 @@ const Warehouse = ({navigation}) => {
             }
           }}
           onEndReachedThreshold={0.1}
+          removeClippedSubviews={true}
+          windowSize={11}
+          ListEmptyComponent={
+            <LottieView
+              loop
+              autoPlay
+              source={assets.LottieAnimation.not_found}
+              style={{width: 250, height: 250}}
+            />
+          }
           renderItem={({item}) => {
             return <CardProduct item={item} />;
           }}
-          removeClippedSubviews={true}
-          windowSize={11}
         />
       )}
       {loadmore ? <LoadmoreIndicator /> : null}

@@ -14,7 +14,7 @@ import Detail_Input from '../../component/Detail_Input';
 import Information from '../../component/Information';
 import Line from '../../component/Line';
 import Button from '../../component/Button';
-import {formatPoint, formatPrice, WINDOW_WIDTH} from '../../global';
+import {formatPoint, formatPrice, WINDOW_WIDTH} from '../../MyGlobal';
 import {useSelector} from 'react-redux';
 
 const CreateOrder = ({route}) => {

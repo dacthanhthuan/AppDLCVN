@@ -75,19 +75,27 @@ const Style_Detail = StyleSheet.create({
     marginTop: 10,
     justifyContent: 'space-between',
   },
+
   container_8: {
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 53,
+    height: 53,
     borderRadius: 7,
     borderWidth: 1,
-    padding: 10,
-    borderColor: '#005AA9',
+    justifyContent: 'center',
+    borderColor: 'rgba(0, 90, 169, 1)',
+    backgroundColor: 'rgba(255,255,255,1)',
   },
+
   imgCart: {
     width: 30,
     height: 30,
+    alignSelf: 'center',
+  },
+
+  fireworkLottieView: {
+    position: 'absolute',
+    alignSelf: 'center',
+    zIndex: 0,
   },
 });
 

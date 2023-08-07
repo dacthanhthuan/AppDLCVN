@@ -12,12 +12,12 @@ const Header = ({
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      <TouchableOpacity onPress={onPressLeft}>
+      <TouchableOpacity onPress={onPressLeft} hitSlop={15}>
         <Image style={styles.iconLeft} resizeMode="contain" source={iconLeft} />
       </TouchableOpacity>
       <Text style={styles.text}>{text}</Text>
       {iconRight ? (
-        <TouchableOpacity onPress={onPressRight}>
+        <TouchableOpacity onPress={onPressRight} hitSlop={8}>
           <Image
             style={styles.iconRight}
             resizeMode="contain"
@@ -35,13 +35,14 @@ const Header = ({
 export default React.memo(Header);
 
 import {StyleSheet} from 'react-native';
-import CartBadge from '../CartBadge';
+import CartBadge from '../Cart/CartBadge';
 const styles = StyleSheet.create({
   container: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    zIndex: 1,
   },
   text: {
     fontSize: 20,

@@ -1,6 +1,6 @@
 import Carousel from '../AnimatedCarousel';
 import {memo, useContext} from 'react';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../global';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../MyGlobal';
 import {ScrollContext} from '../../screens/Home';
 import SlideBig from './SlideBig';
 

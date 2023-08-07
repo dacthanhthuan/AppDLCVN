@@ -1,151 +1,63 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  ToastAndroid,
-} from 'react-native';
+import {SafeAreaView, View, Text, FlatList, ToastAndroid} from 'react-native';
 import styles from './styles';
-import ProductCart from '../../component/ProductCart';
-import Checkbox from '../../component/Checkbox';
+import ProductCart from '../../component/Cart/ProductCart';
 import Button from '../../component/Button';
-import {Swipeable} from 'react-native-gesture-handler';
 import Header from '../../component/Header';
-import {formatPoint, formatPrice} from '../../global';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  addProduct2Cart,
-  changeProductQuantity,
-  rmProductFromCart,
-} from '../../redux/actions/cartActions';
+import {formatPoint, formatPrice, useIsReady} from '../../MyGlobal';
+import {useSelector} from 'react-redux';
 import CartEmpty from '../CartEmpty';
-
-const Cart = ({navigation, route}) => {
-  const dispatch = useDispatch();
-  const productData = useSelector(state => state.cart.data);
+import {
+  AllCheckProvider,
+  useAllCheck,
+} from '../../component/Cart/AllCheckBoxGroup/context';
+import {useNavigation} from '@react-navigation/native';
+import AllCheckBox from '../../component/Cart/AllCheckBoxGroup/AllCheckBox';
+import LoadingOverlay from '../../component/LoadingOverlay';
+// Vấn đề check-all box và hướng giải quyết: xem <AllCheckBoxGroup />
+/**
+ * ** Ngoài ra, còn có thể sử dụng OnLayout nếu các component render ra có cùng kích thước
+ * để tối ưu hiệu suất.
+ */
+const Cart = () => {
+  const isReady = useIsReady();
+  const navigation = useNavigation();
+  const cartData = useSelector(state => state.cart.data);
   const isLogin = useSelector(state => state.user.login.status);
+  const allcheck = useAllCheck();
 
   const [totalprice, setTotalprice] = useState(0);
   const [totalpoint, setTotalpoint] = useState(0);
   const [productOrder, setProductOrder] = useState([]);
 
-  const [allCheck, setallCheck] = useState(false);
-  const [forceChange, setForceChange] = useState(false);
-  const [listCheck, setListCheck] = useState(
-    new Array(productData.length).fill(false),
-  );
-  const [check, setCheck] = useState(-1);
-
-  const onCheckboxAll = checked => {
-    if (check === -1 && checked === false) {
-      setListCheck(new Array(productData.length).fill(false));
-      setallCheck(false);
-    } else setallCheck(checked);
-  };
-
+  // price calculate
   useEffect(() => {
-    const check = listCheck.findIndex(item => item === false);
-    if ((!allCheck && check === -1) || (allCheck && check !== -1)) {
-      setForceChange(!forceChange);
-    }
-    setCheck(check);
-  }, [listCheck]);
-
-  useEffect(() => {
-    let prices = productData.map(
-      item => parseInt(item.product.price) * parseInt(item.quantity),
-    );
-
     let totalPrice = 0;
     let totalPoint = 0;
     let products = [];
 
-    listCheck.map((item, index) => {
-      if (item && productData[index]) {
-        if (productData[index].pType === 'money') {
-          totalPrice += prices[index];
-        } else {
-          totalPoint += prices[index];
-        }
-        products.push(productData[index]);
+    allcheck.checkboxs.map(unique => {
+      let product = cartData.at(unique);
+      products.push(product);
+      if (product.pType === 'point') {
+        totalPoint +=
+          parseInt(product.product.price) * parseInt(product.quantity);
+      } else {
+        totalPrice +=
+          parseInt(product.product.price) * parseInt(product.quantity);
       }
     });
 
     setTotalprice(totalPrice);
     setTotalpoint(totalPoint);
     setProductOrder(products);
-  }, [productData, listCheck]);
+  }, [allcheck.checkboxs]);
 
-  const clearCard = (productId, type) => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          dispatch(
-            rmProductFromCart({
-              productId: productId,
-              quantity: 0,
-              pType: type,
-            }),
-          );
-        }}
-        style={{alignItems: 'center', justifyContent: 'center', padding: 12}}>
-        <Image
-          style={{width: 22, height: 24}}
-          resizeMode="contain"
-          source={require('../../assets/clearCart.png')}
-        />
-      </TouchableOpacity>
-    );
-  };
+  if (!isReady) {
+    return <LoadingOverlay />;
+  }
 
-  const RenderItem = ({item, index}) => {
-    return (
-      <Swipeable
-        renderRightActions={() =>
-          clearCard(item?.product.product_id, item.pType)
-        }>
-        <ProductCart
-          onQtyChange={qty => {
-            if (qty < 1) {
-              dispatch(
-                rmProductFromCart({
-                  productId: item.product.product_id,
-                  quantity: 0,
-                  pType: item?.pType,
-                }),
-              );
-            } else {
-              dispatch(
-                changeProductQuantity({
-                  productId: item.product.product_id,
-                  quantity: qty,
-                  pType: item?.pType,
-                }),
-              );
-            }
-          }}
-          sl={item.quantity}
-          onChecked={value => {
-            listCheck[index] = value;
-            setListCheck(list => [...listCheck]);
-          }}
-          title={item?.product.product_name}
-          price={
-            item?.pType === 'point'
-              ? formatPoint(item?.product.price)
-              : formatPrice(item?.product.price)
-          }
-          image={item?.source || {uri: item?.product.img_1}}
-          allCheck={allCheck ? allCheck : listCheck[index]}
-        />
-      </Swipeable>
-    );
-  };
-
-  return productData.length === 0 ? (
+  return cartData.length === 0 ? (
     <CartEmpty />
   ) : (
     <SafeAreaView style={styles.container}>
@@ -158,10 +70,17 @@ const Cart = ({navigation, route}) => {
       />
 
       <FlatList
-        data={productData}
+        data={cartData}
         style={{marginTop: 35}}
         renderItem={RenderItem}
         removeClippedSubviews
+        showsVerticalScrollIndicator={false}
+        getItemLayout={(_, index) => {
+          return {length: 80, offset: index * 80, index};
+        }}
+        initialNumToRender={6}
+        windowSize={11}
+        keyExtractor={(item, index) => item.product.product_id + index}
       />
 
       <View
@@ -171,11 +90,8 @@ const Cart = ({navigation, route}) => {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <Checkbox
-          onChecked={onCheckboxAll}
-          text={'Chọn tất cả'}
-          forceChangeState={forceChange}
-        />
+        <AllCheckBox dataLength={cartData.length} text={'Chọn tất cả'} />
+
         <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
           <Text style={{fontSize: 13, color: '#000000'}}>Tổng giá bán</Text>
           <Text
@@ -216,4 +132,16 @@ const Cart = ({navigation, route}) => {
   );
 };
 
-export default React.memo(Cart);
+function RenderItem({item, index}) {
+  return <ProductCart item={item} unique={index} />;
+}
+
+function WrapperCart() {
+  return (
+    <AllCheckProvider>
+      <Cart />
+    </AllCheckProvider>
+  );
+}
+
+export default React.memo(WrapperCart);

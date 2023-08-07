@@ -2,7 +2,16 @@ import React from 'react';
 import {View, TextInput, Image, TouchableOpacity} from 'react-native';
 import styles from './styles';
 
-const Input = ({placeholder, value, onChangeText, onEndEditing, focus}) => {
+const Input = ({
+  placeholder,
+  value,
+  onChangeText,
+  onEndEditing,
+  onSubmitEditing,
+  focus,
+  clearTextOnFocus,
+  onFocus,
+}) => {
   return (
     <View style={styles.container}>
       <TextInput
@@ -13,8 +22,12 @@ const Input = ({placeholder, value, onChangeText, onEndEditing, focus}) => {
         value={value}
         autoFocus={focus}
         onEndEditing={onEndEditing}
-        enterKeyHint={'search'}></TextInput>
-      <TouchableOpacity>
+        onSubmitEditing={onSubmitEditing}
+        enterKeyHint={'search'}
+        clearTextOnFocus={clearTextOnFocus}
+        onFocus={onFocus}
+      />
+      <TouchableOpacity onPress={onSubmitEditing}>
         <Image
           style={styles.icon}
           source={require('../../assets/Home/ei_search.png')}

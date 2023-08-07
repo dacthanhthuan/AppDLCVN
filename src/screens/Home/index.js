@@ -41,7 +41,7 @@ import Header from '../../component/Home/HeaderTitle/HeaderTitle';
 import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 import CarouselSlideSmall from '../../component/Home/CarouselSlideSmall';
-import {WINDOW_HEIGHT, modifyData} from '../../global';
+import {WINDOW_HEIGHT, modifyData} from '../../MyGlobal';
 import {HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT} from './styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -55,10 +55,8 @@ import HomeSkeleton from '../../component/Home/HomeSkeleton';
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
 import {PRODUCT_LIST} from '../../redux/actions/types';
 import ThemeListHeaderComponent from '../../component/Home/ThemeListHeaderComponent';
-import {
-  addProduct2Cart,
-  mergeProductData,
-} from '../../redux/actions/cartActions';
+import {mergeProductData} from '../../redux/actions/cartActions';
+import {mergeSearch} from '../../redux/actions/searchRecentActions';
 
 export const ScrollContext = createContext(false);
 
@@ -97,11 +95,21 @@ const Home = () => {
       .catch(err => {});
   };
 
+  // get search recent data from local and dispatch redux
+  const getSearchDataFromLocal = async () => {
+    try {
+      const sData = await getData(LOCALSTORAGE.search_recent);
+      dispatch(mergeSearch(sData.data));
+    } catch (error) {}
+  };
+
   // Initial rendered of app
   useEffect(() => {
     // get data from local and dispatch to redux
     getUserDatafromLocal();
     getCartDataFromLocal();
+    getSearchDataFromLocal();
+
     // start call api to get new domain and apikey
     dispatch(clientInitialApiStart);
     // hide splash screen and set color for status bar
