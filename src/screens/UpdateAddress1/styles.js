@@ -17,6 +17,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
+
+  error: {
+    color: 'red',
+    fontSize: 15,
+    paddingVertical: 15,
+  },
 });
 
 export default styles;

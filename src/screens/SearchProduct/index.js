@@ -7,6 +7,8 @@ import Product from '../../component/Home/Product';
 import {WINDOW_WIDTH, nomarlizeVietNamese} from '../../MyGlobal';
 import {useSelector} from 'react-redux';
 import LoadingOverlay from '../../component/LoadingOverlay';
+import LottieView from 'lottie-react-native';
+import assets from '../../assets';
 
 const SearchProduct = ({navigation, route}) => {
   const productData = useSelector(state => state.product.data);
@@ -98,11 +100,12 @@ const SearchProduct = ({navigation, route}) => {
         keyExtractor={item => String(item.unique_id)}
         ListHeaderComponent={<View style={{marginTop: 20}}></View>}
         ListEmptyComponent={
-          <>
-            <Text style={{textAlign: 'center'}}>
-              Không có sản phẩm phù hợp.
-            </Text>
-          </>
+          <LottieView
+            style={{width: 250, height: 250, alignSelf: 'center'}}
+            source={assets.LottieAnimation.not_found}
+            loop
+            autoPlay
+          />
         }
         renderItem={({item}) => <Product item={item} />}
       />

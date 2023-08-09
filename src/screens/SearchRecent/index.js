@@ -98,6 +98,7 @@ const SearchRecent = ({navigation}) => {
               removeSearch(item);
             }}
             onPress={() => {
+              addSearch(item);
               navigation.navigate('SearchProduct', {text: item});
             }}
           />

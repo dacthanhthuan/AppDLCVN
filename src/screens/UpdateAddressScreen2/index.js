@@ -1,51 +1,72 @@
 import {useState, useEffect} from 'react';
-import {View, StatusBar, Text} from 'react-native';
+import {View, Text, ToastAndroid} from 'react-native';
 import Header from '../../component/Header';
 import styles from './styles';
 import CheckBoxGroup from '../../component/UpdateAddress2/CustomCheckBoxGroup';
-import SplashScreen from 'react-native-splash-screen';
-import RadioButton from '../../component/RadioButton';
 import {fetchData, button} from './data';
-import ChooseItem from '../../component/UpdateAddress2/ChooseItem';
+import {useDispatch, useSelector} from 'react-redux';
+import {locationListCityStart} from '../../redux/actions/locationActions';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {
+  AddressCheckBoxProvider,
+  useAddressCheckBox,
+} from '../../component/UpdateAddress2/AddressCheckBox/context';
+import CustomAddressList from '../../component/UpdateAddress2/CustomAddressList';
+import Button from '../../component/Button';
 
 const left = require('../../assets/UpdateAddress/Arrow1.png');
 
-const UpdateAddress2 = ({navigation}) => {
-  const [data, setData] = useState([]);
-  const [title, setTitle] = useState('');
-  const [buttonSelect, setButtonSelect] = useState();
-  const [isFetched, setisFetched] = useState(false);
+const UpdateAddress2Main = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {root_screen, data} = route.params;
 
-  const selectedItem = item => {
-    switch (item.type) {
-      case 'province':
-        button[0] = {...item, value: 'provinces', title: item.name};
-        button[1] = {value: 'districts', title: 'Quận/Huyện'};
-        button[2] = {value: 'wards', title: 'Phường/Xã'};
-        setisFetched(!isFetched);
-        return;
-      case 'district':
-        button[1] = {...item, value: 'districts', title: item.name};
-        button[2] = {value: 'wards', title: 'Phường/Xã'};
-        setisFetched(!isFetched);
-        return;
-      case 'ward':
-        button[2] = {...item, value: 'wards', title: item.name};
-        setisFetched(!isFetched);
-        return;
+  const [title, setTitle] = useState('Tỉnh/Thành phố');
+  const addressCheckbox = useAddressCheckBox();
+
+  const session_token = useSelector(state => state.user.session_token);
+  const location = useSelector(state => state.location);
+
+  useEffect(() => {
+    if (location.city.length == 0) {
+      dispatch(locationListCityStart(session_token));
+    }
+  }, []);
+
+  const onConfirmChange = () => {
+    if (
+      (addressCheckbox.city.id &&
+        addressCheckbox.district.id &&
+        addressCheckbox.ward.id) ||
+      addressCheckbox.district.id == '769'
+    ) {
+      navigation.navigate(root_screen, {
+        address: {
+          city: addressCheckbox.city,
+          district: addressCheckbox.district,
+          ward: addressCheckbox.ward,
+        },
+        data: data,
+      });
+    } else {
+      ToastAndroid.show('Vui lòng chọn địa chỉ', ToastAndroid.LONG);
     }
   };
 
   useEffect(() => {
-    fetchData(buttonSelect).then(res => {
-      setData(res);
-    });
-    buttonSelect?.value === 'provinces'
-      ? setTitle('Tỉnh/Thành phố')
-      : buttonSelect?.value === 'districts'
-      ? setTitle('Quận/Huyện')
-      : setTitle('Phường/Xã');
-  }, [buttonSelect]);
+    switch (addressCheckbox.buttonSelect) {
+      case 'city':
+        setTitle('Tỉnh/Thành phố');
+        break;
+      case 'district':
+        setTitle('Quận/Huyện');
+        break;
+      case 'ward':
+        setTitle('Phường/Xã');
+        break;
+    }
+  }, [addressCheckbox.buttonSelect]);
 
   return (
     <View style={styles.container}>
@@ -55,29 +76,22 @@ const UpdateAddress2 = ({navigation}) => {
         iconLeft={left}
         onPressLeft={() => navigation.goBack()}
       />
+
       <Text style={styles.title}>Chọn khu vực</Text>
-      <CheckBoxGroup
-        data={button}
-        selected={value => {
-          setButtonSelect(value);
-        }}
-        checkNum={1}
-        forceRender={isFetched}
-      />
+      <CheckBoxGroup />
       <Text style={styles.title}>{title}</Text>
-      <RadioButton
-        data={data}
-        renderButton={({item, isSelected}) => (
-          <ChooseItem isSelected={isSelected} item={item} />
-        )}
-        activeContButtonStyle={styles.activeText}
-        inActiveContButtonStyle={styles.inActiveText}
-        buttonStyle={styles.buttonText}
-        containerStyle={styles.containerText}
-        onSelect={selectedItem}
-      />
+      <CustomAddressList />
+      <Button text={'Xác nhận'} onPress={onConfirmChange} />
     </View>
   );
 };
+
+function UpdateAddress2() {
+  return (
+    <AddressCheckBoxProvider>
+      <UpdateAddress2Main />
+    </AddressCheckBoxProvider>
+  );
+}
 
 export default UpdateAddress2;

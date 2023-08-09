@@ -25,6 +25,7 @@ import {LOCALSTORAGE} from '../../storage/direct';
 import LoginSettingOverlay from '../../component/LoginSettingOverlay';
 import {TabActions} from '@react-navigation/native';
 import {removeAllCartProduct} from '../../redux/actions/cartActions';
+import {addressBookClear} from '../../redux/actions/addressBookActions';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
@@ -167,6 +168,7 @@ const ProfileAdmin = ({navigation}) => {
         <InfoCard
           image={require('../../assets/Rectangle295.png')}
           text="Quản lý địa chỉ"
+          onPress={() => navigation.navigate('CustomerInformation')}
         />
         <InfoCard
           image={require('../../assets/Rectangle298.png')}
@@ -200,9 +202,11 @@ const ProfileAdmin = ({navigation}) => {
           image={require('../../assets/Rectangle270.png')}
           text="Đăng xuất"
           onPress={() => {
-            //clear user and cart data (both local and redux store)
+            // clear user and cart data (both local and redux store)
             dispatch(clientClearUserData);
             dispatch(removeAllCartProduct);
+            // clear address book data
+            dispatch(addressBookClear);
             removeData(LOCALSTORAGE.user);
             removeData(LOCALSTORAGE.cart);
             navigation.dispatch(TabActions.jumpTo('Home'));

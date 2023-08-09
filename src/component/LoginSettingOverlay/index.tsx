@@ -48,9 +48,12 @@ export default function LoginSettingOverlay({
       // get user login option
       let login_option = await getData(LOCALSTORAGE.biometric_login_option);
 
+      // if login_option == null then set it is false
+      if (login_option == null) login_option = 'false';
+
       // check user login option vs current option, if they different, ask user verification password
       // otherwise, run onConfirm() function
-      if (login_option !== checkbox.toString()) {
+      if (login_option != checkbox.toString()) {
         setTogglePwConfirm(true);
       } else {
         onConfirm();

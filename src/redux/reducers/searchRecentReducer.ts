@@ -17,7 +17,23 @@ export default function searchRecentReducer(
 ) {
   switch (action.type) {
     case SEARCH_RECENT.ADD: {
-      const searchData = state.data.slice(0, 9);
+      let isExist = -1;
+      let searchData = state.data.slice(0, 9);
+
+      searchData.map((item, index) => {
+        if (item === action.payload) {
+          isExist = index;
+        }
+      });
+
+      // if not exist in search data then
+      if (isExist !== -1) {
+        searchData = [
+          ...searchData.slice(0, isExist),
+          ...searchData.slice(isExist + 1, 9),
+        ];
+      }
+
       searchData.unshift(action.payload);
 
       storeData(LOCALSTORAGE.search_recent, {

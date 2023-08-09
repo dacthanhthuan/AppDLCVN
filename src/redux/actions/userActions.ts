@@ -1,4 +1,4 @@
-import {LOGIN, REGISTER, CLEAR} from './types';
+import {LOGIN, REGISTER, CLEAR, GET_DETAIL} from './types';
 
 //Login actions
 export const clientLoginStart = (mobile: string, password: string) => {
@@ -58,4 +58,15 @@ export const clientRegisterFail = (data: any) => ({
 //Clear user data action
 export const clientClearUserData = {
   type: CLEAR.USER,
+};
+
+// get detail user information
+export const clientGetDetailUserStart = (token: string) => {
+  const form = new FormData();
+  form.append('token', token);
+
+  return {
+    type: GET_DETAIL.USER,
+    payload: form,
+  };
 };

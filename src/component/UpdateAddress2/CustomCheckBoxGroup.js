@@ -1,19 +1,74 @@
 import RadioButton from '../RadioButton';
 import Checkbox from '../Checkbox';
 import {StyleSheet} from 'react-native';
-import {} from 'react';
+import {useCallback, useEffect, memo} from 'react';
+import {
+  AddressCheckBoxActions,
+  useAddressCheckBox,
+  useAddressCheckBoxDispatch,
+} from './AddressCheckBox/context';
+import CustomRadioButton from './CustomRadioButton';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  locationListDistrictEnd,
+  locationListDistrictStart,
+  locationListWardEnd,
+  locationListWardStart,
+} from '../../redux/actions/locationActions';
 
-const CheckBoxGroup = ({data, selected, checkNum, forceRender}) => {
+const CheckBoxGroup = () => {
+  const addressCheckbox = useAddressCheckBox();
+  const addressDispatch = useAddressCheckBoxDispatch();
+  const session_token = useSelector(state => state.user.session_token);
+  const dispatch = useDispatch();
+
+  const onCheckboxSelect = useCallback(
+    select => {
+      addressDispatch(AddressCheckBoxActions.selectButton(select?.subdivision));
+
+      switch (select.subdivision) {
+        // district
+        case 'district': {
+          if (addressCheckbox.city.id) {
+            dispatch(
+              locationListDistrictStart(session_token, addressCheckbox.city.id),
+            );
+          } else {
+            dispatch(locationListDistrictEnd([]));
+          }
+          break;
+        }
+
+        // ward
+        case 'ward': {
+          if (addressCheckbox.district.id) {
+            dispatch(
+              locationListWardStart(session_token, addressCheckbox.district.id),
+            );
+          } else {
+            dispatch(locationListWardEnd([]));
+          }
+          break;
+        }
+      }
+    },
+    [addressCheckbox.city, addressCheckbox.district],
+  );
+
   return (
-    <RadioButton
+    <CustomRadioButton
       containerStyle={styles.container}
-      data={data}
+      data={[
+        addressCheckbox.city,
+        addressCheckbox.district,
+        addressCheckbox.ward,
+      ]}
       renderButton={({item, isSelected}) => {
         return (
           <Checkbox
             inactiveStyle={styles.checkbox}
             containerStyle={styles.checkboxview}
-            text={item.title}
+            text={item.name}
             check={isSelected}
             disable={true}
           />
@@ -21,18 +76,17 @@ const CheckBoxGroup = ({data, selected, checkNum, forceRender}) => {
       }}
       buttonStyle={styles.buttonContainer}
       activeContButtonStyle={styles.activeButton}
-      checked={checkNum}
-      extraData={forceRender}
-      onSelect={value => selected(value)}
+      onSelect={onCheckboxSelect}
     />
   );
 };
 
-export default CheckBoxGroup;
+export default memo(CheckBoxGroup);
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 5,
+    height: 200,
   },
 
   checkbox: {

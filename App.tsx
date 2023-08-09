@@ -39,7 +39,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import Home from './src/screens/Home';
-import UpdateAddress2 from './src/screens/UpdateAddressScreen2';
+import UpdateAddressMain from './src/screens/UpdateAddressScreen2';
 import Warehouse from './src/screens/Warehouse';
 import Cart from './src/screens/Cart';
 import 'react-native-gesture-handler';
@@ -118,7 +118,7 @@ const App = () => {
           <Stack.Screen name="Walk" component={Walk} />
           <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
           <Stack.Screen name="MainTab" component={MainTab} />
-          <Stack.Screen name="UpdateAddress2" component={UpdateAddress2} />
+          <Stack.Screen name="UpdateAddress2" component={UpdateAddressMain} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

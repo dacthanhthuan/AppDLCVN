@@ -39,10 +39,10 @@ const Cart = () => {
     allcheck.checkboxs.map(unique => {
       let product = cartData.at(unique);
       products.push(product);
-      if (product.pType === 'point') {
+      if (product?.pType === 'point') {
         totalPoint +=
           parseInt(product.product.price) * parseInt(product.quantity);
-      } else {
+      } else if (product?.pType === 'money') {
         totalPrice +=
           parseInt(product.product.price) * parseInt(product.quantity);
       }

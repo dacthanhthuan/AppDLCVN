@@ -16,7 +16,7 @@ import {memo, useState, useEffect} from 'react';
  * @activeContButtonStyle (ViewStyle) style of container when button active
  * @inActiveContButtonStyle (ViewStyle) Style of container when butotn inactive
  */
-const RadioButton = ({
+const CustomRadioButton = ({
   data,
   renderButton,
   horizontal,
@@ -30,17 +30,11 @@ const RadioButton = ({
   initialNumtoRender,
   maxToRenderPerBatch,
   windowSize,
-}) => {
-  const [select, setSelect] = useState(
-    checked ? data[checked - 1]?.value : data[0]?.value,
-  );
+}: any) => {
+  const [select, setSelect] = useState(checked ? checked - 1 : 0);
 
   useEffect(() => {
-    onSelect
-      ? data.forEach(item => {
-          item.value === select ? onSelect(item) : null;
-        })
-      : null;
+    onSelect ? onSelect(data[select]) : null;
   }, [select]);
 
   return (
@@ -50,22 +44,18 @@ const RadioButton = ({
         horizontal ? {flexDirection: 'row'} : {flexDirection: 'column'},
       ]}
       data={data}
-      renderItem={({item}) => (
+      keyExtractor={(item, index) => item.type + index + new Date()}
+      renderItem={({item, index}) => (
         <Pressable
-          key={item.value}
           style={({pressed}) => [
             pressed ? {opacity: 0.3} : null,
             buttonStyle,
-            select === item.value
-              ? activeContButtonStyle
-              : inActiveContButtonStyle,
+            select === index ? activeContButtonStyle : inActiveContButtonStyle,
           ]}
-          onPress={() => setSelect(item.value)}>
-          {renderButton ? (
-            renderButton({item, isSelected: select === item.value})
-          ) : (
-            <Text>{item.title}</Text>
-          )}
+          onPress={() => setSelect(index)}>
+          {renderButton
+            ? renderButton({item, isSelected: select === index})
+            : null}
         </Pressable>
       )}
       removeClippedSubviews={true}
@@ -77,4 +67,4 @@ const RadioButton = ({
   );
 };
 
-export default memo(RadioButton);
+export default memo(CustomRadioButton);

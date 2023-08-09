@@ -1,4 +1,4 @@
-import {LOGIN, REGISTER, CLEAR} from '../actions/types';
+import {LOGIN, REGISTER, CLEAR, GET_DETAIL} from '../actions/types';
 import {AnyAction} from 'redux';
 
 const initialState = {
@@ -16,6 +16,7 @@ const initialState = {
 export default function UserReducer(state = initialState, action: AnyAction) {
   switch (action.type) {
     case LOGIN.START:
+    case GET_DETAIL.USER:
     case REGISTER.START:
       return {
         ...state,

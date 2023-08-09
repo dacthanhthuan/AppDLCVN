@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     marginVertical: '3%',
     paddingHorizontal: 18,
     fontSize: 16,
+    height: 45,
   },
 
   iconSearch: {
