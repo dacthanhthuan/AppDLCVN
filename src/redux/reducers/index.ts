@@ -7,6 +7,7 @@ import CartReducer from './cartReducer';
 import searchRecentReducer from './searchRecentReducer';
 import addressBookReducer from './addressBookReducer';
 import locationReducer from './locationReducer';
+import orderReducer from './orderReducer';
 
 const rootReducer = combineReducers({
   app: AppReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   search: searchRecentReducer,
   addressBook: addressBookReducer,
   location: locationReducer,
+  order: orderReducer,
 });
 
 export default rootReducer;

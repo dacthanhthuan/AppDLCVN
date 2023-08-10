@@ -38,6 +38,7 @@ export default function ProductListReducer(
         total_record: action.payload.data.total_record,
         current_record: state.current_record + action.payload.data.l.length,
         nextpage: state.nextpage + 1,
+        message: '',
       };
     case PRODUCT_LIST.FAIL:
       return {

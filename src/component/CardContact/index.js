@@ -7,7 +7,7 @@ const CardContact = ({name, phone, onPress}) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.name}>{name}</Text>
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} hitSlop={10}>
           <Text style={{fontSize: 13, color: '#005AA9'}}>Sửa</Text>
         </TouchableOpacity>
       </View>

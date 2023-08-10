@@ -97,6 +97,20 @@ const Style_Detail = StyleSheet.create({
     alignSelf: 'center',
     zIndex: 0,
   },
+
+  stroke_line: {
+    marginTop: 8,
+    color: '#005AA9',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textDecorationLine: 'line-through',
+  },
+
+  decrementPrice: {
+    color: 'red',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 });
 
 export default Style_Detail;

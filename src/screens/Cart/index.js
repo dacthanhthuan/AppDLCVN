@@ -27,31 +27,46 @@ const Cart = () => {
   const allcheck = useAllCheck();
 
   const [totalprice, setTotalprice] = useState(0);
+  const [totalDecrementprice, setTotalDecrementprice] = useState(0);
   const [totalpoint, setTotalpoint] = useState(0);
+  const [totalDecrementpoint, setTotalDecrementpoint] = useState(0);
   const [productOrder, setProductOrder] = useState([]);
 
   // price calculate
   useEffect(() => {
     let totalPrice = 0;
+    let totalDecrementPrice = 0;
     let totalPoint = 0;
+    let totalDecrementPoint = 0;
     let products = [];
 
     allcheck.checkboxs.map(unique => {
       let product = cartData.at(unique);
+      let decrement = product?.product?.decrement;
       products.push(product);
       if (product?.pType === 'point') {
         totalPoint +=
           parseInt(product.product.price) * parseInt(product.quantity);
+        totalDecrementPoint +=
+          parseInt(product.product.price) *
+          parseInt(product.quantity) *
+          ((100 - parseInt(decrement)) / 100);
       } else if (product?.pType === 'money') {
         totalPrice +=
           parseInt(product.product.price) * parseInt(product.quantity);
+        totalDecrementPrice +=
+          parseInt(product.product.price) *
+          parseInt(product.quantity) *
+          ((100 - parseInt(decrement)) / 100);
       }
     });
 
     setTotalprice(totalPrice);
+    setTotalDecrementprice(totalDecrementPrice);
     setTotalpoint(totalPoint);
+    setTotalDecrementpoint(totalDecrementPoint);
     setProductOrder(products);
-  }, [allcheck.checkboxs]);
+  }, [allcheck.checkboxs, cartData]);
 
   if (!isReady) {
     return <LoadingOverlay />;
@@ -100,18 +115,18 @@ const Cart = () => {
               color: '#000000',
               fontWeight: '500',
             }}>
-            {formatPrice(totalprice)}
+            {formatPrice(totalDecrementprice + totalDecrementpoint)}
           </Text>
-          {totalpoint > 0 ? (
-            <Text
-              style={{
-                fontSize: 16,
-                color: 'green',
-                fontWeight: '500',
-              }}>
-              {formatPoint(totalpoint)}
-            </Text>
-          ) : null}
+
+          <Text style={{fontSize: 13, color: '#000000'}}>hoặc</Text>
+          <Text
+            style={{
+              fontSize: 16,
+              color: 'green',
+              fontWeight: '500',
+            }}>
+            {formatPoint(totalDecrementprice + totalDecrementpoint)}
+          </Text>
         </View>
       </View>
       <Button
@@ -122,6 +137,8 @@ const Cart = () => {
                 products: productOrder,
                 totalPrices: totalprice,
                 totalPoint: totalpoint,
+                totalDecrementPrices: totalDecrementprice,
+                totalDecrementPoint: totalDecrementpoint,
               })
             : productOrder.length == 0
             ? ToastAndroid.show('Chưa chọn mặt hàng', ToastAndroid.LONG)

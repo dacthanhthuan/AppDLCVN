@@ -50,6 +50,7 @@ export default function locationReducer(
         ...state,
         loading: false,
         city: action.payload,
+        message: undefined,
       };
     }
     case LOCATION.LIST_WARD_END: {
@@ -57,6 +58,7 @@ export default function locationReducer(
         ...state,
         loading: false,
         ward: action.payload,
+        message: undefined,
       };
     }
     case LOCATION.LIST_DISTRICT_END: {
@@ -64,6 +66,7 @@ export default function locationReducer(
         ...state,
         loading: false,
         district: action.payload,
+        message: undefined,
       };
     }
 

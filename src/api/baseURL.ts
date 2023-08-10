@@ -24,6 +24,7 @@ export const list_all_city_url = '/location/city?apikey=';
 export const list_district_by_city_id_url = '/location/district?apikey=';
 export const list_ward_by_district_id_url = '/location/ward?apikey=';
 export const detail_user_url = '/client_info/detail?apikey=';
+export const new_order_url = '/client_order/checkout?apikey=';
 
 export default {
   base_url,
@@ -38,4 +39,5 @@ export default {
   list_district_by_city_id_url,
   list_ward_by_district_id_url,
   detail_user_url,
+  new_order_url,
 };

@@ -45,6 +45,7 @@ import assets from '../../assets';
 import LottieView from 'lottie-react-native';
 import {GestureDetector, Gesture} from 'react-native-gesture-handler';
 import LoadingOverlay from '../../component/LoadingOverlay';
+import TextViewRow from '../../component/TextViewRow';
 const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 const RenderImage = ({item}) => {
@@ -69,6 +70,11 @@ const DetailProduct = ({route}) => {
     type === 'point'
       ? formatPoint(product?.price)
       : formatPrice(product?.price);
+  // decrement and decrement price
+  const decrement = product.decrement != 0 ? product.decrement : undefined;
+  const priceDecrement = formatPrice(
+    parseInt(product?.price) * ((100 - parseInt(decrement)) / 100),
+  );
   const commission = formatPrice(product?.commission_vnd); // commission of product
   const imageData = []; // image data
 
@@ -300,20 +306,36 @@ const DetailProduct = ({route}) => {
         </View>
         <View style={styles.container_2}>
           <Text style={styles.nameproduct}>{product.product_name}</Text>
-          <Text style={styles.price_1}>{price}</Text>
+          <Text style={[styles.price_1, decrement ? styles.stroke_line : null]}>
+            {price}
+          </Text>
+          {decrement ? (
+            <Text style={styles.decrementPrice}>{priceDecrement}</Text>
+          ) : null}
           <Text style={styles.text_1}>Giá nhà cung cấp</Text>
         </View>
         <Line />
         <Text style={styles.title_1}>Thông tin sản phẩm</Text>
-        <Information
-          text_1={'Giá nhà cung cấp:'}
-          text_3={'Hoa hồng:'}
-          price_1={price}
-          price_3={commission}
-          style_p3={{
-            color: 'green',
-          }}
+        <TextViewRow
+          title={'Giá nhà cung cấp:'}
+          price={price}
+          priceStyle={decrement ? {textDecorationLine: 'line-through'} : null}
         />
+        {decrement ? (
+          <>
+            <TextViewRow
+              title={'Sale:'}
+              price={'-' + decrement + '%'}
+              priceStyle={{color: 'red', fontSize: 15, fontWeight: '500'}}
+            />
+            <TextViewRow
+              title={'Giá đã giảm:'}
+              price={priceDecrement}
+              priceStyle={{color: 'red', fontWeight: '500'}}
+            />
+          </>
+        ) : null}
+        <TextViewRow title="Hoa hồng" point={commission} />
         <View style={styles.container_3}>
           <Text style={styles.title_2}>Giới thiệu sản phẩm</Text>
           <Text style={styles.text_1}>{product.short_description}</Text>

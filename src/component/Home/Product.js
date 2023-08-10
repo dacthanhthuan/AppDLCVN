@@ -9,7 +9,11 @@ const Product = ({item}) => {
   const goToDetailProduct = () => {
     navigation.navigate('DetailProduct', {product: item, type: 'money'});
   };
+  const decrement = item.decrement != 0 ? item.decrement : undefined;
   const price = formatPrice(item?.price);
+  const priceDecrement = formatPrice(
+    parseInt(item?.price) * ((100 - parseInt(decrement)) / 100),
+  );
   const commission = formatPrice(item?.commission_vnd);
 
   return (
@@ -20,6 +24,9 @@ const Product = ({item}) => {
           styles.renderPressable,
           pressed ? {opacity: 0.8} : null,
         ]}>
+        {decrement ? (
+          <Text style={styles.decrementBadge}>-{decrement}%</Text>
+        ) : null}
         <Image
           source={{uri: item?.img_1}}
           style={[styles.renderImage]}
@@ -32,11 +39,20 @@ const Product = ({item}) => {
           {item?.product_id}
         </Text>
         <Text style={styles.renderProductId} numberOfLines={1}>
-          Giá bán: <Text style={styles.renderPrice}>{price}</Text>
+          Giá bán:{' '}
+          <Text
+            style={[styles.renderPrice, decrement ? styles.stroke_text : null]}>
+            {price}
+          </Text>
         </Text>
-        <Text style={styles.renderProductId} numberOfLines={1}>
+        {decrement ? (
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Sale : <Text style={styles.renderDecrement}>{priceDecrement}</Text>
+          </Text>
+        ) : null}
+        {/* <Text style={styles.renderProductId} numberOfLines={1}>
           Hoa hồng: <Text style={styles.renderCommission}>{commission}</Text>
-        </Text>
+        </Text> */}
       </Pressable>
     </View>
   );
@@ -95,5 +111,35 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#19A538',
     fontWeight: '500',
+  },
+
+  renderDecrement: {
+    fontSize: 15,
+    color: 'red',
+    fontWeight: '500',
+  },
+
+  stroke_text: {
+    textDecorationLine: 'line-through',
+    paddingVertical: '1%',
+    fontSize: 14,
+    paddingVertical: 8,
+    color: '#005AA9',
+    fontWeight: '500',
+  },
+
+  decrementBadge: {
+    width: 35,
+    height: 35,
+    backgroundColor: 'red',
+    color: 'white',
+    borderRadius: 20,
+    position: 'absolute',
+    right: 5,
+    top: 5,
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    zIndex: 1,
+    fontSize: 13,
   },
 });

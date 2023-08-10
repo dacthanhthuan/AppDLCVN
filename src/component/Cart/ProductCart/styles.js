@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    color: '#09355C',
+    color: '#005AA9',
     marginTop: 7,
     fontWeight: '500',
   },
@@ -77,6 +77,33 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginHorizontal: 4,
     paddingHorizontal: 3,
+  },
+  decrementBadge: {
+    width: 50,
+    backgroundColor: 'red',
+    color: 'white',
+    borderRadius: 5,
+    position: 'absolute',
+    right: 10,
+    top: 5,
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    zIndex: 1,
+    fontSize: 13,
+  },
+
+  stroke_line: {
+    fontSize: 12,
+    textDecorationLine: 'line-through',
+  },
+
+  decrementPrice: {
+    fontSize: 16,
+    color: 'red',
+    marginTop: 7,
+    fontWeight: '500',
+    maxWidth: 80,
+    flexWrap: 'wrap',
   },
 });
 

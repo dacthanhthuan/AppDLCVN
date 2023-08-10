@@ -10,11 +10,21 @@ import {
   rmProductFromCart,
 } from '../../../redux/actions/cartActions';
 import CheckBoxInFlatList from '../AllCheckBoxGroup/CheckBoxInFlatList';
+import {
+  useDispatchAllCheck,
+  AllCheckActions,
+} from '../AllCheckBoxGroup/context';
 
 const ProductCart = ({item, unique, debounceTime = 400}) => {
   const [qty, setQty] = useState(item?.quantity);
   const [initialRender, setInitialRender] = useState(true);
   const dispatch = useDispatch();
+  const allcheckDispatch = useDispatchAllCheck();
+
+  const decrement =
+    item.product.decrement != 0 ? item.product.decrement : undefined;
+  const decrementPrice =
+    parseInt(item.product.price) * ((100 - parseInt(decrement)) / 100);
 
   // set quantity if item change
   useEffect(() => {
@@ -35,6 +45,8 @@ const ProductCart = ({item, unique, debounceTime = 400}) => {
           pType: item?.pType,
         }),
       );
+
+      allcheckDispatch(AllCheckActions.Remove_Check_Box(unique));
     } else {
       quantityDebounceTimer = setTimeout(() => {
         dispatch(
@@ -68,22 +80,34 @@ const ProductCart = ({item, unique, debounceTime = 400}) => {
                 pType: item?.pType,
               }),
             );
+
+            allcheckDispatch(AllCheckActions.Remove_Check_Box(unique));
           }}
         />
       )}>
       <CheckBoxInFlatList unique={unique} />
       <View style={styles.rightContainer}>
+        {decrement ? (
+          <Text style={styles.decrementBadge}>-{decrement}%</Text>
+        ) : null}
         <Image style={styles.image} source={{uri: item?.product?.img_1}} />
         <View style={styles.rightCard}>
           <Text style={styles.title} numberOfLines={1}>
             {item?.product?.product_name}
           </Text>
           <View style={styles.rowPriceSL}>
-            <Text style={{color: '#005AA9', fontSize: 16}}>
+            <Text style={[styles.price, decrement ? styles.stroke_line : null]}>
               {item?.pType === 'point'
                 ? formatPoint(item?.product.price)
                 : formatPrice(item?.product.price)}
             </Text>
+            {decrement ? (
+              <Text style={styles.decrementPrice}>
+                {item?.pType === 'point'
+                  ? formatPoint(decrementPrice)
+                  : formatPrice(decrementPrice)}
+              </Text>
+            ) : null}
             <View style={styles.rowSL}>
               <Pressable
                 hitSlop={10}

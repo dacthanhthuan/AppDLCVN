@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Pressable, View, Text, Image } from "react-native";
-import styles from "./styles";
+import React, {useState, useEffect} from 'react';
+import {Pressable, View, Text, Image} from 'react-native';
+import styles from './styles';
 
-const Checkbox = ({ checked, onPress, check }) => {
+const Checkbox = ({checked, onPress, check}) => {
   const [isChecked, setChecked] = useState(checked);
 
   useEffect(() => {
@@ -22,7 +22,9 @@ const Checkbox = ({ checked, onPress, check }) => {
   }, [check]);
 
   return (
-    <Pressable onPress={onCheckboxPress} style={[styles.container, isChecked ? styles.checkedBox : {}]}>
+    <Pressable
+      onPress={onCheckboxPress}
+      style={[styles.container, isChecked ? styles.checkedBox : {}]}>
       {isChecked && <View style={styles.innerSquare} />}
     </Pressable>
   );
@@ -30,20 +32,36 @@ const Checkbox = ({ checked, onPress, check }) => {
 
 export default Checkbox;
 
-
-export const Checkbox_2 = ({ isSelected, onSelected, img, title, type, styleImg, styleTitle }) => {
+export const Checkbox_2 = ({
+  isSelected,
+  onSelected,
+  img,
+  title,
+  type,
+  styleImg,
+  styleTitle,
+  unique,
+}) => {
   return (
     <View style={styles.viewpayment}>
-      <View style={{ flexDirection: "row", flex: 1 }}>
+      <View style={{flexDirection: 'row', flex: 1}}>
         {img ? (
           <Image style={[styles.icon_2, styleImg]} source={img} />
         ) : (
-          <View style={styles.viewborder}><Text style={styles.text_3}>{type}</Text></View>
+          <View style={styles.viewborder}>
+            <Text style={styles.text_3}>{type}</Text>
+          </View>
         )}
         <Text style={[styles.text_4, styleTitle]}>{title}</Text>
       </View>
-      <Pressable onPress={() => onSelected(title)} style={[styles.container, isSelected === title ? styles.checkedBox : {}]}>
-        {isSelected === title ? <View style={styles.innerSquare} /> : null}
+      <Pressable
+        onPress={() => onSelected(unique)}
+        hitSlop={7}
+        style={[
+          styles.container,
+          isSelected === unique ? styles.checkedBox : {},
+        ]}>
+        {isSelected === unique ? <View style={styles.innerSquare} /> : null}
       </Pressable>
     </View>
   );

@@ -138,7 +138,6 @@ const AddAddress = () => {
             style={{fontSize: 15}}
             placeholderTextColor="grey"
             placeholder="Số nhà, tên đường"
-            multiline
             onChangeText={setAddress}
           />
         </View>

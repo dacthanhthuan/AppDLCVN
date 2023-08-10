@@ -4,17 +4,11 @@ import styles from './styles';
 import Checkbox from '../Checkbox';
 
 const CardAddress = ({numberAddress, address, onPress, isDefault = false}) => {
-  const [check, setCheck] = useState(isDefault);
-
-  const onPressCheck = () => {
-    setCheck(value => !value);
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Địa chỉ giao hàng</Text>
       <View style={styles.header}>
-        <Checkbox check={check} onPress={onPressCheck} />
+        <Checkbox check={isDefault} disable />
         <View
           style={{
             flex: 1,
@@ -22,9 +16,9 @@ const CardAddress = ({numberAddress, address, onPress, isDefault = false}) => {
             justifyContent: 'space-between',
           }}>
           <Text style={styles.numberAddress}>{numberAddress}</Text>
-          <TouchableOpacity onPress={onPress}>
+          {/* <TouchableOpacity onPress={onPress}>
             <Text style={{fontSize: 13, color: '#005AA9'}}>Sửa</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <Text style={styles.address}>{address}</Text>

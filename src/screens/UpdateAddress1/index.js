@@ -113,7 +113,10 @@ const UpdateAddress1 = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{flex: 1}}
+        contentContainerStyle={{padding: 16}}
+        showsVerticalScrollIndicator={false}>
         <Header
           iconLeft={require('../../assets/Arrow1.png')}
           text="Sửa địa chỉ"
@@ -173,7 +176,7 @@ const UpdateAddress1 = () => {
             style={{fontSize: 15}}
             placeholderTextColor="grey"
             placeholder="Số nhà, tên đường"
-            multiline
+            numberOfLines={2}
             value={address}
             onChangeText={setAddress}
           />

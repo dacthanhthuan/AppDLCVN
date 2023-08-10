@@ -81,3 +81,9 @@ export enum GET_DETAIL {
   USER = 'Get_Detail_User_Start',
   PRODUCT = 'Get_Detail_Product_Start',
 }
+
+export enum ORDER {
+  NEW_ORDER_START = 'New_Order_Start',
+  NEW_ORDER_END = 'New_Order_End',
+  NEW_ORDER_FAIL = 'New_Order_Fail',
+}

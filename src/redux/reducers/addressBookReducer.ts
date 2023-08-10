@@ -49,18 +49,21 @@ export default function addressBookReducer(
       return {
         ...state,
         newState: false,
+        message: undefined,
       };
     }
     case ADDRESS_BOOK.UPDATE_END: {
       return {
         ...state,
         updateState: false,
+        message: undefined,
       };
     }
     case ADDRESS_BOOK.SET_DEFAULT_END: {
       return {
         ...state,
         setDefaultState: false,
+        message: undefined,
       };
     }
     case ADDRESS_BOOK.LIST_ALL_END: {
@@ -68,6 +71,7 @@ export default function addressBookReducer(
         ...state,
         listLoading: false,
         data: action.payload,
+        message: undefined,
       };
     }
 
