@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
 
   flatlistContent: {
     alignSelf: 'center',
+    width: '94%',
   },
 
   rowHeader: {

@@ -21,25 +21,31 @@ import {removeAllCartProduct} from '../../redux/actions/cartActions';
 import {removeData} from '../../storage';
 import {LOCALSTORAGE} from '../../storage/direct';
 import {
-  ErrorActions,
-  ErrorType,
-  useErrorDispatch,
-} from '../../component/ErrorContext/context';
+  NotificationActions,
+  useNotificationDispatch,
+} from '../../component/NotificationContext/context';
+import {NotificationType} from '../../component/NotificationContext/types';
+import {riseNormalError} from '../../redux/actions/errorHandlerActions';
 
 const Payment = () => {
   const lineWidth = useWindowDimensions().width;
   const route = useRoute();
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const errorDispatch = useErrorDispatch();
+  const notification = useNotificationDispatch();
 
   const ship = route.params?.ship || {};
   const total = route.params?.total || 0;
+  const type = route.params?.type;
   const session_token = useSelector(state => state.user.session_token);
   const newOrderState = useSelector(state => state.order.newOrderState);
   const orderMsg = useSelector(state => state.order.message);
+  const walletMain = useSelector(state => state.user.lWallet[0].amount);
+  const walletCashback = useSelector(state => state.user.lWallet[1].amount);
 
-  const [payment_type, setPaymentType] = useState('wallet');
+  const [payment_type, setPaymentType] = useState(
+    type == 'wallet' ? 'wallet' : 'cash_back',
+  );
   const [orderPress, setOrderPress] = useState(false);
 
   const handleTypeAddressPress = payment_type => {
@@ -47,7 +53,28 @@ const Payment = () => {
   };
 
   const onPaymentPress = () => {
-    if (payment_type != 'momo') {
+    if (payment_type == 'momo') {
+      dispatch(
+        riseNormalError({
+          duration: 2500,
+          message: 'Thanh toán bằng ví Momo hiện không hỗ trợ',
+        }),
+      );
+    } else if (payment_type == 'wallet' && walletMain - total < 0) {
+      dispatch(
+        riseNormalError({
+          duration: 3000,
+          message: 'Thực hiện không thành công, ví tiền của bạn không đủ',
+        }),
+      );
+    } else if (payment_type == 'cash_back' && walletCashback - total < 0) {
+      dispatch(
+        riseNormalError({
+          duration: 3000,
+          message: 'Thực hiện không thành công, ví điểm của bạn không đủ',
+        }),
+      );
+    } else {
       dispatch(
         newOrderStart({
           token: session_token,
@@ -65,14 +92,6 @@ const Payment = () => {
       );
 
       setOrderPress(true);
-    } else {
-      errorDispatch(
-        ErrorActions.rise({
-          duration: 2500,
-          error: 'Thanh toán bằng ví Momo hiện chưa hỗ trợ',
-          type: ErrorType.NORMAL,
-        }),
-      );
     }
   };
 
@@ -81,18 +100,17 @@ const Payment = () => {
       setOrderPress(false);
       dispatch(removeAllCartProduct);
       removeData(LOCALSTORAGE.cart);
-      navigation.navigate('SuccPayment');
-    }
-
-    if (!newOrderState && orderMsg && orderPress) {
-      setOrderPress(false);
-      errorDispatch(
-        ErrorActions.rise({
-          duration: 3000,
-          error: 'Thanh toán không thành công, ' + orderMsg,
-          type: ErrorType.NORMAL,
+      notification(
+        NotificationActions.rise({
+          data: {
+            message:
+              'Đặt hàng thành công, truy cập lịch sử đơn hàng để theo dõi',
+          },
+          duration: 4000,
+          type: NotificationType.NORMAL,
         }),
       );
+      navigation.navigate('SuccPayment');
     }
   }, [newOrderState]);
 
@@ -117,9 +135,8 @@ const Payment = () => {
       </View>
       <TextViewRow
         title="Tổng thanh toán"
-        price={formatPrice(total)}
-        point={formatPoint(total)}
-        between="hoặc"
+        price={type == 'wallet' ? formatPrice(total) : undefined}
+        point={type == 'cashback' ? formatPoint(total) : undefined}
       />
       <TextViewRow title="Tổng phí vận chuyển" between="Freeship" />
 
@@ -134,43 +151,51 @@ const Payment = () => {
       </View>
 
       <View style={{marginLeft: 45}}>
-        <Checkbox_2
-          type={'VNĐ'}
-          title={'Thanh toán bằng Ví VNĐ'}
-          onSelected={handleTypeAddressPress}
-          isSelected={payment_type}
-          unique="wallet"
-        />
-        <Checkbox_2
-          type={'Point'}
-          title={'Thanh toán bằng Ví điểm'}
-          onSelected={handleTypeAddressPress}
-          isSelected={payment_type}
-          unique="cash_back"
-        />
-        <Checkbox_2
-          title={'Thanh toán bằng Ví Momo'}
-          img={require('../../assets/imgOder/Momo.png')}
-          onSelected={handleTypeAddressPress}
-          isSelected={payment_type}
-          unique="momo"
-        />
+        {type == 'cashback' ? (
+          <Checkbox_2
+            type={'Point'}
+            title={'Thanh toán bằng Ví điểm'}
+            onSelected={handleTypeAddressPress}
+            isSelected={payment_type}
+            unique="cash_back"
+          />
+        ) : null}
+        {type == 'wallet' ? (
+          <>
+            <Checkbox_2
+              type={'VNĐ'}
+              title={'Thanh toán bằng Ví VNĐ'}
+              onSelected={handleTypeAddressPress}
+              isSelected={payment_type}
+              unique="wallet"
+            />
+            <Checkbox_2
+              title={'Thanh toán bằng Ví Momo'}
+              img={require('../../assets/imgOder/Momo.png')}
+              onSelected={handleTypeAddressPress}
+              isSelected={payment_type}
+              unique="momo"
+            />
+          </>
+        ) : null}
       </View>
-      <Checkbox_2
-        styleTitle={{
-          fontWeight: '400',
-          alignSelf: 'center',
-        }}
-        styleImg={{
-          width: 31,
-          height: 31,
-        }}
-        img={require('../../assets/imgOder/Rectangle_239.png')}
-        title={'Thanh toán bằng tiền mặt'}
-        onSelected={handleTypeAddressPress}
-        isSelected={payment_type}
-        unique="cod"
-      />
+      {type == 'wallet' ? (
+        <Checkbox_2
+          styleTitle={{
+            fontWeight: '400',
+            alignSelf: 'center',
+          }}
+          styleImg={{
+            width: 31,
+            height: 31,
+          }}
+          img={require('../../assets/imgOder/Rectangle_239.png')}
+          title={'Thanh toán bằng tiền mặt'}
+          onSelected={handleTypeAddressPress}
+          isSelected={payment_type}
+          unique="cod"
+        />
+      ) : null}
       <View style={{flex: 1, paddingLeft: 30, paddingRight: 30}}>
         <View style={{flex: 1}}></View>
         <Button onPress={onPaymentPress} text={'Xác nhận thanh toán'} />

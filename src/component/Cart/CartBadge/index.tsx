@@ -4,10 +4,13 @@ import {useSelector} from 'react-redux';
 
 type CartBadgeProps = {
   style?: StyleProp<ViewStyle>;
+  isWallet: boolean;
 };
 
-export default function CartBadge({style}: CartBadgeProps) {
-  const cartData = useSelector((state: any) => state.cart.data);
+export default function CartBadge({style, isWallet = true}: CartBadgeProps) {
+  const cartData = isWallet
+    ? useSelector((state: any) => state.cart.wallet)
+    : useSelector((state: any) => state.cart.point);
   const total_quantity = cartData.reduce(
     (total: any, next: any) => total + next.quantity,
     0,

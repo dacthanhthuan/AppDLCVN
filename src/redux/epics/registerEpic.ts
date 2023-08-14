@@ -4,6 +4,7 @@ import {Epic, ofType} from 'redux-observable';
 import {REGISTER} from '../actions/types';
 import {clientRegisterEnd, clientRegisterFail} from '../actions/userActions';
 import api_register from '../../api/api_register';
+import {riseNetworkError} from '../actions/errorHandlerActions';
 
 const registerEpic: Epic = (action$, state$) =>
   action$.pipe(
@@ -14,6 +15,13 @@ const registerEpic: Epic = (action$, state$) =>
           return clientRegisterEnd(res);
         })
         .catch(err => {
+          if (err instanceof Error) {
+            return riseNetworkError({
+              error: err,
+              visible: true,
+            });
+          }
+
           return clientRegisterFail(err);
         });
     }),

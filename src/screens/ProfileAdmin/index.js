@@ -14,10 +14,7 @@ import CardProfile from '../../component/CardProfile';
 import TranfersMoney from '../../component/TranfersMoney';
 import NotLogin from '../NotLogin';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  clientClearUserData,
-  clientLoginEnd,
-} from '../../redux/actions/userActions';
+import {clientClearUserData} from '../../redux/actions/userActions';
 import {getData, multiRemoveData, removeData, storeData} from '../../storage';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import {formatPrice, BIOMETRIC, formatPoint, useIsReady} from '../../MyGlobal';
@@ -26,12 +23,20 @@ import LoginSettingOverlay from '../../component/LoginSettingOverlay';
 import {TabActions} from '@react-navigation/native';
 import {removeAllCartProduct} from '../../redux/actions/cartActions';
 import {addressBookClear} from '../../redux/actions/addressBookActions';
+import {clearListOrder} from '../../redux/actions/orderActions';
+import {
+  NotificationActions,
+  useNotificationDispatch,
+} from '../../component/NotificationContext/context';
+import {NotificationType} from '../../component/NotificationContext/types';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
   const isReady = useIsReady();
 
   const dispatch = useDispatch();
+  const notification = useNotificationDispatch();
+
   const user = useSelector(state => state.user);
   const login = useSelector(state => state.user.login.status);
   // state define show or hide login by biometric setting
@@ -154,12 +159,12 @@ const ProfileAdmin = ({navigation}) => {
         <InfoCard
           image={require('../../assets/Rectangle294.png')}
           text="Chia sẻ app"
-          onPress={() => navigation.navigate('SearchRecent')}
+          onPress={() => {}}
         />
         <InfoCard
           image={require('../../assets/Rectangle295.png')}
           text="Thiết lập bảo mật"
-          onPress={() => navigation.navigate('CustomerManagement')}
+          onPress={() => {}}
         />
         <InfoCard
           image={require('../../assets/Rectangle300.png')}
@@ -202,13 +207,28 @@ const ProfileAdmin = ({navigation}) => {
           image={require('../../assets/Rectangle270.png')}
           text="Đăng xuất"
           onPress={() => {
-            // clear user and cart data (both local and redux store)
+            // display notification
+            notification(
+              NotificationActions.rise({
+                data: {
+                  message: 'Bạn đã đăng xuất',
+                },
+                duration: 2500,
+                type: NotificationType.NORMAL,
+              }),
+            );
+
+            // clear user and cart data
             dispatch(clientClearUserData);
             dispatch(removeAllCartProduct);
-            // clear address book data
+            // clear address book data and order list
             dispatch(addressBookClear);
+            dispatch(clearListOrder());
+
+            // clear local
             removeData(LOCALSTORAGE.user);
             removeData(LOCALSTORAGE.cart);
+            removeData(LOCALSTORAGE.order_list);
             navigation.dispatch(TabActions.jumpTo('Home'));
           }}
         />

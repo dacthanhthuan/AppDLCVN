@@ -9,12 +9,16 @@ import App from './App';
 import {name as appName} from './app.json';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
-import {ErrorProvider} from './src/component/ErrorContext/context';
+import {NotificationProvider} from './src/component/NotificationContext/context';
+import NormalErrorQueue from './src/component/NoralError/NormalErrorQueue';
+import CustoNetworkError from './src/component/NetworkError/NetworkError';
 
 AppRegistry.registerComponent(appName, () => () => (
   <Provider store={store}>
-    <ErrorProvider>
+    <NotificationProvider>
       <App />
-    </ErrorProvider>
+      <CustoNetworkError />
+      <NormalErrorQueue />
+    </NotificationProvider>
   </Provider>
 ));

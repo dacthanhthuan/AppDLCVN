@@ -23,7 +23,7 @@ function AllCheckBoxGroup() {
         showsVerticalScrollIndicator={false}
         data={data}
         renderItem={({item, index}) => {
-          return <CheckBoxInFlatList unique={index} />;
+          return <CheckBoxInFlatList index={index} />;
         }}
       />
       <AllCheckBox dataLength={data.length} text="All Check Button" />

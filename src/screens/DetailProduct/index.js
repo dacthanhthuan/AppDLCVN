@@ -60,7 +60,10 @@ const DetailProduct = ({route}) => {
   const {product, type} = route?.params || {}; // get product data from route and product type
 
   // cart data state
-  const cartData = useSelector(state => state.cart.data);
+  const cartData =
+    type == 'money'
+      ? useSelector(state => state.cart.wallet)
+      : useSelector(state => state.cart.point);
   const [isExist, setIsExist] = useState(false); // state check if product is exist in cart
 
   // quantity of order
@@ -262,10 +265,14 @@ const DetailProduct = ({route}) => {
         onPressLeft={() => navigation.goBack()}
         text={'Chi tiết sản phẩm'}
         iconLeft={require('../../assets/Arrow1.png')}
-        onPressRight={() => navigation.navigate('Cart')}
+        onPressRight={() => {
+          if (type == 'money') navigation.navigate('Cart');
+          else navigation.navigate('PointCart');
+        }}
         iconRight={require('../../assets/Vector.png')}
         containerStyle={{paddingBottom: 10}}
         showCartBadge
+        isWallet={type == 'money' ? true : false}
       />
       <ScrollView
         style={{flex: 1}}
@@ -363,7 +370,8 @@ const DetailProduct = ({route}) => {
           <Button
             onPress={() => {
               !isExist ? addToCart(1) : null;
-              navigation.navigate('Cart');
+              if (type == 'money') navigation.navigate('Cart');
+              else navigation.navigate('PointCart');
             }}
             text={'Chọn mua'}
             style={{marginTop: 0}}

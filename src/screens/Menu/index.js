@@ -1,158 +1,130 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import styles from './styles';
-import {SafeAreaView, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  Text,
+  View,
+  RefreshControl,
+  FlatList,
+} from 'react-native';
 import Header from '../../component/Header';
 import SingleMenu from '../../component/SingleMenu';
 import StatusMenu from '../../component/StatusMenu';
 import StatusWallet from '../../component/StatusWallet';
-import {FlatList} from 'react-native-gesture-handler';
 import {useIsReady} from '../../MyGlobal';
 import LoadingOverlay from '../../component/LoadingOverlay';
-
-const data = [
-  {
-    madh: '002220321D9M',
-    date: '25/03/2022',
-    time: '17:40',
-    goods: [
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/dlcbrazil.png'),
-        price: 1000000,
-        producerPrice: 600000,
-      },
-
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/dlcred.png'),
-        price: 700000,
-        producerPrice: 400000,
-      },
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/dlcsoybean.png'),
-        price: 1300000,
-        producerPrice: 800000,
-      },
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/Group135.png'),
-        price: 1200000,
-        producerPrice: 800000,
-      },
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/Group135.png'),
-        price: 800000,
-        producerPrice: 600000,
-      },
-    ],
-    slSp: 5,
-    total: 5200000,
-    producerTotal: 3200000,
-    type: 'money/paying',
-  },
-  {
-    madh: '12C220321D9M',
-    date: '25/03/2022',
-    time: '17:40',
-    goods: [
-      {
-        name: 'Auslac Lactoferrin (Giá Ưu Đãi)',
-        source: require('../../assets/Ellipse83.png'),
-        price: 1100000,
-        producerPrice: 700000,
-      },
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/dlcred.png'),
-        price: 900000,
-        producerPrice: 500000,
-      },
-    ],
-    slSp: 2,
-    total: 2000000,
-    producerTotal: 1200000,
-    type: 'money/delivered',
-  },
-  {
-    madh: '002123321D9A',
-    date: '25/03/2022',
-    time: '17:40',
-    goods: [
-      {
-        source: require('../../assets/Ellipse83.png'),
-        name: 'Auslac Lactoferrin (Giá Ưu Đãi)',
-        price: 1100000,
-        producerPrice: 700000,
-      },
-    ],
-    slSp: 1,
-    total: 1100000,
-    producerTotal: 700000,
-    type: 'point/canceled',
-  },
-  {
-    madh: '002123321D9A',
-    date: '25/03/2022',
-    time: '17:40',
-    goods: [
-      {
-        source: require('../../assets/dlcsoybean.png'),
-        name: 'Viên uống DLC Antrodia Cinnamomea',
-        price: 800000,
-        producerPrice: 500000,
-      },
-    ],
-    slSp: 1,
-    total: 800000,
-    producerTotal: 500000,
-    type: 'point/paying',
-  },
-];
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  clearListOrder,
+  getListOrderStart,
+} from '../../redux/actions/orderActions';
+import {useImmer} from 'use-immer';
+import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
+import LoginNow from '../LoginNow';
 
 const ALL = 'Tất cả';
-const CTT = 'Chờ thanh toán';
 
 const Menu = ({navigation}) => {
   const isReady = useIsReady();
+  const dispatch = useDispatch();
 
-  const [selectedCategory, setSelectedCategory] = useState(ALL);
-  const [selectedCategori, setSelectedCategori] = useState(CTT);
-  const [filterData, setFilterData] = useState(data);
+  const session_token = useSelector(state => state.user.session_token);
+  const login = useSelector(state => state.user.login.status);
 
-  useEffect(() => {
-    switch (true) {
-      case selectedCategory.includes('Ví VNĐ'):
-        setFilterData(getFilteredData('money'));
-        break;
-      case selectedCategory.includes('Ví điểm'):
-        setFilterData(getFilteredData('point'));
-        break;
-      case selectedCategory.includes('Tất cả'):
-        setFilterData(getFilteredData('o'));
-        break;
-    }
-  }, [selectedCategory, selectedCategori]);
+  const orderList = useSelector(state => state.order.data);
+  const currentRecord = useSelector(state => state.order.current_record);
+  const totalRecord = useSelector(state => state.order.total_record);
+  const nextPage = useSelector(state => state.order.nextPage);
+  const listOrderState = useSelector(state => state.order.listOrderState);
 
-  const filterMyData = useCallback((payingType, payingState) => {
-    return data.filter(
-      item => item.type.includes(payingType) && item.type.includes(payingState),
+  const lDeliverySteps = useSelector(state => state.app.data.lDeliverySteps);
+  const walllet_payment_type = useSelector(
+    state => state.app.data.wallet_main_id,
+  );
+  const cashback_payment_type = useSelector(
+    state => state.app.data.wallet_cashback_id,
+  );
+
+  // new order state
+  const newOrderState = useSelector(state => state.order.newOrderState);
+  const orderMsg = useSelector(state => state.order.message);
+
+  const [filterData, updateFilterData] = useImmer([]);
+  const [paymentType, setPaymentType] = useState(ALL);
+  const [orderStatus, setOrderStatus] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
+
+  // call api to get order list data
+  const getOrderListApi = (page = 1, payment_type, orderStatus) => {
+    dispatch(
+      getListOrderStart({
+        token: session_token,
+        page: page,
+        type: orderStatus,
+        payment_type: payment_type,
+      }),
     );
-  }, []);
+  };
 
-  const getFilteredData = payingType => {
-    switch (true) {
-      case selectedCategori.includes('Chờ thanh toán'):
-        return filterMyData(payingType, 'paying');
-      case selectedCategori.includes('Hoàn thành'):
-        return filterMyData(payingType, 'delivered');
-      case selectedCategori.includes('Đã hủy'):
-        return filterMyData(payingType, 'cancel');
+  // whenever new order is create (and initial rendered)
+  useEffect(() => {
+    if (!newOrderState && !orderMsg) {
+      dispatch(clearListOrder());
+      getOrderListApi();
+    }
+  }, [newOrderState]);
+
+  // update order data after load
+  useEffect(() => {
+    updateFilterData(orderList);
+    if (!listOrderState) {
+      setLoadMore(false);
+      setRefreshing(false);
+    }
+  }, [orderList]);
+
+  // if user login, re-load order list
+  useEffect(() => {
+    if (login || refreshing) {
+      dispatch(clearListOrder());
+      getOrderListApi();
+      setLoadMore(false);
+    }
+  }, [login, refreshing]);
+
+  // get data whenever user change their choose:
+  useEffect(() => {
+    // clear order list whenever user change list
+    dispatch(clearListOrder());
+
+    getOrderListApi(
+      0,
+      paymentType == 'Tất cả'
+        ? undefined
+        : paymentType == 'Ví VNĐ'
+        ? walllet_payment_type
+        : cashback_payment_type,
+      orderStatus,
+    );
+  }, [orderStatus, paymentType]);
+
+  // handle load more
+  const handleLoadmore = () => {
+    if (!listOrderState && !loadMore) {
+      getOrderListApi(nextPage);
     }
   };
 
-  return !isReady ? (
+  // check list record
+  const checkOrderListRecord = () => {
+    return currentRecord < totalRecord;
+  };
+
+  return !login ? (
+    <LoginNow />
+  ) : !isReady ? (
     <LoadingOverlay />
   ) : (
     <SafeAreaView style={styles.container}>
@@ -161,33 +133,63 @@ const Menu = ({navigation}) => {
         iconLeft={require('../../assets/Arrow1.png')}
         iconRight={require('../../assets/Rectangle366.png')}
         onPressLeft={() => navigation.goBack()}
+        containerStyle={{paddingHorizontal: 16, paddingTop: 16}}
       />
 
       <View style={styles.categoriContainer}>
         <StatusMenu
-          categori={['Chờ thanh toán', 'Hoàn thành', 'Đã hủy']}
-          selectedCatogory={selectedCategori}
-          onCategoryPress={setSelectedCategori}
+          categori={lDeliverySteps}
+          selectedCatogory={orderStatus}
+          onCategoryPress={setOrderStatus}
         />
         <StatusWallet
           categori={['Tất cả', 'Ví VNĐ', 'Ví điểm']}
-          selectedCatogory={selectedCategory}
-          onCategoryPress={setSelectedCategory}
+          selectedCatogory={paymentType}
+          onCategoryPress={setPaymentType}
         />
       </View>
 
-      <Text style={{fontSize: 16, color: '#000000', marginVertical: 12}}>
+      <Text
+        style={{
+          fontSize: 16,
+          color: '#000000',
+          marginVertical: 12,
+          paddingHorizontal: 16,
+        }}>
         Đơn đã đặt
       </Text>
 
       <FlatList
         data={filterData}
-        style={{flex: 1}}
+        style={{flex: 1, padding: 16}}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            colors={['white']}
+            progressBackgroundColor={'#005AA9'}
+            onRefresh={() => setRefreshing(true)}
+          />
+        }
         renderItem={({item}) => {
           return <SingleMenu style={{marginHorizontal: 2}} data={item} />;
         }}
+        ListHeaderComponent={
+          listOrderState && !refreshing ? (
+            <ActivityIndicator size={'large'} />
+          ) : null
+        }
+        onEndReached={() => {
+          if (checkOrderListRecord()) {
+            setLoadMore(true);
+            handleLoadmore();
+          }
+        }}
+        initialNumToRender={3}
+        maxToRenderPerBatch={5}
+        removeClippedSubviews
       />
+      {loadMore ? <LoadmoreIndicator /> : null}
     </SafeAreaView>
   );
 };

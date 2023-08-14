@@ -1,25 +1,26 @@
-import {multiStoreData} from '../storage';
+import {multiStoreData, storeData} from '../storage';
 import apiHelper, {NETWORK} from './apiHelper';
 import baseURL from './baseURL';
 import {LOCALSTORAGE} from '../storage/direct';
 
 export default async function api_initial_client(data: FormData) {
-  return await new Promise((resolve, reject) => {
-    apiHelper(baseURL.base_url, data).then(res => {
-      switch (res?.code) {
-        case NETWORK.SUCCESS:
-          //Store data and call to getdomain and api in callback
-          multiStoreData([
-            [LOCALSTORAGE.main_domain, res.data.data.main_domain],
-            [LOCALSTORAGE.apikey, res.data.data.apikey],
-          ]);
+  try {
+    const respone: any = await apiHelper(baseURL.base_url, data);
+    switch (respone?.code) {
+      case NETWORK.SUCCESS:
+        //Store data and call to getdomain and api in callback
+        multiStoreData([
+          [LOCALSTORAGE.main_domain, respone.data.data.main_domain],
+          [LOCALSTORAGE.apikey, respone.data.data.apikey],
+        ]);
+        // store app data
+        storeData(LOCALSTORAGE.app, respone.data.data);
 
-          resolve(res?.data.data);
-          break;
-        case NETWORK.ERROR403:
-          reject(res?.message);
-          break;
-      }
-    });
-  });
+        return Promise.resolve(respone?.data.data);
+      case NETWORK.ERROR403:
+        return Promise.reject(respone?.message);
+    }
+  } catch (err) {
+    throw err;
+  }
 }

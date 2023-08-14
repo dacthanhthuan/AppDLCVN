@@ -1,0 +1,10 @@
+Lấy từ initial api:
+	lDeliverySteps: các bước xác nhận đơn hàng
+
+	wallet_cashback_id: payment_type cho ví điểm
+	wallet_main_id: payment_type cho ví tiền
+
+Để lấy tất cả đơn hàng: api history all order, sau đó truyền type và payment_type đã lấy được từ intial api
+
+Đơn hàng wallet và đơn hàng cashback riêng biệt.
+Khi ấn chọn một địa chỉ từ màn hình CreateOrder, không thay đổi địa chỉ mặc định mà chỉ lấy địa chỉ đó để đặt hàng.

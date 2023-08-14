@@ -70,6 +70,11 @@ const SearchProduct = ({navigation, route}) => {
         onPressLeft={() => {
           navigation.goBack();
         }}
+        onPressRight={() => {
+          navigation.navigate('Cart');
+        }}
+        showCartBadge
+        isWallet
       />
 
       <Input
@@ -93,7 +98,7 @@ const SearchProduct = ({navigation, route}) => {
       </Text>
 
       <FlatList
-        style={{width: WINDOW_WIDTH}}
+        style={{width: WINDOW_WIDTH * 0.94}}
         data={filterProduct}
         numColumns={2}
         showsVerticalScrollIndicator={false}

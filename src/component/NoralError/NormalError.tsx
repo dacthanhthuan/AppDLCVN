@@ -11,8 +11,8 @@ type NormalErrorProps = {
 export default function NormalError({error}: NormalErrorProps) {
   return (
     <Animated.View
-      entering={LightSpeedInLeft.duration(300)}
-      exiting={LightSpeedOutRight.duration(300)}
+      entering={LightSpeedInLeft.duration(400)}
+      exiting={LightSpeedOutRight.duration(400)}
       style={styles.container}>
       <Text style={styles.message}>{error}</Text>
     </Animated.View>
@@ -21,18 +21,21 @@ export default function NormalError({error}: NormalErrorProps) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
+    marginTop: 50,
     paddingVertical: 12,
     paddingHorizontal: 10,
     width: '90%',
     alignSelf: 'center',
     position: 'absolute',
-    backgroundColor: 'rgba(176, 0, 32, 1)',
-    borderRadius: 5,
-    borderWidth: 4,
-    borderTopWidth: 3,
+    backgroundColor: '#C70039',
+    borderBottomLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderTopWidth: 1.5,
+    borderRightWidth: 1.5,
     borderBottomWidth: 5,
-    borderColor: 'rgba(130, 0, 32, 1)',
+    borderLeftWidth: 5,
+    borderColor: '#900C3F',
+    borderRightColor: 'white',
     flexDirection: 'row',
   },
 

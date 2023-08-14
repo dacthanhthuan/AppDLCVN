@@ -15,6 +15,7 @@ import {
 import api_update_address_book from '../../api/api_update_address_book';
 import api_get_list_address_book from '../../api/api_get_list_address_book';
 import api_set_default_address_book from '../../api/api_set_default_address_book';
+import {riseNetworkError} from '../actions/errorHandlerActions';
 
 const addressBookEpic: Epic = (action$, state$) =>
   action$.pipe(
@@ -29,19 +30,51 @@ const addressBookEpic: Epic = (action$, state$) =>
         case ADDRESS_BOOK.NEW_START:
           return await api_new_address_book(action.payload)
             .then(res => addressBookNewEnd(res))
-            .catch(msg => addressBookNewFail(msg));
+            .catch(msg => {
+              if (msg instanceof Error) {
+                return riseNetworkError({
+                  error: msg,
+                  visible: true,
+                });
+              }
+              return addressBookNewFail(msg);
+            });
         case ADDRESS_BOOK.UPDATE_START:
           return await api_update_address_book(action.payload)
             .then(res => addressBookUpdateEnd(res))
-            .catch(msg => addressBookUpdateFail(msg));
+            .catch(msg => {
+              if (msg instanceof Error) {
+                return riseNetworkError({
+                  error: msg,
+                  visible: true,
+                });
+              }
+              return addressBookUpdateFail(msg);
+            });
         case ADDRESS_BOOK.LIST_ALL_START:
           return await api_get_list_address_book(action.payload)
             .then(res => addressBookListAllEnd(res))
-            .catch(msg => addressBookListAllFail(msg));
+            .catch(msg => {
+              if (msg instanceof Error) {
+                return riseNetworkError({
+                  error: msg,
+                  visible: true,
+                });
+              }
+              return addressBookListAllFail(msg);
+            });
         case ADDRESS_BOOK.SET_DEFAULT_START:
           return await api_set_default_address_book(action.payload)
             .then(res => addressBookSetDefaultEnd(res))
-            .catch(msg => addressBookSetDefaultFail(msg));
+            .catch(msg => {
+              if (msg instanceof Error) {
+                return riseNetworkError({
+                  error: msg,
+                  visible: true,
+                });
+              }
+              return addressBookSetDefaultFail(msg);
+            });
       }
     }),
   );

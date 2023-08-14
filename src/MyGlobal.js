@@ -259,12 +259,22 @@ export function useIsReady() {
     useFocusEffect(() => {
       setTimeout(() => {
         setIsReady(true);
-      }, 10);
+      }, 100);
     }),
     [],
   );
 
   return isReady;
 }
+
+export const secondToMs = value => {
+  return parseInt(value) * 1000;
+};
+
+export const secondToGlobalDate = value => {
+  const second = parseInt(value) * 1000;
+  const date = new Date(second);
+  return date;
+};
 
 export const showmoreImage = require('./assets/Rectangle270.png');

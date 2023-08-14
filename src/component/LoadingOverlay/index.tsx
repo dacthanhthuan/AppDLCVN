@@ -3,7 +3,7 @@ import {Overlay} from '@rneui/themed';
 import style from './style';
 
 type LoadingOverlayProps = {
-  visible: boolean;
+  visible?: boolean;
 };
 
 export default function LoadingOverlay({visible = true}: LoadingOverlayProps) {

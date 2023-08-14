@@ -11,6 +11,11 @@ const CardProduct = ({item}) => {
     navigation.navigate('DetailProduct', {product: item, type: 'point'});
   };
 
+  const decrement = item.decrement != 0 ? item.decrement : undefined;
+  const priceDecrement = formatPoint(
+    parseInt(item?.price) * ((100 - parseInt(decrement)) / 100),
+  );
+
   return (
     <View style={[styles.container]}>
       <Pressable
@@ -19,6 +24,9 @@ const CardProduct = ({item}) => {
           pressed ? {opacity: 0.8} : {opacity: 1},
         ]}
         onPress={navigateToDetailProduct}>
+        {decrement ? (
+          <Text style={styles.decrementBadge}>-{decrement}%</Text>
+        ) : null}
         <Image
           style={styles.image}
           resizeMode="contain"
@@ -28,7 +36,12 @@ const CardProduct = ({item}) => {
           {item.product_name}
         </Text>
         <Text style={styles.id}>{item.product_id}</Text>
-        <Text style={styles.price}>{formatPoint(item.price)}</Text>
+        <Text style={[styles.price, decrement ? styles.stroke_text : null]}>
+          {formatPoint(item.price)}
+        </Text>
+        {decrement ? (
+          <Text style={styles.renderDecrement}>{priceDecrement}</Text>
+        ) : null}
       </Pressable>
     </View>
   );

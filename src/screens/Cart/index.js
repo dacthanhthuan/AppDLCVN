@@ -19,52 +19,43 @@ import LoadingOverlay from '../../component/LoadingOverlay';
  * ** Ngoài ra, còn có thể sử dụng OnLayout nếu các component render ra có cùng kích thước
  * để tối ưu hiệu suất.
  */
-const Cart = () => {
+
+/**
+ *
+ * @returns WalletCart screen
+ */
+const WalletCart = () => {
   const isReady = useIsReady();
   const navigation = useNavigation();
-  const cartData = useSelector(state => state.cart.data);
+  const cartData = useSelector(state => state.cart.wallet);
   const isLogin = useSelector(state => state.user.login.status);
   const allcheck = useAllCheck();
 
   const [totalprice, setTotalprice] = useState(0);
   const [totalDecrementprice, setTotalDecrementprice] = useState(0);
-  const [totalpoint, setTotalpoint] = useState(0);
-  const [totalDecrementpoint, setTotalDecrementpoint] = useState(0);
   const [productOrder, setProductOrder] = useState([]);
 
   // price calculate
   useEffect(() => {
     let totalPrice = 0;
     let totalDecrementPrice = 0;
-    let totalPoint = 0;
-    let totalDecrementPoint = 0;
     let products = [];
 
     allcheck.checkboxs.map(unique => {
       let product = cartData.at(unique);
       let decrement = product?.product?.decrement;
       products.push(product);
-      if (product?.pType === 'point') {
-        totalPoint +=
-          parseInt(product.product.price) * parseInt(product.quantity);
-        totalDecrementPoint +=
-          parseInt(product.product.price) *
-          parseInt(product.quantity) *
-          ((100 - parseInt(decrement)) / 100);
-      } else if (product?.pType === 'money') {
-        totalPrice +=
-          parseInt(product.product.price) * parseInt(product.quantity);
-        totalDecrementPrice +=
-          parseInt(product.product.price) *
-          parseInt(product.quantity) *
-          ((100 - parseInt(decrement)) / 100);
-      }
+
+      totalPrice +=
+        parseInt(product?.product?.price) * parseInt(product?.quantity);
+      totalDecrementPrice +=
+        parseInt(product?.product.price) *
+        parseInt(product?.quantity) *
+        ((100 - parseInt(decrement)) / 100);
     });
 
     setTotalprice(totalPrice);
     setTotalDecrementprice(totalDecrementPrice);
-    setTotalpoint(totalPoint);
-    setTotalDecrementpoint(totalDecrementPoint);
     setProductOrder(products);
   }, [allcheck.checkboxs, cartData]);
 
@@ -115,17 +106,7 @@ const Cart = () => {
               color: '#000000',
               fontWeight: '500',
             }}>
-            {formatPrice(totalDecrementprice + totalDecrementpoint)}
-          </Text>
-
-          <Text style={{fontSize: 13, color: '#000000'}}>hoặc</Text>
-          <Text
-            style={{
-              fontSize: 16,
-              color: 'green',
-              fontWeight: '500',
-            }}>
-            {formatPoint(totalDecrementprice + totalDecrementpoint)}
+            {formatPrice(totalDecrementprice)}
           </Text>
         </View>
       </View>
@@ -136,9 +117,8 @@ const Cart = () => {
             ? navigation.navigate('CreateOrder', {
                 products: productOrder,
                 totalPrices: totalprice,
-                totalPoint: totalpoint,
                 totalDecrementPrices: totalDecrementprice,
-                totalDecrementPoint: totalDecrementpoint,
+                type: 'money_payment',
               })
             : productOrder.length == 0
             ? ToastAndroid.show('Chưa chọn mặt hàng', ToastAndroid.LONG)
@@ -150,13 +130,13 @@ const Cart = () => {
 };
 
 function RenderItem({item, index}) {
-  return <ProductCart item={item} unique={index} />;
+  return <ProductCart item={item} index={index} />;
 }
 
 function WrapperCart() {
   return (
     <AllCheckProvider>
-      <Cart />
+      <WalletCart />
     </AllCheckProvider>
   );
 }

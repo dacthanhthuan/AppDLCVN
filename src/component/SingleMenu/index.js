@@ -2,14 +2,17 @@ import React from 'react';
 import {Pressable, Image, View, Text, FlatList} from 'react-native';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {WINDOW_WIDTH, formatPrice} from '../../MyGlobal';
+import {WINDOW_WIDTH, formatPrice, secondToGlobalDate} from '../../MyGlobal';
 
 const SingleMenu = ({data, style}) => {
-  const isMore = data.slSp > 1;
-  const slicedImages = data?.goods?.length ? data?.goods?.slice(0, 5) : [];
-  const diffImages =
-    data?.slSp > 4 ? data?.goods?.length - slicedImages?.length + 1 : 0;
   const navigation = useNavigation();
+
+  const isManyProduct = data.lItems.length > 1;
+  const slicedImages = data.lItems.slice(0, 5);
+  const diffImages =
+    data.lItems.length > 4 ? data.lItems.length - slicedImages.length + 1 : 0;
+
+  const globalDate = secondToGlobalDate(data.created_at);
 
   return (
     <Pressable
@@ -40,13 +43,15 @@ const SingleMenu = ({data, style}) => {
               fontFamily: 'Montserrat',
               fontWeight: '600',
             }}>
-            Mã đơn hàng: {data.madh}
+            Mã đơn hàng: {data.id}
           </Text>
-          <Text style={{fontSize: 12, color: 'grey', marginTop: 5}}>
-            {data.date} - {data.time}
+          <Text style={{fontSize: 13, color: 'grey', marginTop: 5}}>
+            {globalDate.toLocaleDateString()} -{' '}
+            {globalDate.toLocaleTimeString()}
           </Text>
         </View>
       </View>
+
       <View style={styles.line}></View>
 
       <View
@@ -60,7 +65,7 @@ const SingleMenu = ({data, style}) => {
           data={slicedImages}
           horizontal
           renderItem={({item, index}) =>
-            isMore ? (
+            isManyProduct ? (
               <View
                 style={{
                   backgroundColor: '#E7E7E7',
@@ -71,7 +76,14 @@ const SingleMenu = ({data, style}) => {
                   height: 45,
                   marginRight: 10,
                 }}>
-                <Image style={{width: 25, height: 25}} source={item?.source} />
+                <Image
+                  style={{width: 25, height: 25}}
+                  source={
+                    item.image
+                      ? {uri: item.image}
+                      : require('../../assets/noimage.png')
+                  }
+                />
                 {diffImages > 0 && index === slicedImages?.length - 1 ? (
                   <View style={styles.moreImagesContainer}>
                     <Text style={styles.moreImages}>{`+${diffImages}`}</Text>
@@ -80,22 +92,23 @@ const SingleMenu = ({data, style}) => {
               </View>
             ) : null
           }
-          keyExtractor={(item, index) => index.toString()}
         />
-        <Image
-          style={{width: 7, height: 13}}
-          source={require('../../assets/vectorRight.png')}
-        />
+        {isManyProduct ? (
+          <Image
+            style={{width: 7, height: 13}}
+            source={require('../../assets/vectorRight.png')}
+          />
+        ) : null}
       </View>
 
-      {isMore ? (
+      {isManyProduct ? (
         <>
           <Text style={styles.textName} numberOfLines={1}>
-            {data.goods[0].name}
+            {data.lItems[0].name}
           </Text>
           <Text style={styles.textName}>
             <Text style={{color: '#000000', fontWeight: '400'}}>Giá bán:</Text>{' '}
-            {formatPrice(data.goods[0].price)}
+            {formatPrice(data.lItems[0].price)}
           </Text>
         </>
       ) : (
@@ -114,19 +127,27 @@ const SingleMenu = ({data, style}) => {
                 marginVertical: 10,
                 marginRight: 10,
               }}
-              source={data?.goods[0].source}
+              source={
+                data?.lItems[0]?.image
+                  ? {uri: data.lItems[0].image}
+                  : require('../../assets/noimage.png')
+              }
             />
-            <View style={{flexDirection: 'column'}}>
+            <View style={{flexDirection: 'column', width: '80%'}}>
               <Text style={styles.textName} numberOfLines={1}>
-                {data.goods[0].name}
+                {data.lItems[0].name}
               </Text>
               <Text style={styles.textName}>
                 <Text style={{color: '#000000', fontWeight: '400'}}>
                   Giá bán:
                 </Text>{' '}
-                {formatPrice(data.goods[0].price)}
+                {formatPrice(data.lItems[0].price)}
               </Text>
             </View>
+            <Image
+              style={{width: 7, height: 13}}
+              source={require('../../assets/vectorRight.png')}
+            />
           </View>
         </>
       )}
@@ -135,8 +156,8 @@ const SingleMenu = ({data, style}) => {
 
       <View style={styles.rowFooter}>
         <Text
-          style={{fontSize: 12, color: '#000000', fontFamily: 'Montserrat'}}>
-          {data.slSp} sản phẩm
+          style={{fontSize: 14, color: '#000000', fontFamily: 'Montserrat'}}>
+          {data.lItems.length} sản phẩm
         </Text>
         <Text style={styles.textTotal}>{formatPrice(data.total)}</Text>
       </View>
@@ -144,4 +165,7 @@ const SingleMenu = ({data, style}) => {
   );
 };
 
-export default React.memo(SingleMenu);
+export default React.memo(
+  SingleMenu,
+  (pre, next) => JSON.stringify(pre) === JSON.stringify(next),
+);

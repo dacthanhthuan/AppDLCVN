@@ -11,6 +11,7 @@ enum AllCheckActionType {
   CHANGE_ALL_CHECK_NOT_FORCHANGE,
   ADD_CHECKBOX,
   REMOVE_CHECKBOX,
+  DELETE_CHECKBOX,
 }
 
 const AllCheckContext = createContext(null);
@@ -65,9 +66,29 @@ function AllCheckReducer(state: any, action: any) {
     case AllCheckActionType.REMOVE_CHECKBOX: {
       return {
         ...state,
-        checkboxs: state.checkboxs.filter((item: any) => {
-          return item !== action.payload;
-        }),
+        checkboxs: [
+          ...state.checkboxs.filter((item: any) => {
+            return item !== action.payload;
+          }),
+        ],
+      };
+    }
+
+    case AllCheckActionType.DELETE_CHECKBOX: {
+      return {
+        ...state,
+        checkboxs: [
+          ...state.checkboxs
+            .map((item: any) => {
+              if (item < action.payload) {
+                return item;
+              } else if (item > action.payload) {
+                return item - 1;
+              }
+              return [];
+            })
+            .flat(),
+        ],
       };
     }
     default:
@@ -84,12 +105,16 @@ export const AllCheckActions = {
     type: AllCheckActionType.CHANGE_ALL_CHECK_NOT_FORCHANGE,
     payload: state,
   }),
-  Add_Check_Box: (unique: string | number) => ({
+  Add_Check_Box: (index: number) => ({
     type: AllCheckActionType.ADD_CHECKBOX,
-    payload: unique,
+    payload: index,
   }),
-  Remove_Check_Box: (unique: string | number) => ({
+  Remove_Check_Box: (index: number) => ({
     type: AllCheckActionType.REMOVE_CHECKBOX,
-    payload: unique,
+    payload: index,
+  }),
+  Delete_Check_Box: (index: number) => ({
+    type: AllCheckActionType.DELETE_CHECKBOX,
+    payload: index,
   }),
 };

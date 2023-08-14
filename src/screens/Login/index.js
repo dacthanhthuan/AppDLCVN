@@ -22,10 +22,16 @@ import LoadingOverlay from '../../component/LoadingOverlay';
 import {BIOMETRIC, mobileCheck, passwordCheck} from '../../MyGlobal';
 import {getData, multiRemoveData} from '../../storage';
 import {LOCALSTORAGE} from '../../storage/direct';
+import {
+  NotificationActions,
+  useNotificationDispatch,
+} from '../../component/NotificationContext/context';
+import {NotificationType} from '../../component/NotificationContext/types';
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const notification = useNotificationDispatch();
 
   //Declare state
   const [mobile, setMobile] = useState('');
@@ -87,6 +93,18 @@ const Login = () => {
     if (!loading && !initialRendered) {
       if (login) {
         checkAccount();
+
+        // display notification
+        notification(
+          NotificationActions.rise({
+            data: {
+              message: 'Chào mừng bạn đã đăng nhập, ' + user.fullname,
+            },
+            duration: 3000,
+            type: NotificationType.NORMAL,
+          }),
+        );
+
         navigation.dispatch(StackActions.pop());
       }
       if (message) setError(message);

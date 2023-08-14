@@ -5,6 +5,7 @@ const initialState = {
   domain: '',
   api: '',
   loading: true,
+  data: {},
 };
 
 export default function AppReducer(state = initialState, action: AnyAction) {
@@ -14,11 +15,12 @@ export default function AppReducer(state = initialState, action: AnyAction) {
         domain: action.payload?.main_domain,
         api: action.payload?.apikey,
         loading: false,
+        data: action.payload,
       };
     case INITIAL.FAIL:
       return {
         ...state,
-        state: 'fail',
+        loading: true,
         message: action.payload,
       };
     case CLEAR.APP:

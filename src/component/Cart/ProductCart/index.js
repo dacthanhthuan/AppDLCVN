@@ -15,7 +15,7 @@ import {
   AllCheckActions,
 } from '../AllCheckBoxGroup/context';
 
-const ProductCart = ({item, unique, debounceTime = 400}) => {
+const ProductCart = ({item, index, debounceTime = 400}) => {
   const [qty, setQty] = useState(item?.quantity);
   const [initialRender, setInitialRender] = useState(true);
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const ProductCart = ({item, unique, debounceTime = 400}) => {
         }),
       );
 
-      allcheckDispatch(AllCheckActions.Remove_Check_Box(unique));
+      allcheckDispatch(AllCheckActions.Delete_Check_Box(index));
     } else {
       quantityDebounceTimer = setTimeout(() => {
         dispatch(
@@ -81,11 +81,11 @@ const ProductCart = ({item, unique, debounceTime = 400}) => {
               }),
             );
 
-            allcheckDispatch(AllCheckActions.Remove_Check_Box(unique));
+            allcheckDispatch(AllCheckActions.Delete_Check_Box(index));
           }}
         />
       )}>
-      <CheckBoxInFlatList unique={unique} />
+      <CheckBoxInFlatList index={index} />
       <View style={styles.rightContainer}>
         {decrement ? (
           <Text style={styles.decrementBadge}>-{decrement}%</Text>
@@ -133,5 +133,5 @@ const ProductCart = ({item, unique, debounceTime = 400}) => {
 };
 
 export default React.memo(ProductCart, (pre, next) => {
-  return JSON.stringify(pre) === JSON.stringify(next);
+  return JSON.stringify(pre.item) === JSON.stringify(next.item);
 });

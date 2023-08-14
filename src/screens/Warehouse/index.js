@@ -150,9 +150,10 @@ const Warehouse = ({navigation}) => {
           text="Kho đổi điểm"
           iconRight={require('../../assets/Vector.png')}
           onPressRight={() => {
-            navigation.navigate('Cart');
+            navigation.navigate('PointCart');
           }}
           showCartBadge={true}
+          isWallet={false}
         />
         <View style={styles.rowPoint}>
           <Text style={styles.helloText}>Chào {user.fullname}</Text>
@@ -213,7 +214,7 @@ const Warehouse = ({navigation}) => {
               loop
               autoPlay
               source={assets.LottieAnimation.not_found}
-              style={{width: 250, height: 250}}
+              style={{width: 250, height: 250, alignSelf: 'center'}}
             />
           }
           renderItem={({item}) => {

@@ -5,13 +5,22 @@ export enum LOCALSTORAGE {
   // store domain (main_domain: string)
   main_domain = 'main_domain',
 
+  // app data
+  app = 'app',
+
   // store user information {...user, loading: true/false, login:{...}, register: {...}}
   user = 'user',
 
   // store product list data
   product_list = 'product_list',
 
-  // store user cart {data: *cart data}
+  // change point list data
+  change_point_list = 'change_point_list',
+
+  // order list data
+  order_list = 'order_list',
+
+  // store user cart {wallet: *cart wallet data, point: *cart point data}
   cart = 'user_cart',
 
   // store state user is seen popup in today {popup: object[], day: Date()}

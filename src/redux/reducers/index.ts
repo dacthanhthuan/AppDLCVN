@@ -8,6 +8,7 @@ import searchRecentReducer from './searchRecentReducer';
 import addressBookReducer from './addressBookReducer';
 import locationReducer from './locationReducer';
 import orderReducer from './orderReducer';
+import ErrorHandlerReducer from './errorReducer';
 
 const rootReducer = combineReducers({
   app: AppReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   addressBook: addressBookReducer,
   location: locationReducer,
   order: orderReducer,
+  error: ErrorHandlerReducer,
 });
 
 export default rootReducer;

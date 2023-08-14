@@ -6,6 +6,7 @@ import {
   clientProductListFail,
 } from '../actions/productListActions';
 import api_product_list from '../../api/api_product_list';
+import {riseNetworkError} from '../actions/errorHandlerActions';
 
 const productListEpic: Epic = (action$, state$) =>
   action$.pipe(
@@ -16,7 +17,15 @@ const productListEpic: Epic = (action$, state$) =>
     switchMap(async action => {
       return await api_product_list(action.payload)
         .then(res => clientProductListEnd(res, action.type))
-        .catch(err => clientProductListFail(err, action.type));
+        .catch(msg => {
+          if (msg instanceof Error) {
+            return riseNetworkError({
+              error: msg,
+              visible: true,
+            });
+          }
+          return clientProductListFail(msg, action.type);
+        });
     }),
   );
 

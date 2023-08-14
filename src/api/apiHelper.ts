@@ -1,4 +1,6 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
+import {NoInternetError} from '../component/NetworkError/NoInternetError';
+import {TimeoutError} from '../component/NetworkError/TimeoutError';
 
 export enum NETWORK {
   SUCCESS,
@@ -29,7 +31,16 @@ export default async function apiHelper(url: string, data: FormData) {
         }
       }
     })
-    .catch(err => {
-      throw new Error(err.message);
+    .catch((err: AxiosError) => {
+      if (
+        err.code === AxiosError.ECONNABORTED &&
+        err.message.includes('timeout')
+      ) {
+        throw new TimeoutError('Lỗi kết nối, đang thử lại...');
+      }
+
+      if (err.code === AxiosError.ERR_NETWORK) {
+        throw new NoInternetError('Vấn đề về kết nối internet...');
+      }
     });
 }

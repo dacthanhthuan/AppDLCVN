@@ -86,4 +86,15 @@ export enum ORDER {
   NEW_ORDER_START = 'New_Order_Start',
   NEW_ORDER_END = 'New_Order_End',
   NEW_ORDER_FAIL = 'New_Order_Fail',
+  LIST_ORDER_START = 'List_Order_Start',
+  LIST_ORDER_END = 'List_Order_End',
+  LIST_ORDER_FAIL = 'List_Order_Fail',
+  LIST_ORDER_CLEAR = 'List_Order_Clear',
+}
+
+export enum ERROR {
+  NORMAL_RISE = 'ERROR-NORMAL-RISE',
+  NORMAL_HIDE = 'ERROR-NORMAL-HIDE',
+  NETWORK_RISE = 'ERROR-NETWORK-RISE',
+  NETWORK_HIDE = 'ERROR-NETWORK-HIDE',
 }

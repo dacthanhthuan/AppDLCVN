@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     // fontFamily: 'Montserrat',
     fontWeight: '600',
-    width: '90%',
+    width: '100%',
   },
   rowFooter: {
     width: '100%',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   textTotal: {
-    fontSize: 15,
+    fontSize: 16,
     color: '#19A538',
     fontWeight: '600',
     // fontFamily: 'Montserrat',

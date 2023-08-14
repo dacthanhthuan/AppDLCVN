@@ -7,6 +7,11 @@ import {BIOMETRIC} from '../../MyGlobal';
 import PasswordConfirmOverlay from '../PasswordConfirmOverlay';
 import {ToastAndroid} from 'react-native';
 import {Linking} from 'react-native';
+import {
+  NotificationActions,
+  useNotificationDispatch,
+} from '../NotificationContext/context';
+import {NotificationType} from '../NotificationContext/types';
 
 type LoadingOverlayProps = {
   visible: boolean;
@@ -21,6 +26,9 @@ export default function LoginSettingOverlay({
   onConfirm,
   onCancel,
 }: LoadingOverlayProps) {
+  // notification dispatch
+  const notification = useNotificationDispatch();
+
   // state of checkbox (current option)
   const [checkbox, setCheckbox] = useState(false);
   // state show or hide PasswordConfirmOverlay
@@ -88,9 +96,31 @@ export default function LoginSettingOverlay({
               mobile: user.mobile,
               password: password,
             });
+
+            // display notification
+            notification(
+              NotificationActions.rise({
+                data: {
+                  message: 'Đã kích hoạt tính năng đăng nhập bằng vân tay',
+                },
+                duration: 3000,
+                type: NotificationType.NORMAL,
+              }),
+            );
           }
           // otherwise, user want to unactive biometric login
           else {
+            // display notification
+            notification(
+              NotificationActions.rise({
+                data: {
+                  message: 'Đã huỷ bỏ tính năng đăng nhập bằng vân tay',
+                },
+                duration: 3000,
+                type: NotificationType.NORMAL,
+              }),
+            );
+
             // remove biometric login data and option
             await multiRemoveData([
               LOCALSTORAGE.biometric_login_data,

@@ -9,6 +9,7 @@ const Header = ({
   onPressRight,
   containerStyle,
   showCartBadge,
+  isWallet = true,
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
@@ -23,7 +24,9 @@ const Header = ({
             resizeMode="contain"
             source={iconRight}
           />
-          {showCartBadge ? <CartBadge style={styles.cartBadge} /> : null}
+          {showCartBadge ? (
+            <CartBadge style={styles.cartBadge} isWallet={isWallet} />
+          ) : null}
         </TouchableOpacity>
       ) : (
         <View style={styles.iconRight} />
@@ -36,6 +39,7 @@ export default React.memo(Header);
 
 import {StyleSheet} from 'react-native';
 import CartBadge from '../Cart/CartBadge';
+import {useNavigation} from '@react-navigation/native';
 const styles = StyleSheet.create({
   container: {
     width: '100%',

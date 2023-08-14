@@ -22,10 +22,16 @@ import {
 } from '../../redux/actions/addressBookActions';
 import {mobileCheck} from '../../MyGlobal';
 import {clientGetDetailUserStart} from '../../redux/actions/userActions';
+import {
+  NotificationActions,
+  useNotificationDispatch,
+} from '../../component/NotificationContext/context';
+import {NotificationType} from '../../component/NotificationContext/types';
 
 const UpdateAddress1 = () => {
   const route = useRoute();
   const navigation = useNavigation();
+  const notification = useNotificationDispatch();
 
   const dispatch = useDispatch();
   const session_token = useSelector(state => state.user.session_token); // user token
@@ -95,16 +101,27 @@ const UpdateAddress1 = () => {
     }
   }, [updateState]);
 
-  // after set default,
+  // after set default, dispatch get list to reload data
   useEffect(() => {
     if (!setDefaultState && ispressed) {
       dispatch(addressBookListAllStart(session_token));
     }
   }, [setDefaultState]);
 
-  // go back previous screen when list is
+  // go back previous screen after reload data success
   useEffect(() => {
     if (!listLoading && ispressed) {
+      // display notification
+      notification(
+        NotificationActions.rise({
+          data: {
+            message: 'Cập nhật dữ liệu thành công',
+          },
+          duration: 3000,
+          type: NotificationType.NORMAL,
+        }),
+      );
+
       // reload user data after change
       dispatch(clientGetDetailUserStart(session_token));
       navigation.dispatch(StackActions.pop());

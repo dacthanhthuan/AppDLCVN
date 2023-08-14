@@ -31,13 +31,14 @@ const Style_DetailOrder = StyleSheet.create({
   text_2: {
     fontSize: 16,
     color: '#000000',
+    maxWidth: '90%',
   },
   text_3: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#005AA9',
   },
   text_4: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#000000',
     fontWeight: '300',
   },
@@ -62,6 +63,45 @@ const Style_DetailOrder = StyleSheet.create({
   },
   view_3: {
     marginLeft: 10,
+    flex: 3,
+  },
+
+  decrementBadge: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    fontSize: 12,
+    color: 'white',
+    backgroundColor: 'red',
+    position: 'absolute',
+    left: -10,
+    top: -10,
+    zIndex: 1,
+    textAlign: 'center',
+    verticalAlign: 'middle',
+  },
+
+  stroke_line: {
+    textDecorationLine: 'line-through',
+    fontSize: 12,
+  },
+
+  decrementPrice: {
+    fontSize: 14,
+    color: 'red',
+    marginRight: 5,
+  },
+
+  priceView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  button: {
+    width: '40%',
+    margin: 10,
+    alignSelf: 'center',
   },
 });
 

@@ -43,3 +43,37 @@ export const newOrderFail = (msg: string) => ({
   type: ORDER.NEW_ORDER_FAIL,
   payload: msg,
 });
+
+type ListOrderProps = {
+  token: string;
+  type?: string;
+  page?: string;
+  payment_type?: string;
+};
+
+export const getListOrderStart = (data: ListOrderProps) => {
+  const form = new FormData();
+  form.append('token', data.token);
+  form.append('type', data.type);
+  form.append('payment_type', data.payment_type);
+  form.append('page', data.page);
+
+  return {
+    type: ORDER.LIST_ORDER_START,
+    payload: form,
+  };
+};
+
+export const getListOrderEnd = (data: any) => ({
+  type: ORDER.LIST_ORDER_END,
+  payload: data,
+});
+
+export const getListOrderFail = (message: string) => ({
+  type: ORDER.LIST_ORDER_FAIL,
+  payload: message,
+});
+
+export const clearListOrder = () => ({
+  type: ORDER.LIST_ORDER_CLEAR,
+});

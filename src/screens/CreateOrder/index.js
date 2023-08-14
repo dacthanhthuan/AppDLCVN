@@ -26,17 +26,20 @@ const CreateOrder = ({route}) => {
     totalPrices,
     totalDecrementPrices,
     totalDecrementPoint,
+    type,
+    choose_address,
   } = route?.params || {};
   const navigation = useNavigation();
 
   // address default
-  const default_address = useSelector(state => state.user.address_default);
+  const address_default = useSelector(state => state.user.address_default);
+  const ship_location = choose_address ? choose_address : address_default;
 
   // ship infomation
-  const ship_address = `${default_address.address}, ${default_address.ward}, ${default_address.district}, ${default_address.city}`;
-  const ship_name = default_address.fullname;
-  const ship_mobile = default_address.mobile;
-  const address_book_id = default_address.id;
+  const ship_address = `${ship_location.address}, ${ship_location.ward}, ${ship_location.district}, ${ship_location.city}`;
+  const ship_name = ship_location.fullname;
+  const ship_mobile = ship_location.mobile;
+  const address_book_id = ship_location.id;
   const [ship_note, setNote] = useState('');
   const litems = products.map(item => {
     return {
@@ -137,7 +140,15 @@ const CreateOrder = ({route}) => {
                   <Text style={styles.text_1}>Địa chỉ giao hàng</Text>
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate('CustomerInformation', {goback: true})
+                      navigation.navigate('CustomerInformation', {
+                        goback: true,
+                        products,
+                        totalPoint,
+                        totalPrices,
+                        totalDecrementPrices,
+                        totalDecrementPoint,
+                        type,
+                      })
                     }
                     hitSlop={10}>
                     <Text style={styles.text_2}>Thay đổi</Text>
@@ -201,33 +212,42 @@ const CreateOrder = ({route}) => {
                 <Text style={styles.title_1}>Thông tin sản phẩm</Text>
                 <TextViewRow
                   title="Tổng tiền hàng:"
-                  price={formatPrice(totalPrices + totalPoint)}
-                  point={formatPoint(totalPoint + totalPrices)}
-                  between="hoặc"
+                  price={
+                    type == 'money_payment'
+                      ? formatPrice(totalPrices)
+                      : undefined
+                  }
+                  point={
+                    type == 'point_payment'
+                      ? formatPoint(totalPoint)
+                      : undefined
+                  }
                 />
                 <Line />
                 <TextViewRow title="Phí vận chuyển:" between="Freeship" />
                 <Line />
                 <TextViewRow
                   title="Tổng giảm giá:"
-                  price={formatPrice(
-                    totalDecrementPoint +
-                      totalDecrementPrices -
-                      totalPrices +
-                      totalPoint,
-                  )}
+                  price={
+                    type == 'money_payment'
+                      ? formatPrice(totalPrices - totalDecrementPrices)
+                      : formatPoint(totalPoint - totalDecrementPoint)
+                  }
                   priceStyle={{color: 'red'}}
                 />
                 <Line />
                 <TextViewRow
                   title="Tổng số tiền cần thanh toán:"
-                  price={formatPrice(
-                    totalDecrementPoint + totalDecrementPrices,
-                  )}
-                  point={formatPoint(
-                    totalDecrementPoint + totalDecrementPrices,
-                  )}
-                  between="hoặc"
+                  price={
+                    type == 'money_payment'
+                      ? formatPrice(totalDecrementPrices)
+                      : undefined
+                  }
+                  point={
+                    type == 'point_payment'
+                      ? formatPoint(totalDecrementPoint)
+                      : undefined
+                  }
                 />
               </View>
             </View>
@@ -242,7 +262,11 @@ const CreateOrder = ({route}) => {
                 onPress={() =>
                   navigation.navigate('Payment', {
                     ship: ship,
-                    total: totalDecrementPoint + totalDecrementPrices,
+                    total:
+                      type == 'money_payment'
+                        ? totalDecrementPrices
+                        : totalDecrementPoint,
+                    type: type == 'money_payment' ? 'wallet' : 'cashback',
                   })
                 }
                 text={'Tiến hành thanh toán'}

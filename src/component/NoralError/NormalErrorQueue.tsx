@@ -1,10 +1,11 @@
+import {useDispatch, useSelector} from 'react-redux';
 import NormalError from './NormalError';
-import {ErrorActions, useError, useErrorDispatch} from './context';
 import {useCallback, useEffect, useState} from 'react';
+import {hideNormalError} from '../../redux/actions/errorHandlerActions';
 
 export default function NormalErrorQueue() {
-  const error = useError();
-  const dispatch = useErrorDispatch();
+  const error = useSelector((state: any) => state.error);
+  const dispatch = useDispatch();
   // get data from error state
   const queue = error.normal;
   const errorData = error.normal[0];
@@ -27,7 +28,7 @@ export default function NormalErrorQueue() {
   // timer animate between 2 error
   const animateTimer = useCallback(() => {
     animateTimout = setTimeout(() => {
-      dispatch(ErrorActions.hide());
+      dispatch(hideNormalError());
 
       clearTimeout(animateTimout);
     }, 100);
@@ -57,5 +58,5 @@ export default function NormalErrorQueue() {
     }
   }, [queue.length]);
 
-  return visible ? <NormalError error={errorData.error} /> : null;
+  return visible ? <NormalError error={errorData.message} /> : null;
 }

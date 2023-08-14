@@ -16,7 +16,7 @@ type CheckboxType = {
   text?: string;
   textStyle?: StyleProp<TextStyle>;
   disable?: boolean;
-  unique?: number;
+  index?: number;
 };
 
 const CheckboxInFlatList = ({
@@ -25,7 +25,7 @@ const CheckboxInFlatList = ({
   text,
   textStyle,
   disable,
-  unique,
+  index,
 }: CheckboxType) => {
   // state check of checkbox
   const [checked, setChecked] = React.useState(false);
@@ -36,11 +36,11 @@ const CheckboxInFlatList = ({
 
   // if unique is exist, update checkbox into allcheck context
   useEffect(() => {
-    if (unique !== undefined) {
+    if (index !== undefined) {
       if (checked) {
-        dispatch(AllCheckActions.Add_Check_Box(unique));
+        dispatch(AllCheckActions.Add_Check_Box(index));
       } else {
-        dispatch(AllCheckActions.Remove_Check_Box(unique));
+        dispatch(AllCheckActions.Remove_Check_Box(index));
       }
     }
   }, [checked]);

@@ -19,6 +19,11 @@ import {
 } from '../../redux/actions/addressBookActions';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import {clientGetDetailUserStart} from '../../redux/actions/userActions';
+import {
+  NotificationActions,
+  useNotificationDispatch,
+} from '../../component/NotificationContext/context';
+import {NotificationType} from '../../component/NotificationContext/types';
 
 const CustomerInformation = () => {
   const navigation = useNavigation();
@@ -27,16 +32,18 @@ const CustomerInformation = () => {
 
   // get go_back params (if navigate from CreateOrder screen)
   const go_back = route.params?.goback || undefined;
+  const {
+    products,
+    totalPoint,
+    totalPrices,
+    totalDecrementPrices,
+    totalDecrementPoint,
+    type,
+  } = route.params || {};
 
   const session_token = useSelector(state => state.user.session_token);
   const addressBook = useSelector(state => state.addressBook.data);
   const listLoading = useSelector(state => state.addressBook.listLoading);
-  const setDefaultState = useSelector(
-    state => state.addressBook.setDefaultState,
-  );
-
-  // default choose is pressed
-  const [defaultChange, setDefaultChange] = useState(false);
 
   // initial dispatch to get list address
   useEffect(() => {
@@ -45,36 +52,21 @@ const CustomerInformation = () => {
     }
   }, []);
 
-  // after set default, reload user and addressbook data
-  useEffect(() => {
-    if (!setDefaultState && defaultChange) {
-      dispatch(addressBookListAllStart(session_token));
-      dispatch(clientGetDetailUserStart(session_token));
-    }
-  }, [setDefaultState]);
-
-  // after reload data success (above), pop this screen to go back
-  useEffect(() => {
-    if (!listLoading && defaultChange && go_back) {
-      navigation.dispatch(StackActions.pop());
-      setDefaultChange(false);
-    }
-  }, [listLoading]);
-
   // render item
   const RenderItem = useCallback(({item}) => {
     return (
       <Pressable
         onPress={() => {
-          if (item.is_default != 1) {
-            dispatch(
-              addressBookSetDefaultStart({
-                token: session_token,
-                id: item.id,
-              }),
-            );
-
-            setDefaultChange(true);
+          if (go_back) {
+            navigation.navigate('CreateOrder', {
+              choose_address: item,
+              products,
+              totalPoint,
+              totalPrices,
+              totalDecrementPrices,
+              totalDecrementPoint,
+              type,
+            });
           }
         }}>
         <CardContact

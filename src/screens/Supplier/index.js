@@ -15,9 +15,13 @@ import LottieView from 'lottie-react-native';
 import assets from '../../assets';
 import {useIsReady} from '../../MyGlobal';
 import LoadingOverlay from '../../component/LoadingOverlay';
+import {useSelector} from 'react-redux';
+import LoginNow from '../LoginNow';
 
 const Supplier = () => {
   const isReady = useIsReady();
+
+  const login = useSelector(state => state.user.login.status);
 
   const [search, setSearch] = useState('');
   const Searchfuncion = data_supplier.filter(itemsearch => {
@@ -42,7 +46,9 @@ const Supplier = () => {
     );
   };
 
-  return !isReady ? (
+  return !login ? (
+    <LoginNow />
+  ) : !isReady ? (
     <LoadingOverlay />
   ) : (
     <SafeAreaView style={StyleSupplier.container}>

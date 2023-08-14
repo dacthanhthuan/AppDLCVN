@@ -70,6 +70,8 @@ const SearchRecent = ({navigation}) => {
         onPressRight={() => {
           navigation.navigate('Cart');
         }}
+        showCartBadge={true}
+        isWallet
       />
 
       <Input

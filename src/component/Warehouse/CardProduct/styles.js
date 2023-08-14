@@ -4,7 +4,7 @@ import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../../MyGlobal';
 const styles = StyleSheet.create({
   container: {
     width: (WINDOW_WIDTH * 0.94) / 2,
-    height: WINDOW_HEIGHT * 0.3,
+    height: WINDOW_HEIGHT * 0.32,
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   image: {
-    width: 131,
-    height: 112,
+    width: 130,
+    height: 110,
     alignSelf: 'center',
   },
   title: {
@@ -50,6 +50,35 @@ const styles = StyleSheet.create({
     marginTop: 7,
     fontWeight: '500',
     paddingLeft: 12,
+  },
+
+  decrementBadge: {
+    width: 35,
+    height: 35,
+    backgroundColor: 'red',
+    color: 'white',
+    borderRadius: 20,
+    position: 'absolute',
+    right: 5,
+    top: 5,
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    zIndex: 1,
+    fontSize: 13,
+  },
+
+  renderDecrement: {
+    color: 'red',
+    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '500',
+    paddingLeft: 12,
+  },
+
+  stroke_text: {
+    textDecorationLine: 'line-through',
+    fontSize: 14,
+    fontWeight: '500',
   },
 });
 

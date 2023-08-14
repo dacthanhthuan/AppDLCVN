@@ -14,7 +14,10 @@ import Animated, {
   withSpring,
   runOnJS,
 } from 'react-native-reanimated';
-import {clientInitialApiStart} from '../../redux/actions/appActions';
+import {
+  clientInitialApiEnd,
+  clientInitialApiStart,
+} from '../../redux/actions/appActions';
 import {clientLoginEnd} from '../../redux/actions/userActions';
 
 //Splash screen
@@ -57,6 +60,7 @@ import {PRODUCT_LIST} from '../../redux/actions/types';
 import ThemeListHeaderComponent from '../../component/Home/ThemeListHeaderComponent';
 import {mergeProductData} from '../../redux/actions/cartActions';
 import {mergeSearch} from '../../redux/actions/searchRecentActions';
+import {hideNormalError} from '../../redux/actions/errorHandlerActions';
 
 export const ScrollContext = createContext(false);
 
@@ -75,6 +79,15 @@ const Home = () => {
   const [loadmore, setLoadmore] = useState(false);
   const [skeletonVisible, setSekeletonVisible] = useState(true);
 
+  // get app data from local and dispatch to redux
+  const getApppDatafromLocal = async () => {
+    await getData(LOCALSTORAGE.app)
+      .then(res => {
+        dispatch(clientInitialApiEnd(res));
+      })
+      .catch(err => {});
+  };
+
   // get user data from local and dispatch to redux
   const getUserDatafromLocal = async () => {
     await getData(LOCALSTORAGE.user)
@@ -90,7 +103,7 @@ const Home = () => {
   const getCartDataFromLocal = async () => {
     await getData(LOCALSTORAGE.cart)
       .then(res => {
-        if (res != null) dispatch(mergeProductData(res.data));
+        if (res != null) dispatch(mergeProductData(res));
       })
       .catch(err => {});
   };
@@ -107,6 +120,7 @@ const Home = () => {
   useEffect(() => {
     // get data from local and dispatch to redux
     getUserDatafromLocal();
+    getApppDatafromLocal();
     getCartDataFromLocal();
     getSearchDataFromLocal();
 
@@ -119,11 +133,7 @@ const Home = () => {
 
   // get product list from server
   const getProductListApi = (page = 1) => {
-    try {
-      dispatch(clientProductListStart(page, '0', session_token));
-    } catch (error) {
-      throw new Error(error);
-    }
+    dispatch(clientProductListStart(page, '0', session_token));
   };
 
   // after loading app state (domain and api) finish or user is logout/login then
@@ -171,6 +181,8 @@ const Home = () => {
   useEffect(() => {
     if ((productData.loading || loadingApp) && !loadmore) {
       setSekeletonVisible(true);
+      // hide error if this exist
+      dispatch(hideNormalError());
     } else setSekeletonVisible(false);
   }, [loadingApp, productData]);
 

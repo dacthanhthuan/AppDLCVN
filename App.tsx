@@ -64,6 +64,8 @@ import AddAddress from './src/screens/AddAddress';
 import UpdateAddress1 from './src/screens/UpdateAddress1';
 import SingleMenu from './src/screens/Menu';
 import ProfileAdmin from './src/screens/ProfileAdmin';
+import PointCart from './src/screens/PointCart';
+
 import {useSelector} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
@@ -77,6 +79,7 @@ const App = () => {
           screenOptions={{headerShown: false}}
           initialRouteName="MainTab">
           <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen name="PointCart" component={PointCart} />
           <Stack.Screen name="NoOrders" component={NoOrders} />
           <Stack.Screen name="Team" component={Team} />
           <Stack.Screen name="TeamThree" component={TeamThree} />

@@ -4,12 +4,14 @@ import styles from './styles';
 import Button from '../../component/Button';
 import LottieView from 'lottie-react-native';
 import assets from '../../assets';
+import {useNavigation} from '@react-navigation/native';
 
-const SuccPayment = ({navigation}) => {
+const SuccPayment = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
       <Text style={{fontSize: 20, color: '#000000'}}>
-        Thanh toán thành công
+        Đơn hàng đang được xử lý...
       </Text>
       <LottieView
         source={assets.LottieAnimation.delivery}
@@ -28,6 +30,13 @@ const SuccPayment = ({navigation}) => {
         style={{marginTop: 32, width: '90%'}}
         onPress={() => {
           navigation.navigate('Home');
+        }}
+      />
+      <Button
+        text="Đến lịch sử đơn hàng"
+        style={{marginTop: 15, width: '90%'}}
+        onPress={() => {
+          navigation.navigate('Order');
         }}
       />
     </SafeAreaView>
