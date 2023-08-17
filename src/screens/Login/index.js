@@ -19,7 +19,7 @@ import {
   clientClearUserData,
 } from '../../redux/actions/userActions';
 import LoadingOverlay from '../../component/LoadingOverlay';
-import {BIOMETRIC, mobileCheck, passwordCheck} from '../../MyGlobal';
+import {BIOMETRIC, mobileCheck, passwordCheck} from '../../global';
 import {getData, multiRemoveData} from '../../storage';
 import {LOCALSTORAGE} from '../../storage/direct';
 import {

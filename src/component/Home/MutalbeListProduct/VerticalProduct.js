@@ -1,5 +1,5 @@
 import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
-import {WINDOW_WIDTH} from '../../../MyGlobal';
+import {WINDOW_WIDTH} from '../../../global';
 import {memo} from 'react';
 import {useNavigation} from '@react-navigation/native';
 

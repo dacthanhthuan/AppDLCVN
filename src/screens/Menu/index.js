@@ -12,7 +12,7 @@ import Header from '../../component/Header';
 import SingleMenu from '../../component/SingleMenu';
 import StatusMenu from '../../component/StatusMenu';
 import StatusWallet from '../../component/StatusWallet';
-import {useIsReady} from '../../MyGlobal';
+import {useIsReady} from '../../global';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -28,6 +28,8 @@ const ALL = 'Tất cả';
 const Menu = ({navigation}) => {
   const isReady = useIsReady();
   const dispatch = useDispatch();
+
+  const loadingApp = useSelector(state => state.app.loading); // loading domain and api state
 
   const session_token = useSelector(state => state.user.session_token);
   const login = useSelector(state => state.user.login.status);
@@ -48,6 +50,8 @@ const Menu = ({navigation}) => {
 
   // new order state
   const newOrderState = useSelector(state => state.order.newOrderState);
+  // delete order state
+  const deleteOrderState = useSelector(state => state.order.deleteOrderState);
   const orderMsg = useSelector(state => state.order.message);
 
   const [filterData, updateFilterData] = useImmer([]);
@@ -68,13 +72,38 @@ const Menu = ({navigation}) => {
     );
   };
 
+  // whenever loading app done
+  useEffect(() => {
+    if (!loadingApp && login) {
+      dispatch(clearListOrder());
+      getOrderListApi();
+    }
+  }, [loadingApp]);
+
   // whenever new order is create (and initial rendered)
   useEffect(() => {
-    if (!newOrderState && !orderMsg) {
+    if (!newOrderState && !orderMsg && login) {
       dispatch(clearListOrder());
       getOrderListApi();
     }
   }, [newOrderState]);
+
+  // whenever order is canceled
+  useEffect(() => {
+    if (!deleteOrderState && !orderMsg && login) {
+      dispatch(clearListOrder());
+
+      getOrderListApi(
+        1,
+        paymentType == 'Tất cả'
+          ? undefined
+          : paymentType == 'Ví VNĐ'
+          ? walllet_payment_type
+          : cashback_payment_type,
+        orderStatus,
+      );
+    }
+  }, [deleteOrderState, orderMsg]);
 
   // update order data after load
   useEffect(() => {
@@ -85,29 +114,43 @@ const Menu = ({navigation}) => {
     }
   }, [orderList]);
 
-  // if user login, re-load order list
+  // if user login or refresh, re-load order list
   useEffect(() => {
-    if (login || refreshing) {
-      dispatch(clearListOrder());
-      getOrderListApi();
-      setLoadMore(false);
+    if (refreshing || login) {
+      if (login) {
+        setPaymentType(ALL);
+        setOrderStatus(0);
+        dispatch(clearListOrder());
+        getOrderListApi(
+          1,
+          paymentType == 'Tất cả'
+            ? undefined
+            : paymentType == 'Ví VNĐ'
+            ? walllet_payment_type
+            : cashback_payment_type,
+          orderStatus,
+        );
+        setLoadMore(false);
+      }
     }
   }, [login, refreshing]);
 
   // get data whenever user change their choose:
   useEffect(() => {
-    // clear order list whenever user change list
-    dispatch(clearListOrder());
+    if (login) {
+      // clear order list whenever user change list
+      dispatch(clearListOrder());
 
-    getOrderListApi(
-      0,
-      paymentType == 'Tất cả'
-        ? undefined
-        : paymentType == 'Ví VNĐ'
-        ? walllet_payment_type
-        : cashback_payment_type,
-      orderStatus,
-    );
+      getOrderListApi(
+        0,
+        paymentType == 'Tất cả'
+          ? undefined
+          : paymentType == 'Ví VNĐ'
+          ? walllet_payment_type
+          : cashback_payment_type,
+        orderStatus,
+      );
+    }
   }, [orderStatus, paymentType]);
 
   // handle load more
@@ -156,13 +199,13 @@ const Menu = ({navigation}) => {
           marginVertical: 12,
           paddingHorizontal: 16,
         }}>
-        Đơn đã đặt
+        Đơn {orderStatus != -1 ? lDeliverySteps[orderStatus].name : 'huỷ'}
       </Text>
 
       <FlatList
         data={filterData}
         style={{flex: 1, padding: 16}}
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -174,9 +217,11 @@ const Menu = ({navigation}) => {
         renderItem={({item}) => {
           return <SingleMenu style={{marginHorizontal: 2}} data={item} />;
         }}
-        ListHeaderComponent={
+        ListEmptyComponent={
           listOrderState && !refreshing ? (
             <ActivityIndicator size={'large'} />
+          ) : !refreshing ? (
+            <Text style={{color: 'black', fontSize: 15}}>Không có đơn</Text>
           ) : null
         }
         onEndReached={() => {
@@ -187,6 +232,12 @@ const Menu = ({navigation}) => {
         }}
         initialNumToRender={3}
         maxToRenderPerBatch={5}
+        windowSize={15}
+        getItemLayout={(_, index) => ({
+          index,
+          length: 280,
+          offset: 280 * index,
+        })}
         removeClippedSubviews
       />
       {loadMore ? <LoadmoreIndicator /> : null}

@@ -1,6 +1,6 @@
 import {Text, Image, StyleSheet} from 'react-native';
 import RadioButton from '../../RadioButton';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../../MyGlobal';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../../global';
 import {memo} from 'react';
 
 const ButtonGroup = ({button, checked, onSelect}) => {

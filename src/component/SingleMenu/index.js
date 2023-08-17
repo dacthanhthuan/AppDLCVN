@@ -2,7 +2,7 @@ import React from 'react';
 import {Pressable, Image, View, Text, FlatList} from 'react-native';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {WINDOW_WIDTH, formatPrice, secondToGlobalDate} from '../../MyGlobal';
+import {WINDOW_WIDTH, formatPrice, secondToGlobalDate} from '../../global';
 
 const SingleMenu = ({data, style}) => {
   const navigation = useNavigation();

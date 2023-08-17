@@ -1,7 +1,7 @@
 import {FlatList, View, StyleSheet} from 'react-native';
 import {useState, useRef, useCallback, useEffect} from 'react';
 import {memo} from 'react';
-import {WINDOW_WIDTH} from '../MyGlobal';
+import {WINDOW_WIDTH} from '../global';
 
 const MyCarousel = ({
   data,

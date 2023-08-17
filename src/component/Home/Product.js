@@ -1,10 +1,13 @@
-import {WINDOW_WIDTH, WINDOW_HEIGHT, formatPrice} from '../../MyGlobal';
+import {WINDOW_WIDTH, WINDOW_HEIGHT, formatPrice} from '../../global';
 import {memo} from 'react';
 import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {addProduct2Cart} from '../../redux/actions/cartActions';
 
 const Product = ({item}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const goToDetailProduct = () => {
     navigation.navigate('DetailProduct', {product: item, type: 'money'});
@@ -27,17 +30,25 @@ const Product = ({item}) => {
         {decrement ? (
           <Text style={styles.decrementBadge}>-{decrement}%</Text>
         ) : null}
+
         <Image
-          source={{uri: item?.img_1}}
+          source={
+            item?.img_1
+              ? {uri: item?.img_1}
+              : require('../../assets/noimage.png')
+          }
           style={[styles.renderImage]}
           resizeMode="contain"
         />
+
         <Text style={styles.renderTitle} numberOfLines={1}>
           {item?.product_name}
         </Text>
+        {/* 
         <Text style={styles.renderProductId} numberOfLines={1}>
           {item?.product_id}
-        </Text>
+        </Text> */}
+
         <Text style={styles.renderProductId} numberOfLines={1}>
           Giá bán:{' '}
           <Text
@@ -45,14 +56,34 @@ const Product = ({item}) => {
             {price}
           </Text>
         </Text>
-        {decrement ? (
-          <Text style={styles.renderProductId} numberOfLines={1}>
-            Sale : <Text style={styles.renderDecrement}>{priceDecrement}</Text>
-          </Text>
-        ) : null}
+
+        <Text style={styles.renderProductId} numberOfLines={1}>
+          {decrement ? (
+            <Text style={styles.renderDecrement}>Sale: {priceDecrement}</Text>
+          ) : (
+            ''
+          )}
+        </Text>
+
         {/* <Text style={styles.renderProductId} numberOfLines={1}>
           Hoa hồng: <Text style={styles.renderCommission}>{commission}</Text>
         </Text> */}
+        <Pressable
+          style={({pressed}) => [
+            styles.addToCartContainer,
+            pressed ? {opacity: 0.5} : null,
+          ]}
+          onPress={() => {
+            dispatch(
+              addProduct2Cart({
+                product: item,
+                quantity: 1,
+                pType: 'money',
+              }),
+            );
+          }}>
+          <Text style={styles.addToCart}>+</Text>
+        </Pressable>
       </Pressable>
     </View>
   );
@@ -65,7 +96,7 @@ export default memo(Product, (pre, next) => {
 const styles = StyleSheet.create({
   renderItem: {
     width: (WINDOW_WIDTH * 0.94) / 2,
-    height: WINDOW_HEIGHT * 0.35,
+    height: 250,
     backgroundColor: 'white',
     justifyContent: 'center',
   },
@@ -141,5 +172,26 @@ const styles = StyleSheet.create({
     verticalAlign: 'middle',
     zIndex: 1,
     fontSize: 13,
+  },
+
+  addToCartContainer: {
+    width: 35,
+    height: 35,
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  addToCart: {
+    fontSize: 20,
+    color: 'white',
+    backgroundColor: '#005aa9',
+    width: '80%',
+    height: '80%',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    borderRadius: 20,
   },
 });

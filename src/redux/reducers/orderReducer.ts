@@ -8,6 +8,7 @@ const initialState = {
   nextPage: 1,
   newOrderState: false,
   listOrderState: false,
+  deleteOrderState: false,
   message: undefined,
 };
 
@@ -74,6 +75,29 @@ export default function orderReducer(state = initialState, action: AnyAction) {
         nextPage: 1,
         listOrderState: false,
         message: undefined,
+      };
+    }
+
+    // delete order
+    case ORDER.DELETE_ORDER_START: {
+      return {
+        ...state,
+        deleteOrderState: true,
+        message: undefined,
+      };
+    }
+    case ORDER.DELETE_ORDER_END: {
+      return {
+        ...state,
+        deleteOrderState: false,
+        message: undefined,
+      };
+    }
+    case ORDER.DELETE_ORDER_FAIL: {
+      return {
+        ...state,
+        deleteOrderState: false,
+        message: action.payload,
       };
     }
 

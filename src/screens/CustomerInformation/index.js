@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import styles from './styles';
 import {
   SafeAreaView,
@@ -11,28 +11,25 @@ import {
 import Header from '../../component/Header';
 import CardContact from '../../component/CardContact';
 import CardAddress from '../../component/CardAddress';
-import {StackActions, useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  addressBookListAllStart,
-  addressBookSetDefaultStart,
-} from '../../redux/actions/addressBookActions';
+import {addressBookListAllStart} from '../../redux/actions/addressBookActions';
 import LoadingOverlay from '../../component/LoadingOverlay';
-import {clientGetDetailUserStart} from '../../redux/actions/userActions';
 import {
-  NotificationActions,
-  useNotificationDispatch,
-} from '../../component/NotificationContext/context';
-import {NotificationType} from '../../component/NotificationContext/types';
+  OrderAddressActions,
+  useOrderAddressDispatch,
+} from '../../component/OrderAddressContext';
 
 const CustomerInformation = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const dispatch = useDispatch();
+  const orderAddressDispatch = useOrderAddressDispatch();
 
   // get go_back params (if navigate from CreateOrder screen)
   const go_back = route.params?.goback || undefined;
   const {
+    ship_location_id,
     products,
     totalPoint,
     totalPrices,
@@ -59,7 +56,6 @@ const CustomerInformation = () => {
         onPress={() => {
           if (go_back) {
             navigation.navigate('CreateOrder', {
-              choose_address: item,
               products,
               totalPoint,
               totalPrices,
@@ -67,6 +63,18 @@ const CustomerInformation = () => {
               totalDecrementPoint,
               type,
             });
+
+            orderAddressDispatch(
+              OrderAddressActions.update({
+                address: item.address,
+                city: item.city,
+                district: item.district,
+                fullname: item.fullname,
+                id: item.id,
+                mobile: item.mobile,
+                ward: item.ward,
+              }),
+            );
           }
         }}>
         <CardContact
@@ -79,6 +87,11 @@ const CustomerInformation = () => {
           address={`${item.ward}, ${item.district}, ${item.city}`}
           // onPress={() => navigation.navigate('UpdateAddress2')}
           isDefault={item.is_default == 1}
+          checked={
+            ship_location_id
+              ? ship_location_id == item.id
+              : item.is_default == 1
+          }
         />
       </Pressable>
     );

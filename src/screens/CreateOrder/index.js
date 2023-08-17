@@ -7,19 +7,21 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import Header from '../../component/Header/index';
 import styles from './style';
 import Detail_Input from '../../component/Detail_Input';
-import Information from '../../component/Information';
 import Line from '../../component/Line';
 import Button from '../../component/Button';
-import {formatPoint, formatPrice, WINDOW_WIDTH} from '../../MyGlobal';
+import {formatPoint, formatPrice, WINDOW_WIDTH} from '../../global';
 import {useSelector} from 'react-redux';
-import VerticalProduct from '../../component/Home/MutalbeListProduct/VerticalProduct';
 import TextViewRow from '../../component/TextViewRow';
+import {useOrderAddress} from '../../component/OrderAddressContext';
 
 const CreateOrder = ({route}) => {
+  const navigation = useNavigation();
+  const orderAddress = useOrderAddress();
+
   const {
     products,
     totalPoint,
@@ -27,19 +29,21 @@ const CreateOrder = ({route}) => {
     totalDecrementPrices,
     totalDecrementPoint,
     type,
-    choose_address,
   } = route?.params || {};
-  const navigation = useNavigation();
 
   // address default
   const address_default = useSelector(state => state.user.address_default);
-  const ship_location = choose_address ? choose_address : address_default;
+  const ship_location = orderAddress.address
+    ? orderAddress.address
+    : address_default;
 
   // ship infomation
-  const ship_address = `${ship_location.address}, ${ship_location.ward}, ${ship_location.district}, ${ship_location.city}`;
-  const ship_name = ship_location.fullname;
-  const ship_mobile = ship_location.mobile;
-  const address_book_id = ship_location.id;
+  const ship_address = ship_location
+    ? `${ship_location.address}, ${ship_location.ward}, ${ship_location.district}, ${ship_location.city}`
+    : 'Chưa có địa chỉ';
+  const ship_name = ship_location?.fullname;
+  const ship_mobile = ship_location?.mobile;
+  const address_book_id = ship_location?.id;
   const [ship_note, setNote] = useState('');
   const litems = products.map(item => {
     return {
@@ -75,7 +79,11 @@ const CreateOrder = ({route}) => {
         ) : null}
         <Image
           style={{width: 80, height: 80}}
-          source={{uri: item.product.img_1}}
+          source={
+            item.product.img_1
+              ? {uri: item.product.img_1}
+              : require('../../assets/noimage.png')
+          }
         />
         <View style={styles.view_3}>
           <Text style={[styles.text_1]} numberOfLines={2}>
@@ -142,6 +150,7 @@ const CreateOrder = ({route}) => {
                     onPress={() =>
                       navigation.navigate('CustomerInformation', {
                         goback: true,
+                        ship_location_id: ship_location?.id,
                         products,
                         totalPoint,
                         totalPrices,

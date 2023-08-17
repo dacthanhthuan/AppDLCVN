@@ -6,7 +6,7 @@ import {
   View,
   ImageSourcePropType,
 } from 'react-native';
-import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../MyGlobal';
+import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../global';
 import {useNavigation} from '@react-navigation/native';
 
 type ProductShowmoreProps = {

@@ -4,7 +4,7 @@ import styles from './styles';
 import {Swipeable} from 'react-native-gesture-handler';
 import DeleteProductIcon from '../DeleteProductIcon';
 import {useDispatch} from 'react-redux';
-import {formatPrice, formatPoint} from '../../../MyGlobal';
+import {formatPrice, formatPoint} from '../../../global';
 import {
   changeProductQuantity,
   rmProductFromCart,
@@ -90,7 +90,14 @@ const ProductCart = ({item, index, debounceTime = 400}) => {
         {decrement ? (
           <Text style={styles.decrementBadge}>-{decrement}%</Text>
         ) : null}
-        <Image style={styles.image} source={{uri: item?.product?.img_1}} />
+        <Image
+          style={styles.image}
+          source={
+            item?.product?.img_1
+              ? {uri: item?.product?.img_1}
+              : require('../../../assets/noimage.png')
+          }
+        />
         <View style={styles.rightCard}>
           <Text style={styles.title} numberOfLines={1}>
             {item?.product?.product_name}

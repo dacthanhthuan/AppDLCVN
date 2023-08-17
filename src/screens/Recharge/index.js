@@ -13,7 +13,7 @@ import Header from '../../component/Header';
 import CardSurplus from '../../component/CardSurplus';
 import Button from '../../component/Button';
 import LogoBanking from '../../component/LogoBanking';
-import {WINDOW_HEIGHT} from '../../MyGlobal';
+import {WINDOW_HEIGHT} from '../../global';
 
 const data = {
   images: [require('../../assets/acb.png'), require('../../assets/vcb.png')],

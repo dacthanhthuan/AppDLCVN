@@ -44,7 +44,7 @@ import Header from '../../component/Home/HeaderTitle/HeaderTitle';
 import ListProduct from '../../component/Home/ListProduct';
 import MutableList from '../../component/Home/MutalbeListProduct/MutableList';
 import CarouselSlideSmall from '../../component/Home/CarouselSlideSmall';
-import {WINDOW_HEIGHT, modifyData} from '../../MyGlobal';
+import {WINDOW_HEIGHT, modifyData} from '../../global';
 import {HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT} from './styles';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -60,7 +60,8 @@ import {PRODUCT_LIST} from '../../redux/actions/types';
 import ThemeListHeaderComponent from '../../component/Home/ThemeListHeaderComponent';
 import {mergeProductData} from '../../redux/actions/cartActions';
 import {mergeSearch} from '../../redux/actions/searchRecentActions';
-import {hideNormalError} from '../../redux/actions/errorHandlerActions';
+import {hideNetworkError} from '../../redux/actions/errorHandlerActions';
+import Style_TranferMoneyTwo from '../TranferMoneyTwo/style';
 
 export const ScrollContext = createContext(false);
 
@@ -133,7 +134,11 @@ const Home = () => {
 
   // get product list from server
   const getProductListApi = (page = 1) => {
-    dispatch(clientProductListStart(page, '0', session_token));
+    try {
+      dispatch(clientProductListStart(page, '0', session_token));
+    } catch (error) {
+      throw new error();
+    }
   };
 
   // after loading app state (domain and api) finish or user is logout/login then
@@ -141,6 +146,8 @@ const Home = () => {
   useEffect(() => {
     if (!loadingApp) {
       dispatch(clientProductListClear(PRODUCT_LIST.CLEAR));
+      // hide error if this exist
+      dispatch(hideNetworkError());
       getProductListApi();
     }
   }, [loadingApp, isLogin]);
@@ -179,12 +186,12 @@ const Home = () => {
 
   // skeleton visible handler
   useEffect(() => {
-    if ((productData.loading || loadingApp) && !loadmore) {
+    if (productData.loading && !loadmore) {
       setSekeletonVisible(true);
-      // hide error if this exist
-      dispatch(hideNormalError());
-    } else setSekeletonVisible(false);
-  }, [loadingApp, productData]);
+    } else {
+      setSekeletonVisible(false);
+    }
+  }, [productData]);
 
   // ANIMATION-----------------------------------
   // animate header

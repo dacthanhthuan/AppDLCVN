@@ -67,6 +67,7 @@ import ProfileAdmin from './src/screens/ProfileAdmin';
 import PointCart from './src/screens/PointCart';
 
 import {useSelector} from 'react-redux';
+import {OrderAddressProvider} from './src/component/OrderAddressContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -74,56 +75,58 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{headerShown: false}}
-          initialRouteName="MainTab">
-          <Stack.Screen name="Cart" component={Cart} />
-          <Stack.Screen name="PointCart" component={PointCart} />
-          <Stack.Screen name="NoOrders" component={NoOrders} />
-          <Stack.Screen name="Team" component={Team} />
-          <Stack.Screen name="TeamThree" component={TeamThree} />
-          <Stack.Screen name="CardEmpty" component={CartEmpty} />
-          <Stack.Screen name="Notifications" component={Notifications} />
-          <Stack.Screen name="SearchTeam" component={SearchTeam} />
-          <Stack.Screen
-            name="CustomerManagement"
-            component={CustomerManagement}
-          />
-          <Stack.Screen name="WithDraw" component={WithDraw} />
-          <Stack.Screen name="Recharge" component={Recharge} />
-          <Stack.Screen name="TransferMoney" component={TransferMoney} />
-          <Stack.Screen name="TranferMoneyTwo" component={TranferMoneyTwo} />
-          <Stack.Screen name="SuccPayment" component={SuccPayment} />
-          <Stack.Screen name="SearchProduct" component={SearchProduct} />
-          <Stack.Screen name="SearchRecent" component={SearchRecent} />
-          <Stack.Screen
-            name="CustomerInformation"
-            component={CustomerInformation}
-          />
-          <Stack.Screen name="UpdateAddress1" component={UpdateAddress1} />
-          <Stack.Screen name="AddAddress" component={AddAddress} />
-          <Stack.Screen name="CreateOrder" component={CreateOrder} />
-          <Stack.Screen name="DetailOrder" component={DetailOrder} />
-          <Stack.Screen name="DetailProduct" component={DetailProduct} />
-          <Stack.Screen name="Detail_User" component={Detail_User} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="InforTranfer" component={InforTranfer} />
-          <Stack.Screen name="WalletScreen" component={WalletScreen} />
-          <Stack.Screen name="WalletScreen_2" component={WalletScreen_2} />
-          <Stack.Screen name="OverView" component={OverView} />
-          <Stack.Screen name="Payment" component={Payment} />
-          <Stack.Screen name="RechargeHistory" component={RechargeHistory} />
-          <Stack.Screen name="Sales" component={Sales} />
-          <Stack.Screen name="Sales_2" component={Sales_2} />
-          <Stack.Screen name="Sales_3" component={Sales_3} />
-          <Stack.Screen name="Walk" component={Walk} />
-          <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
-          <Stack.Screen name="MainTab" component={MainTab} />
-          <Stack.Screen name="UpdateAddress2" component={UpdateAddressMain} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <OrderAddressProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{headerShown: false}}
+            initialRouteName="MainTab">
+            <Stack.Screen name="Cart" component={Cart} />
+            <Stack.Screen name="PointCart" component={PointCart} />
+            <Stack.Screen name="NoOrders" component={NoOrders} />
+            <Stack.Screen name="Team" component={Team} />
+            <Stack.Screen name="TeamThree" component={TeamThree} />
+            <Stack.Screen name="CardEmpty" component={CartEmpty} />
+            <Stack.Screen name="Notifications" component={Notifications} />
+            <Stack.Screen name="SearchTeam" component={SearchTeam} />
+            <Stack.Screen
+              name="CustomerManagement"
+              component={CustomerManagement}
+            />
+            <Stack.Screen name="WithDraw" component={WithDraw} />
+            <Stack.Screen name="Recharge" component={Recharge} />
+            <Stack.Screen name="TransferMoney" component={TransferMoney} />
+            <Stack.Screen name="TranferMoneyTwo" component={TranferMoneyTwo} />
+            <Stack.Screen name="SuccPayment" component={SuccPayment} />
+            <Stack.Screen name="SearchProduct" component={SearchProduct} />
+            <Stack.Screen name="SearchRecent" component={SearchRecent} />
+            <Stack.Screen
+              name="CustomerInformation"
+              component={CustomerInformation}
+            />
+            <Stack.Screen name="UpdateAddress1" component={UpdateAddress1} />
+            <Stack.Screen name="AddAddress" component={AddAddress} />
+            <Stack.Screen name="CreateOrder" component={CreateOrder} />
+            <Stack.Screen name="DetailOrder" component={DetailOrder} />
+            <Stack.Screen name="DetailProduct" component={DetailProduct} />
+            <Stack.Screen name="Detail_User" component={Detail_User} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="InforTranfer" component={InforTranfer} />
+            <Stack.Screen name="WalletScreen" component={WalletScreen} />
+            <Stack.Screen name="WalletScreen_2" component={WalletScreen_2} />
+            <Stack.Screen name="OverView" component={OverView} />
+            <Stack.Screen name="Payment" component={Payment} />
+            <Stack.Screen name="RechargeHistory" component={RechargeHistory} />
+            <Stack.Screen name="Sales" component={Sales} />
+            <Stack.Screen name="Sales_2" component={Sales_2} />
+            <Stack.Screen name="Sales_3" component={Sales_3} />
+            <Stack.Screen name="Walk" component={Walk} />
+            <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
+            <Stack.Screen name="MainTab" component={MainTab} />
+            <Stack.Screen name="UpdateAddress2" component={UpdateAddressMain} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </OrderAddressProvider>
     </GestureHandlerRootView>
   );
 };
@@ -165,13 +168,13 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> = ({
   });
 
   Keyboard.addListener('keyboardDidShow', e => {
-    yAxis.value = withTiming(e.endCoordinates.height, {duration: 800});
-    height.value = withTiming(0, {duration: 600});
+    yAxis.value = withTiming(e.endCoordinates.height, {duration: 500});
+    height.value = withTiming(0, {duration: 300});
   });
 
   Keyboard.addListener('keyboardDidHide', () => {
-    yAxis.value = withTiming(0, {duration: 700});
-    height.value = withTiming(65, {duration: 500});
+    yAxis.value = withTiming(0, {duration: 500});
+    height.value = withTiming(65, {duration: 300});
   });
 
   return (
@@ -216,6 +219,7 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> = ({
             style={[styles.tabBarButton]}
             android_ripple={{
               color: 'navy',
+              radius: 30,
             }}>
             <AnimateButton isFocused={isFocused} image={image} />
           </Pressable>
@@ -234,23 +238,22 @@ const AnimateButton: React.FunctionComponent<AnimateButtonType> = ({
   isFocused,
   image,
 }) => {
-  const opacityValue = useSharedValue(0);
+  const opacityValue = useSharedValue(1);
 
   const animate = useAnimatedStyle(() => {
-    const opacity = withTiming(opacityValue.value, {
-      duration: 350,
-      easing: Easing.cubic,
-    });
-
+    const opacity = opacityValue.value;
     return {
       opacity,
     };
   });
 
   React.useEffect(() => {
-    if (isFocused) opacityValue.value = 1;
-    else {
+    if (isFocused) {
       opacityValue.value = 0;
+      opacityValue.value = withTiming(1, {
+        duration: 300,
+        easing: Easing.cubic,
+      });
     }
   }, [isFocused]);
 
@@ -259,7 +262,7 @@ const AnimateButton: React.FunctionComponent<AnimateButtonType> = ({
       style={[
         styles.tabBarIconBackground,
         {backgroundColor: isFocused ? 'white' : 'transparent'},
-        isFocused ? animate : {opacity: 1},
+        animate,
       ]}>
       <Image
         source={image}

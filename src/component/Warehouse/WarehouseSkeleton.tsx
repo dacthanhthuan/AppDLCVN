@@ -1,6 +1,6 @@
 import {LinearProgress, Skeleton} from '@rneui/themed';
 import {Image, ScrollView, View} from 'react-native';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../MyGlobal';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../global';
 import {StyleSheet} from 'react-native';
 const logo = require('../../assets/Home/Rectangle2.png');
 

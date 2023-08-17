@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View, Text, Image, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import styles from './style';
@@ -6,12 +6,29 @@ import Header from '../../component/Header';
 import Line from '../../component/Line';
 import Information from '../../component/Information';
 import Detail_Input from '../../component/Detail_Input';
-import {formatPrice, WINDOW_WIDTH} from '../../MyGlobal';
+import {formatPrice, WINDOW_WIDTH} from '../../global';
 import TextViewRow from '../../component/TextViewRow';
 import Button from '../../component/Button';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteOrderStart} from '../../redux/actions/orderActions';
+import LoadingOverlay from '../../component/LoadingOverlay';
+import {riseNormalError} from '../../redux/actions/errorHandlerActions';
+import {
+  NotificationActions,
+  useNotificationDispatch,
+} from '../../component/NotificationContext/context';
+import {NotificationType} from '../../component/NotificationContext/types';
+import ConfirmDialog from '../../component/ConfirmDialog';
 
 const DetailOrder = ({route}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const notification = useNotificationDispatch();
+
+  const session_token = useSelector(state => state.user.session_token);
+  const deleteOrderState = useSelector(state => state.order.deleteOrderState);
+  const orderMsg = useSelector(state => state.order.message);
 
   const data = route?.params?.data;
   const totalDecrement =
@@ -19,8 +36,64 @@ const DetailOrder = ({route}) => {
     parseInt(data.total) +
     parseInt(data.ship_fee);
 
+  const [deletePress, setDeletePress] = useState(false);
+  const [cfVisible, setCfVisible] = useState(false);
+
+  // handle accept delete
+  const handleOnAcceptDelete = () => {
+    dispatch(
+      deleteOrderStart({
+        token: session_token,
+        created_at: data.created_at,
+        order_id: data.id,
+      }),
+    );
+
+    setCfVisible(false);
+
+    setDeletePress(true);
+  };
+
+  // handle deny delete
+  const handleOnDenyDelete = () => {
+    setCfVisible(false);
+  };
+
+  const handleDeleteOrder = () => {
+    setCfVisible(!cfVisible);
+  };
+
+  useEffect(() => {
+    if (!deleteOrderState && deletePress) {
+      // if not error
+      if (!orderMsg) {
+        setDeletePress(false);
+        notification(
+          NotificationActions.rise({
+            data: {
+              message: 'Huỷ thành công đơn hàng ' + data.id,
+            },
+            duration: 3000,
+            type: NotificationType.NORMAL,
+          }),
+        );
+
+        navigation.pop();
+      } else {
+        // display error
+        dispatch(
+          riseNormalError({
+            message: orderMsg,
+            duration: 3000,
+          }),
+        );
+      }
+    }
+  }, [deleteOrderState]);
+
   return (
     <ScrollView style={styles.container}>
+      {deleteOrderState ? <LoadingOverlay /> : null}
       <Header
         containerStyle={{paddingHorizontal: 16, paddingTop: 16}}
         onPressLeft={() => navigation.goBack()}
@@ -199,7 +272,18 @@ const DetailOrder = ({route}) => {
           );
         })}
       </View>
-      <Button text={'Huỷ đơn hàng'} style={styles.button} />
+
+      <ConfirmDialog
+        visible={cfVisible}
+        question={'Bạn muốn huỷ đơn hàng này?'}
+        onAccept={handleOnAcceptDelete}
+        onDeny={handleOnDenyDelete}
+      />
+      <Button
+        text={'Huỷ đơn hàng'}
+        style={styles.button}
+        onPress={handleDeleteOrder}
+      />
     </ScrollView>
   );
 };

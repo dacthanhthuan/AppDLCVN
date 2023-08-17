@@ -6,7 +6,7 @@ import Input from '../../component/Input';
 import CardManager from '../../component/CardManager';
 import Button from '../../component/Button';
 import {FlatList} from 'react-native-gesture-handler';
-import {WINDOW_HEIGHT} from '../../MyGlobal';
+import {WINDOW_HEIGHT} from '../../global';
 
 const data = [
   {

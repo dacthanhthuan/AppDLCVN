@@ -19,11 +19,18 @@ import {
   addressBookListAllStart,
   addressBookNewStart,
 } from '../../redux/actions/addressBookActions';
-import {mobileCheck} from '../../MyGlobal';
+import {mobileCheck} from '../../global';
+import {clientGetDetailUserStart} from '../../redux/actions/userActions';
+import {
+  NotificationActions,
+  useNotificationDispatch,
+} from '../../component/NotificationContext/context';
+import {NotificationType} from '../../component/NotificationContext/types';
 
 const AddAddress = () => {
   const route = useRoute();
   const navigation = useNavigation();
+  const notification = useNotificationDispatch();
 
   const dispatch = useDispatch();
   const session_token = useSelector(state => state.user.session_token); // user token
@@ -73,6 +80,19 @@ const AddAddress = () => {
 
   useEffect(() => {
     if (!listLoading && ispressed) {
+      // display notificaton
+      notification(
+        NotificationActions.rise({
+          data: {
+            message: 'Thêm địa chỉ thành công',
+          },
+          duration: 3000,
+          type: NotificationType.NORMAL,
+        }),
+      );
+
+      // reload user data after change
+      dispatch(clientGetDetailUserStart(session_token));
       navigation.dispatch(StackActions.pop());
     }
   }, [listLoading]);

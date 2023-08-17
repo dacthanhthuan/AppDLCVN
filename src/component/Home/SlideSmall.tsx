@@ -1,5 +1,5 @@
 import {ImageSourcePropType, StyleSheet, View} from 'react-native';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../MyGlobal';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../global';
 import {memo} from 'react';
 import ImageButton from './ImageButton';
 
@@ -15,7 +15,7 @@ function SlideSmall({slide, backgroundColor}: SlideSmallProps) {
         containerStyle={styles.slider}
         imagesource={slide}
         imageStyle={styles.slideImage}
-        resizeMode={'stretch'}
+        resizeMode={'contain'}
         textStlye={undefined}
         text={undefined}
         onPress={undefined}

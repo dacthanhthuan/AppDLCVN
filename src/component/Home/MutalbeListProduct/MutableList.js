@@ -1,7 +1,7 @@
 // import Carousel from '../../Carousel';
 import Carousel from '../../AnimatedCarousel';
 import {StyleSheet, View} from 'react-native';
-import {WINDOW_WIDTH} from '../../../MyGlobal';
+import {WINDOW_WIDTH} from '../../../global';
 import {useState, useEffect, memo, useContext} from 'react';
 import ButtonGroup from './ButtonGroup';
 import VerticalProduct from './VerticalProduct';

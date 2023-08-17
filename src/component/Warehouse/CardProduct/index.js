@@ -2,10 +2,13 @@ import React from 'react';
 import {Image, Text, Pressable, View} from 'react-native';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {formatPoint} from '../../../MyGlobal';
+import {formatPoint} from '../../../global';
+import {useDispatch} from 'react-redux';
+import {addProduct2Cart} from '../../../redux/actions/cartActions';
 
 const CardProduct = ({item}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const navigateToDetailProduct = () => {
     navigation.navigate('DetailProduct', {product: item, type: 'point'});
@@ -35,13 +38,26 @@ const CardProduct = ({item}) => {
         <Text style={styles.title} numberOfLines={1}>
           {item.product_name}
         </Text>
-        <Text style={styles.id}>{item.product_id}</Text>
+        {/* <Text style={styles.id}>{item.product_id}</Text> */}
         <Text style={[styles.price, decrement ? styles.stroke_text : null]}>
           {formatPoint(item.price)}
         </Text>
-        {decrement ? (
-          <Text style={styles.renderDecrement}>{priceDecrement}</Text>
-        ) : null}
+        <Text style={styles.renderDecrement}>
+          {decrement ? priceDecrement : ''}
+        </Text>
+        <Pressable
+          style={styles.addToCartContainer}
+          onPress={() => {
+            dispatch(
+              addProduct2Cart({
+                product: item,
+                quantity: 1,
+                pType: 'point',
+              }),
+            );
+          }}>
+          <Text style={styles.addToCart}>+</Text>
+        </Pressable>
       </Pressable>
     </View>
   );

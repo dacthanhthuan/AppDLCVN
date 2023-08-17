@@ -1,10 +1,10 @@
 import {StyleSheet} from 'react-native';
-import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../../MyGlobal';
+import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../../global';
 
 const styles = StyleSheet.create({
   container: {
     width: (WINDOW_WIDTH * 0.94) / 2,
-    height: WINDOW_HEIGHT * 0.32,
+    height: 250,
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
@@ -79,6 +79,27 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     fontSize: 14,
     fontWeight: '500',
+  },
+
+  addToCartContainer: {
+    width: 35,
+    height: 35,
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  addToCart: {
+    fontSize: 20,
+    color: 'white',
+    backgroundColor: '#09355C',
+    width: '80%',
+    height: '80%',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    borderRadius: 20,
   },
 });
 

@@ -12,7 +12,7 @@ import {
 import Input from '../../component/Input';
 import CardProduct from '../../component/Warehouse/CardProduct';
 import Header from '../../component/Header';
-import {useIsReady, nomarlizeVietNamese} from '../../MyGlobal';
+import {useIsReady, nomarlizeVietNamese} from '../../global';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   clientProductListClear,
@@ -29,12 +29,14 @@ const Warehouse = ({navigation}) => {
   const isReady = useIsReady();
 
   const dispatch = useDispatch();
+  const loadingApp = useSelector(state => state.app.loading); // loading domain and api state
   const changePointList = useSelector(state => state.changePoint.data);
   const totalRecord = useSelector(state => state.changePoint.total_record);
   const currentRecord = useSelector(state => state.changePoint.current_record);
   const listLoading = useSelector(state => state.changePoint.loading);
   const nextpage = useSelector(state => state.changePoint.nextpage);
   const user = useSelector(state => state.user);
+  const login = useSelector(state => state.user.login.status);
 
   const [filterData, setFilterData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -81,10 +83,14 @@ const Warehouse = ({navigation}) => {
     }
   };
 
-  // call api initial rendered
+  // call api initial rendered and call api after app loading domain and state
+  // and whenever user login app
   useEffect(() => {
-    getChangePointListApi();
-  }, []);
+    if (!loadingApp) {
+      dispatch(clientProductListClear(CHANGE_POINT_LIST.CLEAR));
+      getChangePointListApi();
+    }
+  }, [loadingApp, login]);
 
   // set data from redux to flatlist data
   useEffect(() => {
@@ -117,14 +123,6 @@ const Warehouse = ({navigation}) => {
   const checkListRecord = () => {
     return currentRecord < totalRecord;
   };
-
-  // when user login, clear changepoint list data
-  useEffect(() => {
-    if (user.login.status) {
-      dispatch(clientProductListClear(CHANGE_POINT_LIST.CLEAR));
-      getChangePointListApi();
-    }
-  }, [user]);
 
   // skeleton visible handler
   useEffect(() => {
@@ -206,7 +204,6 @@ const Warehouse = ({navigation}) => {
               onLoadmore();
             }
           }}
-          onEndReachedThreshold={0.1}
           removeClippedSubviews={true}
           windowSize={11}
           ListEmptyComponent={

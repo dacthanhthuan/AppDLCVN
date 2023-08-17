@@ -4,7 +4,7 @@ import {FlatList, SafeAreaView, Text, View} from 'react-native';
 import Header from '../../component/Header';
 import Input from '../../component/Input';
 import Product from '../../component/Home/Product';
-import {WINDOW_WIDTH, nomarlizeVietNamese} from '../../MyGlobal';
+import {WINDOW_WIDTH, nomarlizeVietNamese} from '../../global';
 import {useSelector} from 'react-redux';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import LottieView from 'lottie-react-native';
@@ -49,6 +49,7 @@ const SearchProduct = ({navigation, route}) => {
         });
 
         setFilterProduct(pData);
+        setSearching(false);
       }
     },
     [productData],

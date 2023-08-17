@@ -78,11 +78,11 @@ const SearchRecent = ({navigation}) => {
         placeholder="Bạn cần tìm gì"
         onChangeText={setKeyword}
         value={keyword}
-        onSubmitEditing={({nativeEvent}) => {
-          if (nativeEvent?.text?.length > 0) {
-            addSearch(nativeEvent.text);
+        onSubmitEditing={() => {
+          if (keyword.length > 0) {
+            addSearch(keyword);
           }
-          navigation.navigate('SearchProduct', {text: nativeEvent?.text});
+          navigation.navigate('SearchProduct', {text: keyword});
         }}
         focus
         onFocus={() => {

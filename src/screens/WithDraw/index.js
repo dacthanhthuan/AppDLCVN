@@ -5,7 +5,7 @@ import Header from '../../component/Header/index';
 import CardSurplus from '../../component/CardSurplus';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import Button from '../../component/Button';
-import {WINDOW_HEIGHT} from '../../MyGlobal';
+import {WINDOW_HEIGHT} from '../../global';
 
 const WithDraw = ({navigation}) => {
   const [selectedAmount, setSelectedAmount] = useState('');

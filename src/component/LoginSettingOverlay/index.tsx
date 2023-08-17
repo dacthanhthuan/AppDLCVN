@@ -3,7 +3,7 @@ import style from './style';
 import {useEffect, useState} from 'react';
 import {getData, multiRemoveData, storeData} from '../../storage';
 import {LOCALSTORAGE} from '../../storage/direct';
-import {BIOMETRIC} from '../../MyGlobal';
+import {BIOMETRIC} from '../../global';
 import PasswordConfirmOverlay from '../PasswordConfirmOverlay';
 import {ToastAndroid} from 'react-native';
 import {Linking} from 'react-native';

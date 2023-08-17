@@ -22,7 +22,7 @@ import {
   clientClearUserData,
   clientRegisterStart,
 } from '../../redux/actions/userActions';
-import {mailCheck, mobileCheck, passwordCheck} from '../../MyGlobal';
+import {mailCheck, mobileCheck, passwordCheck} from '../../global';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -70,7 +70,13 @@ const Register = () => {
     else {
       if (!message) setError(null);
       dispatch(
-        clientRegisterStart(fullname, email, mobile, password, referral),
+        clientRegisterStart(
+          fullname,
+          email,
+          mobile,
+          password,
+          referral ? referral : ' ',
+        ),
       );
     }
   };

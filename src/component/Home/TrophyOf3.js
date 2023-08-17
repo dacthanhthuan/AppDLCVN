@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 import Carousel from '../AnimatedCarousel';
 import ImageButton from './ImageButton';
-import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../MyGlobal';
+import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../global';
 import {memo, useContext, useCallback} from 'react';
 import {interpolate} from 'react-native-reanimated';
 import {ScrollContext} from '../../screens/Home';

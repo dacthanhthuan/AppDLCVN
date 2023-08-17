@@ -4,7 +4,7 @@ import styles from './styles';
 import ProductCart from '../../component/Cart/ProductCart';
 import Button from '../../component/Button';
 import Header from '../../component/Header';
-import {formatPoint, formatPrice, useIsReady} from '../../MyGlobal';
+import {formatPoint, formatPrice, useIsReady} from '../../global';
 import {useSelector} from 'react-redux';
 import CartEmpty from '../CartEmpty';
 import {

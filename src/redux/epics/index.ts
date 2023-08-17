@@ -7,6 +7,7 @@ import addressBookEpic from './addressBookEpic';
 import locationEpic from './locationEpic';
 import getDetailEpic from './getDetailEpic';
 import orderEpic from './orderEpic';
+import supplierEpic from './supplierEpic';
 
 const rootEpic = combineEpics(
   initialApiEpic,
@@ -17,6 +18,7 @@ const rootEpic = combineEpics(
   locationEpic,
   getDetailEpic,
   orderEpic,
+  supplierEpic,
 );
 
 export default rootEpic;

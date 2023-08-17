@@ -15,7 +15,7 @@ import CardMember from '../../component/CardMember';
 import Button from '../../component/Button';
 import Modal from 'react-native-modal';
 import CardSurplus from '../../component/CardSurplus';
-import {WINDOW_HEIGHT} from '../../MyGlobal';
+import {WINDOW_HEIGHT} from '../../global';
 
 const data = [
   {

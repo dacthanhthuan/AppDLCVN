@@ -33,12 +33,10 @@ export const newOrderStart = (data: NewOrderStartProps) => {
     payload: form,
   };
 };
-
 export const newOrderEnd = (data: any) => ({
   type: ORDER.NEW_ORDER_END,
   payload: data,
 });
-
 export const newOrderFail = (msg: string) => ({
   type: ORDER.NEW_ORDER_FAIL,
   payload: msg,
@@ -63,17 +61,40 @@ export const getListOrderStart = (data: ListOrderProps) => {
     payload: form,
   };
 };
-
 export const getListOrderEnd = (data: any) => ({
   type: ORDER.LIST_ORDER_END,
   payload: data,
 });
-
 export const getListOrderFail = (message: string) => ({
   type: ORDER.LIST_ORDER_FAIL,
   payload: message,
 });
-
 export const clearListOrder = () => ({
   type: ORDER.LIST_ORDER_CLEAR,
+});
+
+type DeleteOrderProps = {
+  token: string;
+  created_at: string;
+  order_id: string;
+};
+
+export const deleteOrderStart = (data: DeleteOrderProps) => {
+  const form = new FormData();
+  form.append('token', data.token);
+  form.append('created_at', data.created_at);
+  form.append('order_id', data.order_id);
+
+  return {
+    type: ORDER.DELETE_ORDER_START,
+    payload: form,
+  };
+};
+export const deleteOrderEnd = (data: any) => ({
+  type: ORDER.DELETE_ORDER_END,
+  payload: data,
+});
+export const deleteOrderFail = (msg: string) => ({
+  type: ORDER.DELETE_ORDER_FAIL,
+  payload: msg,
 });

@@ -13,7 +13,7 @@ import Header from '../../component/Header/index';
 import {Checkbox_2} from '../../component/Checkbox/index';
 import Button from '../../component/Button';
 import TextViewRow from '../../component/TextViewRow';
-import {formatPoint, formatPrice} from '../../MyGlobal';
+import {formatPoint, formatPrice} from '../../global';
 import {useDispatch, useSelector} from 'react-redux';
 import {newOrderStart} from '../../redux/actions/orderActions';
 import LoadingOverlay from '../../component/LoadingOverlay';

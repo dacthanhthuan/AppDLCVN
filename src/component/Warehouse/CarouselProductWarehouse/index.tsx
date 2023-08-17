@@ -1,7 +1,7 @@
 import Carousel from '../../AnimatedCarousel';
 import {View} from 'react-native';
 import {useEffect, useState, memo, useContext} from 'react';
-import {WINDOW_WIDTH, WINDOW_HEIGHT, showmoreImage} from '../../../MyGlobal';
+import {WINDOW_WIDTH, WINDOW_HEIGHT, showmoreImage} from '../../../global';
 const img = showmoreImage;
 import styles from './style';
 import CardProduct from '../CardProduct';

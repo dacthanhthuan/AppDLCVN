@@ -4,7 +4,7 @@ import styles from './styles';
 import ProductCart from '../../component/Cart/ProductCart';
 import Button from '../../component/Button';
 import Header from '../../component/Header';
-import {formatPoint, formatPrice, useIsReady} from '../../MyGlobal';
+import {formatPoint, formatPrice, useIsReady} from '../../global';
 import {useSelector} from 'react-redux';
 import CartEmpty from '../CartEmpty';
 import {
@@ -14,6 +14,10 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import AllCheckBox from '../../component/Cart/AllCheckBoxGroup/AllCheckBox';
 import LoadingOverlay from '../../component/LoadingOverlay';
+import {
+  OrderAddressActions,
+  useOrderAddressDispatch,
+} from '../../component/OrderAddressContext';
 // Vấn đề check-all box và hướng giải quyết: xem <AllCheckBoxGroup />
 /**
  * ** Ngoài ra, còn có thể sử dụng OnLayout nếu các component render ra có cùng kích thước
@@ -30,10 +34,16 @@ const WalletCart = () => {
   const cartData = useSelector(state => state.cart.wallet);
   const isLogin = useSelector(state => state.user.login.status);
   const allcheck = useAllCheck();
+  const orderAddressDispatch = useOrderAddressDispatch();
 
   const [totalprice, setTotalprice] = useState(0);
   const [totalDecrementprice, setTotalDecrementprice] = useState(0);
   const [productOrder, setProductOrder] = useState([]);
+
+  // clear order address when user go to cart
+  useEffect(() => {
+    orderAddressDispatch(OrderAddressActions.clear());
+  }, []);
 
   // price calculate
   useEffect(() => {

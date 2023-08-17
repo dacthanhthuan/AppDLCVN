@@ -17,7 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {clientClearUserData} from '../../redux/actions/userActions';
 import {getData, multiRemoveData, removeData, storeData} from '../../storage';
 import LoadingOverlay from '../../component/LoadingOverlay';
-import {formatPrice, BIOMETRIC, formatPoint, useIsReady} from '../../MyGlobal';
+import {formatPrice, BIOMETRIC, formatPoint, useIsReady} from '../../global';
 import {LOCALSTORAGE} from '../../storage/direct';
 import LoginSettingOverlay from '../../component/LoginSettingOverlay';
 import {TabActions} from '@react-navigation/native';
@@ -29,6 +29,7 @@ import {
   useNotificationDispatch,
 } from '../../component/NotificationContext/context';
 import {NotificationType} from '../../component/NotificationContext/types';
+import {riseNetworkError} from '../../redux/actions/errorHandlerActions';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
@@ -159,7 +160,9 @@ const ProfileAdmin = ({navigation}) => {
         <InfoCard
           image={require('../../assets/Rectangle294.png')}
           text="Chia sẻ app"
-          onPress={() => {}}
+          onPress={() => {
+            dispatch(riseNetworkError({error: 'WOWOWOWWW', visible: true}));
+          }}
         />
         <InfoCard
           image={require('../../assets/Rectangle295.png')}

@@ -19,7 +19,7 @@ import {
   WINDOW_HEIGHT,
   WINDOW_WIDTH,
   useIsReady,
-} from '../../MyGlobal';
+} from '../../global';
 // import Carousel from "react-native-snap-carousel";
 import Carousel from 'react-native-reanimated-carousel';
 import {useDispatch, useSelector} from 'react-redux';

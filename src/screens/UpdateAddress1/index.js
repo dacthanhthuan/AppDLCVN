@@ -20,13 +20,17 @@ import {
   addressBookListAllStart,
   addressBookSetDefaultStart,
 } from '../../redux/actions/addressBookActions';
-import {mobileCheck} from '../../MyGlobal';
+import {mobileCheck} from '../../global';
 import {clientGetDetailUserStart} from '../../redux/actions/userActions';
 import {
   NotificationActions,
   useNotificationDispatch,
 } from '../../component/NotificationContext/context';
 import {NotificationType} from '../../component/NotificationContext/types';
+import {
+  OrderAddressActions,
+  useOrderAddressDispatch,
+} from '../../component/OrderAddressContext';
 
 const UpdateAddress1 = () => {
   const route = useRoute();
@@ -34,6 +38,8 @@ const UpdateAddress1 = () => {
   const notification = useNotificationDispatch();
 
   const dispatch = useDispatch();
+  const orderAddressDispatch = useOrderAddressDispatch();
+
   const session_token = useSelector(state => state.user.session_token); // user token
   const listLoading = useSelector(state => state.addressBook.listLoading);
   const updateState = useSelector(state => state.addressBook.updateState);
@@ -122,8 +128,26 @@ const UpdateAddress1 = () => {
         }),
       );
 
+      // update order address
+      const city = location ? location.city.name : data.city;
+      const district = location ? location.district.name : data.district;
+      const ward = location ? location.ward.name : data.ward;
+      const id = data.id;
+      orderAddressDispatch(
+        OrderAddressActions.update({
+          id: id,
+          city: city,
+          district: district,
+          ward: ward,
+          address: address,
+          fullname: fullname,
+          mobile: mobile,
+        }),
+      );
+
       // reload user data after change
       dispatch(clientGetDetailUserStart(session_token));
+      // go back previous screen
       navigation.dispatch(StackActions.pop());
     }
   }, [listLoading]);

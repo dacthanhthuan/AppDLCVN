@@ -1,58 +1,208 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   Image,
   SafeAreaView,
   Text,
-  TextInput,
   View,
   FlatList,
   TouchableOpacity,
+  Pressable,
+  RefreshControl,
+  ActivityIndicator,
+  Keyboard,
 } from 'react-native';
 import StyleSupplier from './style';
-import data_supplier from '../../data/data_supplier/data';
 import Search from '../../component/Search';
 import LottieView from 'lottie-react-native';
 import assets from '../../assets';
-import {useIsReady} from '../../MyGlobal';
+import {useIsReady} from '../../global';
 import LoadingOverlay from '../../component/LoadingOverlay';
-import {useSelector} from 'react-redux';
-import LoginNow from '../LoginNow';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  SupplierListActions,
+  SupplierProductListActions,
+} from '../../redux/actions/supplierActions';
+import {
+  riseSupplierProductsList,
+  useSupplierProductsDispatch,
+  SupplierProductsListProvider,
+  hideSupplierProductsList,
+} from '../../component/SupplierProductsList/context';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
+import Header from '../../component/Header';
 
 const Supplier = () => {
   const isReady = useIsReady();
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const supplierProductsDispatch = useSupplierProductsDispatch();
 
+  const supplier = useSelector(state => state.supplier.supplier);
+  const supplierLoading = useSelector(state => state.supplier.supplierLoading);
+  const supplierNextPage = useSelector(
+    state => state.supplier.supplier_next_page,
+  );
+  const supplierTotalRecord = useSelector(
+    state => state.supplier.supplier_total_record,
+  );
+  const supplierCurrentRecord = useSelector(
+    state => state.supplier.supplier_current_record,
+  );
+  const supplierProductsNextPage = useSelector(
+    state => state.supplier.product_next_page,
+  );
+
+  const loadingApp = useSelector(state => state.app.loading);
+
+  const session_token = useSelector(state => state.user.session_token);
   const login = useSelector(state => state.user.login.status);
 
+  const [data, setData] = useState([]);
   const [search, setSearch] = useState('');
-  const Searchfuncion = data_supplier.filter(itemsearch => {
-    return itemsearch.name.toLowerCase().includes(search);
-  });
+  const [refreshing, setRefreshing] = useState(false);
+  const [loadmore, setLoadmore] = useState(false);
+  let searchDebounceTimout;
 
-  const render_item = ({item}) => {
-    return (
-      <TouchableOpacity style={StyleSupplier.container_2}>
-        <Image style={StyleSupplier.imgSupplier} source={item.img} />
-        <View>
-          <View style={StyleSupplier.container_3}>
-            <Text style={StyleSupplier.name}>{item.name}</Text>
-            <Text style={StyleSupplier.detail}>{item.detail}</Text>
-          </View>
-          <View style={StyleSupplier.container_4}>
-            <Text style={StyleSupplier.quantity}>{item.quantity}</Text>
-            <Text style={StyleSupplier.city}>{item.city}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+  // call api to get supplier list
+  const getSupplierListApi = (key = '', page = 1) => {
+    dispatch(
+      SupplierListActions.start({
+        keyword: key,
+        token: session_token ? session_token : '',
+        page: page,
+      }),
     );
   };
 
-  return !login ? (
-    <LoginNow />
-  ) : !isReady ? (
+  // call api to get supplier products list
+  const getSupplierProductListApi = (page = 1, supplier_id) => {
+    dispatch(
+      SupplierProductListActions.start({
+        keyword: '',
+        page: page,
+        supplier_id: supplier_id,
+        token: session_token ? session_token : '',
+      }),
+    );
+  };
+
+  // initial rendered and reload after loading app domain and api
+  useEffect(() => {
+    if (!loadingApp) {
+      dispatch(SupplierListActions.clear());
+      getSupplierListApi();
+    }
+  }, [loadingApp, login]);
+
+  // update supplier data
+  useEffect(() => {
+    setData(supplier);
+    if (!supplierLoading) {
+      setRefreshing(false);
+      setLoadmore(false);
+    }
+  }, [supplier]);
+
+  // handle refreshing
+  useEffect(() => {
+    if (refreshing) {
+      setSearch('');
+      Keyboard.dismiss();
+      setLoadmore(false);
+      dispatch(SupplierListActions.clear());
+      getSupplierListApi();
+    }
+  }, [refreshing]);
+
+  // handle loadmore
+  const handleLoadmore = () => {
+    if (!supplierLoading) {
+      getSupplierListApi(search, supplierNextPage);
+    }
+  };
+
+  // search after user stop typing 300ms
+  const searchDebouncing = useCallback(keyword => {
+    clearTimeout(searchDebounceTimout);
+
+    if (keyword.length > 0) {
+      searchDebounceTimout = setTimeout(() => {
+        dispatch(SupplierListActions.clear());
+        getSupplierListApi(keyword, 1);
+      }, 300);
+    } else {
+      dispatch(SupplierListActions.clear());
+      getSupplierListApi(keyword, 1);
+    }
+  }, []);
+
+  // feature search
+  useEffect(() => {
+    searchDebouncing(search);
+  }, [search]);
+
+  useFocusEffect(() => {
+    // whenever screen is focus, if supplier product list page greater 1 then rise supplier product
+    if (supplierProductsNextPage > 1)
+      supplierProductsDispatch(riseSupplierProductsList());
+    return () => {
+      // whenever change screen, hide supplier product list
+      supplierProductsDispatch(hideSupplierProductsList());
+    };
+  });
+
+  // render item
+  const RenderItem = useCallback(({item}) => {
+    return (
+      <Pressable
+        style={({pressed}) => [
+          StyleSupplier.container_2,
+          pressed ? {backgroundColor: 'rgba(194,194,194,0.3)'} : null,
+        ]}
+        onPress={() => {
+          getSupplierProductListApi(1, item.id);
+          supplierProductsDispatch(riseSupplierProductsList(item));
+        }}>
+        <Image
+          style={StyleSupplier.imgSupplier}
+          source={
+            item.logo ? {uri: item.logo} : require('../../assets/noimage.png')
+          }
+        />
+        <View>
+          <View style={StyleSupplier.container_3}>
+            <Text style={StyleSupplier.name}>{item.name}</Text>
+            <Text style={StyleSupplier.detail} numberOfLines={2}>
+              {item.short_description}
+            </Text>
+          </View>
+          <View style={StyleSupplier.container_4}>
+            <Text style={StyleSupplier.quantity}>
+              {item.total_product > 99 ? '99+' : item.total_product} sản phẩm
+            </Text>
+            <Text style={StyleSupplier.city}>{item.city}</Text>
+          </View>
+        </View>
+      </Pressable>
+    );
+  }, []);
+
+  return !isReady ? (
     <LoadingOverlay />
   ) : (
     <SafeAreaView style={StyleSupplier.container}>
-      <Text style={StyleSupplier.title}>Nhà cung cấp</Text>
+      <Header
+        iconLeft={require('../../assets/white.png')}
+        text="Nhà cung cấp"
+        iconRight={require('../../assets/Vector.png')}
+        onPressRight={() => {
+          navigation.navigate('Cart');
+        }}
+        showCartBadge={true}
+        isWallet={true}
+        containerStyle={{paddingHorizontal: 15, paddingTop: 15}}
+      />
       <View style={StyleSupplier.container_1}>
         <Search
           placeholder={'Tìm nhà cung cấp'}
@@ -66,26 +216,54 @@ const Supplier = () => {
           />
         </TouchableOpacity>
       </View>
-      <View style={{marginTop: 15}}>
-        {search.length > 0 && Searchfuncion.length == 0 ? (
-          <Text>Không tìm thấy nhà cung cấp</Text>
-        ) : null}
-        <FlatList
-          data={Searchfuncion}
-          renderItem={render_item}
-          ListEmptyComponent={
+      {search.length > 0 && data.length == 0 ? (
+        <Text style={{paddingHorizontal: 15}}>Không tìm thấy nhà cung cấp</Text>
+      ) : null}
+      <FlatList
+        data={data}
+        style={{paddingHorizontal: 15}}
+        contentContainerStyle={{paddingBottom: 15}}
+        renderItem={RenderItem}
+        initialNumToRender={6}
+        ListEmptyComponent={
+          supplierLoading && !refreshing ? (
+            <ActivityIndicator size={'large'} color={'#005aa9'} />
+          ) : !refreshing ? (
             <LottieView
               source={assets.LottieAnimation.not_found}
               loop
               autoPlay
               style={{width: 250, height: 250, alignSelf: 'center'}}
             />
+          ) : null
+        }
+        keyExtractor={item => item.id}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            colors={['white']}
+            progressBackgroundColor={'#005AA9'}
+            onRefresh={() => setRefreshing(true)}
+          />
+        }
+        onEndReached={() => {
+          if (supplierCurrentRecord < supplierTotalRecord) {
+            setLoadmore(true);
+            handleLoadmore();
           }
-          // keyExtractor={(item, title) => title.toString()}
-        />
-      </View>
+        }}
+      />
+      {loadmore ? <LoadmoreIndicator /> : null}
     </SafeAreaView>
   );
 };
 
-export default Supplier;
+const SupplierWrapper = () => {
+  return (
+    <SupplierProductsListProvider>
+      <Supplier />
+    </SupplierProductsListProvider>
+  );
+};
+
+export default SupplierWrapper;

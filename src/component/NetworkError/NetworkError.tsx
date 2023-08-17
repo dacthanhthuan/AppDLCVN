@@ -4,12 +4,9 @@ import {StyleSheet, Text} from 'react-native';
 import Animated, {SlideInUp, SlideOutUp} from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
 import {clientInitialApiStart} from '../../redux/actions/appActions';
-import {getData} from '../../storage';
-import {LOCALSTORAGE} from '../../storage/direct';
-import {clientProductListEnd} from '../../redux/actions/productListActions';
-import {CHANGE_POINT_LIST, PRODUCT_LIST} from '../../redux/actions/types';
 import {NoInternetError} from './NoInternetError';
 import {TimeoutError} from './TimeoutError';
+import NetInfo, {NetInfoSubscription} from '@react-native-community/netinfo';
 
 /**
  * Luôn cố gắng kết nối lại với server bằng cách sử dụng throttling technical để gọi lại api mỗi 10s => không cần sử dụng dữ liệu local để hiển thị với người dùng.
@@ -19,39 +16,41 @@ import {TimeoutError} from './TimeoutError';
 export default function CustoNetworkError() {
   const network = useSelector((state: any) => state.error.network);
   const dispatch = useDispatch();
-  let networkThrottleInterval: number;
+  let timeoutThrottleInterval: number;
+  let noInternetSubcribe: NetInfoSubscription;
 
-  const getHomeLocalData = async () => {
-    await getData(LOCALSTORAGE.product_list)
-      .then(res => {
-        dispatch(clientProductListEnd(res, PRODUCT_LIST.START));
-      })
-      .catch(err => {});
-  };
-
-  const getChangePointLocalData = async () => {
-    await getData(LOCALSTORAGE.change_point_list)
-      .then(res => {
-        dispatch(clientProductListEnd(res, CHANGE_POINT_LIST.START));
-      })
-      .catch(err => {});
-  };
-
-  // throttling
-  const networkThrottle = useCallback((visible: boolean) => {
+  // throttling timeout error
+  const timeoutThrottle = useCallback((visible: boolean) => {
     if (visible) {
-      networkThrottleInterval = setInterval(() => {
+      timeoutThrottleInterval = setInterval(() => {
         dispatch(clientInitialApiStart);
-      }, 5000);
+      }, 10000);
     }
     if (!visible) {
-      clearInterval(networkThrottleInterval);
+      clearInterval(timeoutThrottleInterval);
+    }
+  }, []);
+
+  // subcribe internet status reload api when has internet
+  const noInternetThrottle = useCallback((visible: boolean) => {
+    if (visible) {
+      noInternetSubcribe = NetInfo.addEventListener(state => {
+        if (state.isConnected) {
+          dispatch(clientInitialApiStart);
+        }
+      });
+    } else {
+      noInternetSubcribe();
     }
   }, []);
 
   // call throttle whenever error is appear.
   useEffect(() => {
-    networkThrottle(network.visible);
+    if (network.error instanceof TimeoutError) {
+      timeoutThrottle(network.visible);
+    } else if (network.error instanceof NoInternetError) {
+      noInternetThrottle(network.visible);
+    }
   }, [network.visible]);
 
   return network.visible ? (

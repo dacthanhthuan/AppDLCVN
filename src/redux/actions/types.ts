@@ -90,6 +90,9 @@ export enum ORDER {
   LIST_ORDER_END = 'List_Order_End',
   LIST_ORDER_FAIL = 'List_Order_Fail',
   LIST_ORDER_CLEAR = 'List_Order_Clear',
+  DELETE_ORDER_START = 'Delete_Order_Start',
+  DELETE_ORDER_END = 'Delete_Order_End',
+  DELETE_ORDER_FAIL = 'Delete_Order_Fail',
 }
 
 export enum ERROR {
@@ -97,4 +100,15 @@ export enum ERROR {
   NORMAL_HIDE = 'ERROR-NORMAL-HIDE',
   NETWORK_RISE = 'ERROR-NETWORK-RISE',
   NETWORK_HIDE = 'ERROR-NETWORK-HIDE',
+}
+
+export enum SUPPLIER {
+  LIST_SUPPLIER_START = 'List_Supplier_Start',
+  LIST_SUPPLIER_END = 'List_Supplier_End',
+  LIST_SUPPLIER_FAIL = 'List_Supplier_Fail',
+  LIST_SUPPLIER_CLEAR = 'List_Supplier_Clear',
+  LIST_PRODUCT_SUPPLIER_START = 'Produdct_List_Supplier_Start',
+  LIST_PRODUCT_SUPPLIER_END = 'Product_List_Supplier_End',
+  LIST_PRODUCT_SUPPLIER_FAIL = 'Product_List_Supplier_Fail',
+  LIST_PRODUCT_SUPPLIER_CLEAR = 'Product_List_Supplier_Clear',
 }
