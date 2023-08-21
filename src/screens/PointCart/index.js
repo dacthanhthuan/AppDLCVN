@@ -5,7 +5,7 @@ import ProductCart from '../../component/Cart/ProductCart';
 import Button from '../../component/Button';
 import Header from '../../component/Header';
 import {formatPoint, formatPrice, useIsReady} from '../../global';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import CartEmpty from '../CartEmpty';
 import {
   AllCheckProvider,
@@ -14,6 +14,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import AllCheckBox from '../../component/Cart/AllCheckBoxGroup/AllCheckBox';
 import LoadingOverlay from '../../component/LoadingOverlay';
+import {riseNormalError} from '../../redux/actions/errorHandlerActions';
 
 /**
  *
@@ -21,6 +22,8 @@ import LoadingOverlay from '../../component/LoadingOverlay';
  */
 const PointCart = () => {
   const isReady = useIsReady();
+
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const cartData = useSelector(state => state.cart.point);
   const isLogin = useSelector(state => state.user.login.status);
@@ -32,25 +35,28 @@ const PointCart = () => {
 
   // price calculate
   useEffect(() => {
-    let totalPoint = 0;
-    let totalDecrementPoint = 0;
-    let products = [];
+    if (cartData.length > 0) {
+      let totalPoint = 0;
+      let totalDecrementPoint = 0;
+      let products = [];
 
-    allcheck.checkboxs.map(unique => {
-      let product = cartData.at(unique);
-      let decrement = product?.product?.decrement;
-      products.push(product);
-      totalPoint +=
-        parseInt(product.product.price) * parseInt(product.quantity);
-      totalDecrementPoint +=
-        parseInt(product.product.price) *
-        parseInt(product.quantity) *
-        ((100 - parseInt(decrement)) / 100);
-    });
+      allcheck.checkboxs.map(unique => {
+        let product = cartData.at(unique);
+        let decrement = product?.product?.decrement;
+        products.push(product);
 
-    setTotalpoint(totalPoint);
-    setTotalDecrementpoint(totalDecrementPoint);
-    setProductOrder(products);
+        totalPoint +=
+          parseInt(product?.product?.price) * parseInt(product?.quantity);
+        totalDecrementPoint +=
+          parseInt(product?.product?.price) *
+          parseInt(product?.quantity) *
+          ((100 - parseInt(decrement)) / 100);
+      });
+
+      setTotalpoint(totalPoint);
+      setTotalDecrementpoint(totalDecrementPoint);
+      setProductOrder(products);
+    }
   }, [allcheck.checkboxs, cartData]);
 
   if (!isReady) {
@@ -115,7 +121,12 @@ const PointCart = () => {
                 type: 'point_payment',
               })
             : productOrder.length == 0
-            ? ToastAndroid.show('Chưa chọn mặt hàng', ToastAndroid.LONG)
+            ? dispatch(
+                riseNormalError({
+                  duration: 2000,
+                  message: 'Chưa chọn mặt hàng cần thanh toán.',
+                }),
+              )
             : navigation.navigate('Login')
         }
       />

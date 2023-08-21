@@ -75,9 +75,14 @@ const DetailProduct = ({route}) => {
       : formatPrice(product?.price);
   // decrement and decrement price
   const decrement = product.decrement != 0 ? product.decrement : undefined;
-  const priceDecrement = formatPrice(
-    parseInt(product?.price) * ((100 - parseInt(decrement)) / 100),
-  );
+  const priceDecrement =
+    type === 'point'
+      ? formatPoint(
+          parseInt(product?.price) * ((100 - parseInt(decrement)) / 100),
+        )
+      : formatPrice(
+          parseInt(product?.price) * ((100 - parseInt(decrement)) / 100),
+        );
   const commission = formatPrice(product?.commission_vnd); // commission of product
   const imageData = []; // image data
 
@@ -342,7 +347,7 @@ const DetailProduct = ({route}) => {
             />
           </>
         ) : null}
-        <TextViewRow title="Hoa hồng" point={commission} />
+        {type == 'money' && <TextViewRow title="Hoa hồng" point={commission} />}
         <View style={styles.container_3}>
           <Text style={styles.title_2}>Giới thiệu sản phẩm</Text>
           <Text style={styles.text_1}>{product.short_description}</Text>

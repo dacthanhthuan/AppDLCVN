@@ -5,7 +5,7 @@ import ProductCart from '../../component/Cart/ProductCart';
 import Button from '../../component/Button';
 import Header from '../../component/Header';
 import {formatPoint, formatPrice, useIsReady} from '../../global';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import CartEmpty from '../CartEmpty';
 import {
   AllCheckProvider,
@@ -18,6 +18,7 @@ import {
   OrderAddressActions,
   useOrderAddressDispatch,
 } from '../../component/OrderAddressContext';
+import {riseNormalError} from '../../redux/actions/errorHandlerActions';
 // Vấn đề check-all box và hướng giải quyết: xem <AllCheckBoxGroup />
 /**
  * ** Ngoài ra, còn có thể sử dụng OnLayout nếu các component render ra có cùng kích thước
@@ -30,6 +31,8 @@ import {
  */
 const WalletCart = () => {
   const isReady = useIsReady();
+
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const cartData = useSelector(state => state.cart.wallet);
   const isLogin = useSelector(state => state.user.login.status);
@@ -47,26 +50,28 @@ const WalletCart = () => {
 
   // price calculate
   useEffect(() => {
-    let totalPrice = 0;
-    let totalDecrementPrice = 0;
-    let products = [];
+    if (cartData.length > 0) {
+      let totalPrice = 0;
+      let totalDecrementPrice = 0;
+      let products = [];
 
-    allcheck.checkboxs.map(unique => {
-      let product = cartData.at(unique);
-      let decrement = product?.product?.decrement;
-      products.push(product);
+      allcheck.checkboxs.map(unique => {
+        let product = cartData.at(unique);
+        let decrement = product?.product?.decrement;
+        products.push(product);
 
-      totalPrice +=
-        parseInt(product?.product?.price) * parseInt(product?.quantity);
-      totalDecrementPrice +=
-        parseInt(product?.product.price) *
-        parseInt(product?.quantity) *
-        ((100 - parseInt(decrement)) / 100);
-    });
+        totalPrice +=
+          parseInt(product?.product?.price) * parseInt(product?.quantity);
+        totalDecrementPrice +=
+          parseInt(product?.product?.price) *
+          parseInt(product?.quantity) *
+          ((100 - parseInt(decrement)) / 100);
+      });
 
-    setTotalprice(totalPrice);
-    setTotalDecrementprice(totalDecrementPrice);
-    setProductOrder(products);
+      setTotalprice(totalPrice);
+      setTotalDecrementprice(totalDecrementPrice);
+      setProductOrder(products);
+    }
   }, [allcheck.checkboxs, cartData]);
 
   if (!isReady) {
@@ -96,7 +101,7 @@ const WalletCart = () => {
         }}
         initialNumToRender={6}
         windowSize={11}
-        keyExtractor={(item, index) => item.product.product_id + index}
+        keyExtractor={item => item.product.product_id}
       />
 
       <View
@@ -131,7 +136,12 @@ const WalletCart = () => {
                 type: 'money_payment',
               })
             : productOrder.length == 0
-            ? ToastAndroid.show('Chưa chọn mặt hàng', ToastAndroid.LONG)
+            ? dispatch(
+                riseNormalError({
+                  duration: 2000,
+                  message: 'Chưa chọn mặt hàng cần thanh toán.',
+                }),
+              )
             : navigation.navigate('Login')
         }
       />

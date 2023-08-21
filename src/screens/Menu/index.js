@@ -42,10 +42,10 @@ const Menu = ({navigation}) => {
 
   const lDeliverySteps = useSelector(state => state.app.data.lDeliverySteps);
   const walllet_payment_type = useSelector(
-    state => state.app.data.wallet_main_id,
+    state => state.app.data.payment_type_wallet_main,
   );
   const cashback_payment_type = useSelector(
-    state => state.app.data.wallet_cashback_id,
+    state => state.app.data.payment_type_wallet_cashback,
   );
 
   // new order state
@@ -83,6 +83,8 @@ const Menu = ({navigation}) => {
   // whenever new order is create (and initial rendered)
   useEffect(() => {
     if (!newOrderState && !orderMsg && login) {
+      setPaymentType(ALL);
+      setOrderStatus(0);
       dispatch(clearListOrder());
       getOrderListApi();
     }
@@ -118,13 +120,11 @@ const Menu = ({navigation}) => {
   useEffect(() => {
     if (refreshing || login) {
       if (login) {
-        setPaymentType(ALL);
-        setOrderStatus(0);
         dispatch(clearListOrder());
         getOrderListApi(
           1,
           paymentType == 'Tất cả'
-            ? undefined
+            ? ''
             : paymentType == 'Ví VNĐ'
             ? walllet_payment_type
             : cashback_payment_type,
@@ -142,9 +142,9 @@ const Menu = ({navigation}) => {
       dispatch(clearListOrder());
 
       getOrderListApi(
-        0,
+        1,
         paymentType == 'Tất cả'
-          ? undefined
+          ? ''
           : paymentType == 'Ví VNĐ'
           ? walllet_payment_type
           : cashback_payment_type,

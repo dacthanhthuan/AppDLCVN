@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, Pressable, StyleSheet, Keyboard, View} from 'react-native';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import Animated, {
@@ -77,9 +77,8 @@ const App = () => {
     <GestureHandlerRootView style={{flex: 1}}>
       <OrderAddressProvider>
         <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{headerShown: false}}
-            initialRouteName="MainTab">
+          <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Cart" component={Cart} />
             <Stack.Screen name="PointCart" component={PointCart} />
             <Stack.Screen name="NoOrders" component={NoOrders} />
@@ -122,7 +121,6 @@ const App = () => {
             <Stack.Screen name="Sales_3" component={Sales_3} />
             <Stack.Screen name="Walk" component={Walk} />
             <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
-            <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="UpdateAddress2" component={UpdateAddressMain} />
           </Stack.Navigator>
         </NavigationContainer>
@@ -154,7 +152,11 @@ const tabOptions: BottomTabNavigationOptions = {
 const MyTabBar: React.FunctionComponent<BottomTabBarProps> = ({
   state,
   navigation,
+  descriptors,
 }) => {
+  // get tabbar options
+  const {options}: any = descriptors[state.routes[state.index].key];
+
   let image: any;
 
   const yAxis = useSharedValue(0);
@@ -167,15 +169,31 @@ const MyTabBar: React.FunctionComponent<BottomTabBarProps> = ({
     };
   });
 
-  Keyboard.addListener('keyboardDidShow', e => {
-    yAxis.value = withTiming(e.endCoordinates.height, {duration: 500});
+  const animateHide = (e: any) => {
+    yAxis.value = withTiming(e?.endCoordinates?.height, {duration: 500});
     height.value = withTiming(0, {duration: 300});
-  });
+  };
 
-  Keyboard.addListener('keyboardDidHide', () => {
+  const animateShow = () => {
     yAxis.value = withTiming(0, {duration: 500});
     height.value = withTiming(65, {duration: 300});
-  });
+  };
+
+  Keyboard.addListener('keyboardDidShow', animateHide);
+
+  Keyboard.addListener('keyboardDidHide', animateShow);
+
+  useEffect(() => {
+    if (options?.tabBarStyle?.display == 'none') {
+      animateHide({
+        endCoordinates: {
+          height: 65,
+        },
+      });
+    } else {
+      animateShow();
+    }
+  }, [options.tabBarStyle]);
 
   return (
     <Animated.View style={[styles.tabBar, tabBarAnimatedStyle]}>

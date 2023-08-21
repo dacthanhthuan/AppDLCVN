@@ -161,7 +161,7 @@ const ProfileAdmin = ({navigation}) => {
           image={require('../../assets/Rectangle294.png')}
           text="Chia sẻ app"
           onPress={() => {
-            dispatch(riseNetworkError({error: 'WOWOWOWWW', visible: true}));
+            // dispatch(riseNetworkError({error: 'WOWOWOWWW', visible: true}));
           }}
         />
         <InfoCard

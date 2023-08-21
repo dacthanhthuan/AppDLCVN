@@ -2,7 +2,12 @@ import React from 'react';
 import {Pressable, Image, View, Text, FlatList} from 'react-native';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {WINDOW_WIDTH, formatPrice, secondToGlobalDate} from '../../global';
+import {
+  WINDOW_WIDTH,
+  formatPrice,
+  secondToGlobalDate,
+  formatPoint,
+} from '../../global';
 
 const SingleMenu = ({data, style}) => {
   const navigation = useNavigation();
@@ -11,6 +16,7 @@ const SingleMenu = ({data, style}) => {
   const slicedImages = data.lItems.slice(0, 5);
   const diffImages =
     data.lItems.length > 4 ? data.lItems.length - slicedImages.length + 1 : 0;
+  const isPoint = data.payment_name == 'Ví Điểm' ? true : false;
 
   const globalDate = secondToGlobalDate(data.created_at);
 
@@ -108,7 +114,9 @@ const SingleMenu = ({data, style}) => {
           </Text>
           <Text style={styles.textName}>
             <Text style={{color: '#000000', fontWeight: '400'}}>Giá bán:</Text>{' '}
-            {formatPrice(data.lItems[0].price)}
+            {isPoint
+              ? formatPoint(data.lItems[0].price)
+              : formatPrice(data.lItems[0].price)}
           </Text>
         </>
       ) : (
@@ -141,7 +149,9 @@ const SingleMenu = ({data, style}) => {
                 <Text style={{color: '#000000', fontWeight: '400'}}>
                   Giá bán:
                 </Text>{' '}
-                {formatPrice(data.lItems[0].price)}
+                {isPoint
+                  ? formatPoint(data.lItems[0].price)
+                  : formatPrice(data.lItems[0].price)}
               </Text>
             </View>
             <Image
@@ -159,7 +169,9 @@ const SingleMenu = ({data, style}) => {
           style={{fontSize: 14, color: '#000000', fontFamily: 'Montserrat'}}>
           {data.lItems.length} sản phẩm
         </Text>
-        <Text style={styles.textTotal}>{formatPrice(data.total)}</Text>
+        <Text style={styles.textTotal}>
+          {isPoint ? formatPoint(data.total) : formatPrice(data.total)}
+        </Text>
       </View>
     </Pressable>
   );

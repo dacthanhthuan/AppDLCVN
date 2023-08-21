@@ -17,7 +17,10 @@ import {formatPoint, formatPrice} from '../../global';
 import {useDispatch, useSelector} from 'react-redux';
 import {newOrderStart} from '../../redux/actions/orderActions';
 import LoadingOverlay from '../../component/LoadingOverlay';
-import {removeAllCartProduct} from '../../redux/actions/cartActions';
+import {
+  removeAllCartProduct,
+  rmProductFromCart,
+} from '../../redux/actions/cartActions';
 import {removeData} from '../../storage';
 import {LOCALSTORAGE} from '../../storage/direct';
 import {
@@ -26,6 +29,7 @@ import {
 } from '../../component/NotificationContext/context';
 import {NotificationType} from '../../component/NotificationContext/types';
 import {riseNormalError} from '../../redux/actions/errorHandlerActions';
+import {clientGetDetailUserStart} from '../../redux/actions/userActions';
 
 const Payment = () => {
   const lineWidth = useWindowDimensions().width;
@@ -98,8 +102,17 @@ const Payment = () => {
   useEffect(() => {
     if (!newOrderState && !orderMsg && orderPress) {
       setOrderPress(false);
-      dispatch(removeAllCartProduct);
-      removeData(LOCALSTORAGE.cart);
+
+      // remove product from cart
+      ship.litems.forEach(item =>
+        dispatch(
+          rmProductFromCart({
+            productId: item.product_id,
+            pType: type == 'wallet' ? 'money' : 'point',
+            quantity: 0,
+          }),
+        ),
+      );
       notification(
         NotificationActions.rise({
           data: {
@@ -110,7 +123,21 @@ const Payment = () => {
           type: NotificationType.NORMAL,
         }),
       );
+      // if payment type is not cod
+      if (payment_type !== 'cod') {
+        // then reload user data to get new wallet and point
+        dispatch(clientGetDetailUserStart(session_token));
+      }
       navigation.navigate('SuccPayment');
+    }
+
+    if (!newOrderState && orderMsg && orderPress) {
+      dispatch(
+        riseNormalError({
+          duration: 4000,
+          message: orderMsg,
+        }),
+      );
     }
   }, [newOrderState]);
 

@@ -26,11 +26,6 @@ const ProductCart = ({item, index, debounceTime = 400}) => {
   const decrementPrice =
     parseInt(item.product.price) * ((100 - parseInt(decrement)) / 100);
 
-  // set quantity if item change
-  useEffect(() => {
-    setQty(item.quantity);
-  }, [item]);
-
   // debouce when user change quantity is fast
   let quantityDebounceTimer;
 

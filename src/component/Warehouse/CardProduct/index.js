@@ -46,7 +46,10 @@ const CardProduct = ({item}) => {
           {decrement ? priceDecrement : ''}
         </Text>
         <Pressable
-          style={styles.addToCartContainer}
+          style={({pressed}) => [
+            styles.addToCartContainer,
+            pressed ? {opacity: 0.5} : null,
+          ]}
           onPress={() => {
             dispatch(
               addProduct2Cart({

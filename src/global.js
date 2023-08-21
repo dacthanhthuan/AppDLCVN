@@ -6,12 +6,12 @@ import {useCallback, useState} from 'react';
 export const WINDOW_HEIGHT = Dimensions.get('screen').height;
 export const WINDOW_WIDTH = Dimensions.get('screen').width;
 
-const formatCurrency = new Intl.NumberFormat('vi-VN', {
+export const formatCurrency = new Intl.NumberFormat('vi-VN', {
   style: 'currency',
   currency: 'VND',
 });
 
-const formatDecimal = new Intl.NumberFormat('vi-VN', {
+export const formatDecimal = new Intl.NumberFormat('vi-VN', {
   style: 'decimal',
   currency: 'VND',
 });

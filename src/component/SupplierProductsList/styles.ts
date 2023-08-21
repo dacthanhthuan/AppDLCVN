@@ -6,17 +6,14 @@ const styles = StyleSheet.create({
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     position: 'absolute',
-    bottom: 0,
-  },
-
-  outside: {
-    flex: 1,
+    top: 0,
   },
 
   view: {
     width: '100%',
-    height: '85%',
-    backgroundColor: 'rgba(255, 255, 255, 1)',
+    height: '80%',
+    backgroundColor: 'rgba(255, 255, 150, 1)',
+    paddingBottom: 15,
   },
 
   supplierName: {
@@ -50,13 +47,48 @@ const styles = StyleSheet.create({
   },
 
   contentFlatlist: {
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
 
   notfoundText: {
     fontWeight: '400',
     fontSize: 15,
     color: 'black',
+  },
+
+  outside: {
+    height: '12%',
+    opacity: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  closeButton: {
+    transform: [{rotateZ: '45deg'}],
+    width: 50,
+    height: 50,
+  },
+
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  cartContainer: {
+    paddingTop: 10,
+    paddingHorizontal: 10,
+  },
+
+  cart: {
+    width: 40,
+    height: 40,
+  },
+
+  cartBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 10,
   },
 });
 

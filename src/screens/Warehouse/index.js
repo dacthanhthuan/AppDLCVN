@@ -12,7 +12,7 @@ import {
 import Input from '../../component/Input';
 import CardProduct from '../../component/Warehouse/CardProduct';
 import Header from '../../component/Header';
-import {useIsReady, nomarlizeVietNamese} from '../../global';
+import {useIsReady, nomarlizeVietNamese, formatDecimal} from '../../global';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   clientProductListClear,
@@ -156,7 +156,9 @@ const Warehouse = ({navigation}) => {
         <View style={styles.rowPoint}>
           <Text style={styles.helloText}>Chào {user.fullname}</Text>
           <View style={styles.pointContainer}>
-            <Text style={styles.pointText}>{user.lWallet[1].amount}</Text>
+            <Text style={styles.pointText}>
+              {formatDecimal.format(user.lWallet[1].amount)}
+            </Text>
             <Image
               style={styles.iconAvatar}
               source={require('../../assets/Rectangle312.png')}

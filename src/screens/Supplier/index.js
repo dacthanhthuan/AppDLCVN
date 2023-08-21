@@ -26,9 +26,8 @@ import {
   riseSupplierProductsList,
   useSupplierProductsDispatch,
   SupplierProductsListProvider,
-  hideSupplierProductsList,
 } from '../../component/SupplierProductsList/context';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
 import Header from '../../component/Header';
 
@@ -49,9 +48,6 @@ const Supplier = () => {
   const supplierCurrentRecord = useSelector(
     state => state.supplier.supplier_current_record,
   );
-  const supplierProductsNextPage = useSelector(
-    state => state.supplier.product_next_page,
-  );
 
   const loadingApp = useSelector(state => state.app.loading);
 
@@ -62,7 +58,7 @@ const Supplier = () => {
   const [search, setSearch] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [loadmore, setLoadmore] = useState(false);
-  let searchDebounceTimout;
+  const [initialRendered, setInitalRendered] = useState(true);
 
   // call api to get supplier list
   const getSupplierListApi = (key = '', page = 1) => {
@@ -93,6 +89,7 @@ const Supplier = () => {
       dispatch(SupplierListActions.clear());
       getSupplierListApi();
     }
+    setInitalRendered(false);
   }, [loadingApp, login]);
 
   // update supplier data
@@ -122,35 +119,19 @@ const Supplier = () => {
     }
   };
 
-  // search after user stop typing 300ms
-  const searchDebouncing = useCallback(keyword => {
-    clearTimeout(searchDebounceTimout);
+  // handle search
+  const handleSearch = e => {
+    dispatch(SupplierListActions.clear());
+    getSupplierListApi(e.nativeEvent.text.trim(), 1);
+  };
 
-    if (keyword.length > 0) {
-      searchDebounceTimout = setTimeout(() => {
-        dispatch(SupplierListActions.clear());
-        getSupplierListApi(keyword, 1);
-      }, 300);
-    } else {
-      dispatch(SupplierListActions.clear());
-      getSupplierListApi(keyword, 1);
-    }
-  }, []);
-
-  // feature search
+  // when user clear search text
   useEffect(() => {
-    searchDebouncing(search);
+    if (search.length == 0 && !initialRendered) {
+      dispatch(SupplierListActions.clear());
+      getSupplierListApi('', 1);
+    }
   }, [search]);
-
-  useFocusEffect(() => {
-    // whenever screen is focus, if supplier product list page greater 1 then rise supplier product
-    if (supplierProductsNextPage > 1)
-      supplierProductsDispatch(riseSupplierProductsList());
-    return () => {
-      // whenever change screen, hide supplier product list
-      supplierProductsDispatch(hideSupplierProductsList());
-    };
-  });
 
   // render item
   const RenderItem = useCallback(({item}) => {
@@ -163,6 +144,8 @@ const Supplier = () => {
         onPress={() => {
           getSupplierProductListApi(1, item.id);
           supplierProductsDispatch(riseSupplierProductsList(item));
+          // hide tabbar when supplier products is shown
+          navigation.setOptions({tabBarStyle: {display: 'none'}});
         }}>
         <Image
           style={StyleSupplier.imgSupplier}
@@ -208,6 +191,7 @@ const Supplier = () => {
           placeholder={'Tìm nhà cung cấp'}
           value={search}
           onChangeText={setSearch}
+          onSubmitEditing={handleSearch}
         />
         <TouchableOpacity>
           <Image

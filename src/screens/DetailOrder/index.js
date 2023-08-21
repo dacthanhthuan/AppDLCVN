@@ -6,7 +6,7 @@ import Header from '../../component/Header';
 import Line from '../../component/Line';
 import Information from '../../component/Information';
 import Detail_Input from '../../component/Detail_Input';
-import {formatPrice, WINDOW_WIDTH} from '../../global';
+import {formatPoint, formatPrice, WINDOW_WIDTH} from '../../global';
 import TextViewRow from '../../component/TextViewRow';
 import Button from '../../component/Button';
 import {useDispatch, useSelector} from 'react-redux';
@@ -38,6 +38,7 @@ const DetailOrder = ({route}) => {
 
   const [deletePress, setDeletePress] = useState(false);
   const [cfVisible, setCfVisible] = useState(false);
+  const isPoint = data.payment_name == 'Ví Điểm' ? true : false;
 
   // handle accept delete
   const handleOnAcceptDelete = () => {
@@ -92,15 +93,14 @@ const DetailOrder = ({route}) => {
   }, [deleteOrderState]);
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {deleteOrderState ? <LoadingOverlay /> : null}
       <Header
-        containerStyle={{paddingHorizontal: 16, paddingTop: 16}}
+        containerStyle={{padding: 16}}
         onPressLeft={() => navigation.goBack()}
         iconLeft={require('../../assets/Arrow1.png')}
         text={'Chi tiết đơn hàng'}
       />
-
       <View style={styles.container_1}>
         <View
           style={{
@@ -113,61 +113,76 @@ const DetailOrder = ({route}) => {
         </View>
       </View>
 
-      <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
-        <Image
-          style={styles.icon}
-          source={require('../../assets/imgOder/Rectangle_226.png')}
-        />
-        <View style={{width: '90%', marginLeft: 15}}>
-          <View style={styles.view_1}>
-            <Text style={styles.text_2}>Người nhận hàng</Text>
-          </View>
-          <View style={styles.view_2}>
-            <Text style={styles.text_3}>{data.ship_name}</Text>
-            <Text style={styles.text_4}>{data.ship_mobile}</Text>
-            <Text style={styles.text_4}>{data.ship_address}</Text>
+      <ScrollView style={styles.container}>
+        <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
+          <Image
+            style={styles.icon}
+            source={require('../../assets/imgOder/Rectangle_226.png')}
+          />
+          <View style={{width: '90%', marginLeft: 15}}>
+            <View style={styles.view_1}>
+              <Text style={styles.text_2}>Người nhận hàng</Text>
+            </View>
+            <View style={styles.view_2}>
+              <Text style={styles.text_3}>{data.ship_name}</Text>
+              <Text style={styles.text_4}>{data.ship_mobile}</Text>
+              <Text style={styles.text_4}>{data.ship_address}</Text>
+            </View>
           </View>
         </View>
-      </View>
 
-      <Line />
+        <Line />
 
-      <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
-        <Image
-          style={styles.icon_1}
-          source={require('../../assets/imgOder/Rectangle_230.png')}
-        />
-        <View style={{width: '87%', marginLeft: 20}}>
-          <Text style={styles.title_1}>Thông tin cho khách</Text>
-          <TextViewRow
-            title={'Tổng tiền hàng:'}
-            price={formatPrice(data.total_product)}
-            priceStyle={{color: 'black'}}
+        <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
+          <Image
+            style={styles.icon_1}
+            source={require('../../assets/imgOder/Rectangle_230.png')}
           />
-          <TextViewRow
-            title={'Phí vận chuyển:'}
-            between={
-              data.ship_fee == 0 ? 'FreeShip' : formatPrice(data.ship_fee)
-            }
-            betweenStyle={{color: 'green', fontSize: 15}}
-          />
-          {totalDecrement != 0 ? (
+          <View style={{width: '87%', marginLeft: 20}}>
+            <Text style={styles.title_1}>Thông tin cho khách</Text>
             <TextViewRow
-              title={'Tổng giảm giá:'}
-              price={'-' + formatPrice(totalDecrement)}
-              priceStyle={{color: 'red'}}
+              title={'Tổng tiền hàng:'}
+              price={
+                isPoint
+                  ? formatPoint(data.total_product)
+                  : formatPrice(data.total_product)
+              }
+              priceStyle={{color: 'black'}}
             />
-          ) : null}
-          <TextViewRow
-            title={'Tổng số tiền cần thanh toán:'}
-            price={formatPrice(data.total)}
-          />
+            <TextViewRow
+              title={'Phí vận chuyển:'}
+              between={
+                data.ship_fee == 0
+                  ? 'FreeShip'
+                  : isPoint
+                  ? formatPoint(data.ship_fee)
+                  : formatPrice(data.ship_fee)
+              }
+              betweenStyle={{color: 'green', fontSize: 15}}
+            />
+            {totalDecrement != 0 ? (
+              <TextViewRow
+                title={'Tổng giảm giá:'}
+                price={
+                  '-' + isPoint
+                    ? formatPoint(totalDecrement)
+                    : formatPrice(totalDecrement)
+                }
+                priceStyle={{color: 'red'}}
+              />
+            ) : null}
+            <TextViewRow
+              title={'Tổng số tiền cần thanh toán:'}
+              price={
+                isPoint ? formatPoint(data.total) : formatPrice(data.total)
+              }
+            />
+          </View>
         </View>
-      </View>
 
-      <Line />
+        <Line />
 
-      {/* <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
+        {/* <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
         <Image
           style={Style_DetailOrder.icon_1}
           source={require('../../assets/imgOder/Rectangle_230.png')}
@@ -188,103 +203,112 @@ const DetailOrder = ({route}) => {
         </View>
       </View> */}
 
-      {/* <Line /> */}
+        {/* <Line /> */}
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingHorizontal: 16,
-        }}>
-        <Image
-          style={styles.icon_1}
-          source={require('../../assets/imgOder/Rectangle_231.png')}
-        />
-        <View style={{width: '85%'}}>
-          <Detail_Input
-            style={{padding: -15, borderWidth: 0}}
-            text={'Ghi chú'}
-            placeholder={'Không có ghi chú cho đơn hàng này!'}
-            value={data.ship_note}
-            editable={false}
-          />
-        </View>
-      </View>
-      <Line />
-
-      <View style={{paddingHorizontal: 16, paddingBottom: 20}}>
-        <View style={{flexDirection: 'row'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 16,
+          }}>
           <Image
             style={styles.icon_1}
-            source={require('../../assets/imgOder/Rectangle_232.png')}
+            source={require('../../assets/imgOder/Rectangle_231.png')}
           />
-          <View style={{width: '93%'}}>
-            <View style={styles.view_1}>
-              <Text style={styles.text_2}>Sản phẩm đã mua</Text>
-            </View>
+          <View style={{width: '85%'}}>
+            <Detail_Input
+              style={{padding: -15, borderWidth: 0}}
+              text={'Ghi chú'}
+              placeholder={'Không có ghi chú cho đơn hàng này!'}
+              value={data.ship_note}
+              editable={false}
+            />
           </View>
         </View>
-        {data?.lItems.map((item, index) => {
-          const decrement =
-            item.decrement != 0 ? parseInt(item.decrement) : undefined;
-          const decrementPrice =
-            parseInt(item.price) * ((100 - decrement) / 100);
+        <Line />
 
-          return (
-            <View key={index + new Date() + item.name} style={styles.flatlist}>
-              {decrement ? (
-                <Text style={styles.decrementBadge}>-{decrement}%</Text>
-              ) : null}
-              <Image
-                source={
-                  item.image
-                    ? {uri: item.image}
-                    : require('../../assets/noimage.png')
-                }
-                style={{width: 80, height: 80, marginRight: 10, flex: 1}}
-              />
-              <View style={styles.view_3}>
-                <Text style={styles.text_2} numberOfLines={2}>
-                  {item.name}
-                </Text>
-                {/* <Text style={Style_DetailOrder.text_4}>
-                  Giá nhà cung cấp: 600,000đ
-                </Text> */}
-                <View style={styles.priceView}>
-                  <Text
-                    style={[
-                      styles.text_3,
-                      decrement ? styles.stroke_line : null,
-                    ]}>
-                    Giá bán: {formatPrice(item.price)}
-                  </Text>
-                  {decrement ? (
-                    <Text style={styles.decrementPrice}>
-                      Giá bán: {formatPrice(decrementPrice)}
-                    </Text>
-                  ) : null}
-                </View>
-                <Text style={styles.text_4}>
-                  Số lượng: {parseInt(item.quantity)}
-                </Text>
+        <View style={{paddingHorizontal: 16, paddingBottom: 20}}>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              style={styles.icon_1}
+              source={require('../../assets/imgOder/Rectangle_232.png')}
+            />
+            <View style={{width: '93%'}}>
+              <View style={styles.view_1}>
+                <Text style={styles.text_2}>Sản phẩm đã mua</Text>
               </View>
             </View>
-          );
-        })}
-      </View>
+          </View>
+          {data?.lItems.map((item, index) => {
+            const decrement =
+              item.decrement != 0 ? parseInt(item.decrement) : undefined;
+            const decrementPrice =
+              parseInt(item.price) * ((100 - decrement) / 100);
 
-      <ConfirmDialog
-        visible={cfVisible}
-        question={'Bạn muốn huỷ đơn hàng này?'}
-        onAccept={handleOnAcceptDelete}
-        onDeny={handleOnDenyDelete}
-      />
-      <Button
-        text={'Huỷ đơn hàng'}
-        style={styles.button}
-        onPress={handleDeleteOrder}
-      />
-    </ScrollView>
+            return (
+              <View
+                key={index + new Date() + item.name}
+                style={styles.flatlist}>
+                {decrement ? (
+                  <Text style={styles.decrementBadge}>-{decrement}%</Text>
+                ) : null}
+                <Image
+                  source={
+                    item.image
+                      ? {uri: item.image}
+                      : require('../../assets/noimage.png')
+                  }
+                  style={{width: 80, height: 80, marginRight: 10, flex: 1}}
+                />
+                <View style={styles.view_3}>
+                  <Text style={styles.text_2} numberOfLines={2}>
+                    {item.name}
+                  </Text>
+                  {/* <Text style={Style_DetailOrder.text_4}>
+                  Giá nhà cung cấp: 600,000đ
+                </Text> */}
+                  <View style={styles.priceView}>
+                    <Text
+                      style={[
+                        styles.text_3,
+                        decrement ? styles.stroke_line : null,
+                      ]}>
+                      Giá bán:{' '}
+                      {isPoint
+                        ? formatPoint(item.price)
+                        : formatPrice(item.price)}
+                    </Text>
+                    {decrement ? (
+                      <Text style={styles.decrementPrice}>
+                        Giá bán:{' '}
+                        {isPoint
+                          ? formatPoint(decrementPrice)
+                          : formatPrice(decrementPrice)}
+                      </Text>
+                    ) : null}
+                  </View>
+                  <Text style={styles.text_4}>
+                    Số lượng: {parseInt(item.quantity)}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+
+        <ConfirmDialog
+          visible={cfVisible}
+          question={'Bạn muốn huỷ đơn hàng này?'}
+          onAccept={handleOnAcceptDelete}
+          onDeny={handleOnDenyDelete}
+        />
+        <Button
+          text={'Huỷ đơn hàng'}
+          style={styles.button}
+          onPress={handleDeleteOrder}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
