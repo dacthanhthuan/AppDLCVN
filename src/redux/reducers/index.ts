@@ -10,6 +10,7 @@ import locationReducer from './locationReducer';
 import orderReducer from './orderReducer';
 import ErrorHandlerReducer from './errorReducer';
 import supplierReducer from './supplierReducer';
+import walletReducer from './walletReducer';
 
 const rootReducer = combineReducers({
   app: AppReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   order: orderReducer,
   error: ErrorHandlerReducer,
   supplier: supplierReducer,
+  wallet: walletReducer,
 });
 
 export default rootReducer;

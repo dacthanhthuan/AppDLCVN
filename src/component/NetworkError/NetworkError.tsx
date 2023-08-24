@@ -13,7 +13,7 @@ import NetInfo, {NetInfoSubscription} from '@react-native-community/netinfo';
  *
  * Gọi api clientInitialApiStart để thử kết nối lại với server, đồng thời thêm tuỳ chọn nếu kết nối thành công (loading = false == thành công, trong đó: loading = useSelector(state => state.app.loading, nếu loading = true == thất bại) thì sẽ gọi lại api (trong component gọi api, sử dung useEffect cùng với biến loading để kiểm tra).
  */
-export default function CustoNetworkError() {
+export default function CustomNetworkError() {
   const network = useSelector((state: any) => state.error.network);
   const dispatch = useDispatch();
   let timeoutThrottleInterval: number;

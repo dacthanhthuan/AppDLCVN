@@ -68,6 +68,8 @@ import PointCart from './src/screens/PointCart';
 
 import {useSelector} from 'react-redux';
 import {OrderAddressProvider} from './src/component/OrderAddressContext';
+import WalletHistory from './src/screens/WalletHistory';
+import BankAccount from './src/screens/BankAccount';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -122,6 +124,8 @@ const App = () => {
             <Stack.Screen name="Walk" component={Walk} />
             <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
             <Stack.Screen name="UpdateAddress2" component={UpdateAddressMain} />
+            <Stack.Screen name="WalletHistory" component={WalletHistory} />
+            <Stack.Screen name="BankAccount" component={BankAccount} />
           </Stack.Navigator>
         </NavigationContainer>
       </OrderAddressProvider>

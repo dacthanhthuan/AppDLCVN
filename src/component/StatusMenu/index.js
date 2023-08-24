@@ -9,18 +9,21 @@ const StatusMenu = ({categori: data, selectedCatogory, onCategoryPress}) => {
       horizontal
       showsHorizontalScrollIndicator={false}
       renderItem={({item}) => {
-        const selected = selectedCatogory == item.id;
+        const selected =
+          selectedCatogory == item.id || selectedCatogory == item.wallet_id;
         return (
-          <TouchableOpacity
-            onPress={() => onCategoryPress(item.id)}
-            style={[
-              styles.container,
-              selected ? styles.selectedItemContainer : {},
-            ]}>
-            <Text style={[styles.text, selected ? styles.selectedItem : {}]}>
-              {item.name}
-            </Text>
-          </TouchableOpacity>
+          !item.is_hidden && (
+            <TouchableOpacity
+              onPress={() => onCategoryPress(item.id || item.wallet_id)}
+              style={[
+                styles.container,
+                selected ? styles.selectedItemContainer : {},
+              ]}>
+              <Text style={[styles.text, selected ? styles.selectedItem : {}]}>
+                {item.name || item.wallet_name}
+              </Text>
+            </TouchableOpacity>
+          )
         );
       }}
     />

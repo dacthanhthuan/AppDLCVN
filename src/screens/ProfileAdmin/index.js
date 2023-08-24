@@ -6,6 +6,8 @@ import {
   ImageBackground,
   SafeAreaView,
   View,
+  Pressable,
+  RefreshControl,
 } from 'react-native';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import styles from './styles';
@@ -14,7 +16,10 @@ import CardProfile from '../../component/CardProfile';
 import TranfersMoney from '../../component/TranfersMoney';
 import NotLogin from '../NotLogin';
 import {useDispatch, useSelector} from 'react-redux';
-import {clientClearUserData} from '../../redux/actions/userActions';
+import {
+  clientClearUserData,
+  clientGetDetailUserStart,
+} from '../../redux/actions/userActions';
 import {getData, multiRemoveData, removeData, storeData} from '../../storage';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import {formatPrice, BIOMETRIC, formatPoint, useIsReady} from '../../global';
@@ -40,8 +45,11 @@ const ProfileAdmin = ({navigation}) => {
 
   const user = useSelector(state => state.user);
   const login = useSelector(state => state.user.login.status);
+  const userLoading = useSelector(state => state.user.loading);
+
   // state define show or hide login by biometric setting
   const [biometricOption, setBiometricOption] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   // login options dialog toggle
   const [loginOptions, setLoginOptions] = useState(false);
@@ -74,14 +82,39 @@ const ProfileAdmin = ({navigation}) => {
   useEffect(() => {
     // check biometric is available
     isBiometricSupport();
+    // reload user data
+    dispatch(clientGetDetailUserStart(user.session_token));
   }, []);
+
+  // handle refreshing detail user data
+  const handleRefreshing = () => {
+    setRefreshing(true);
+
+    // reload user detail data
+    dispatch(clientGetDetailUserStart(user.session_token));
+  };
+
+  // when user data loading done
+  useEffect(() => {
+    if (!userLoading) {
+      setRefreshing(false);
+    }
+  }, [userLoading]);
 
   return !isReady ? (
     <LoadingOverlay />
   ) : !login ? (
     <NotLogin />
   ) : (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          colors={['white']}
+          progressBackgroundColor={'#005AA9'}
+          onRefresh={handleRefreshing}
+        />
+      }>
       <SafeAreaView style={styles.container}>
         <CardProfile
           style={{marginTop: 25, borderColor: '#005AA9'}}
@@ -93,7 +126,18 @@ const ProfileAdmin = ({navigation}) => {
 
         <Text style={styles.title}>Quản lí ví</Text>
 
-        <View style={[styles.wallet, {backgroundColor: '#0059A9'}]}>
+        <Pressable
+          style={({pressed}) => [
+            styles.wallet,
+            {backgroundColor: '#0059A9'},
+            pressed ? {backgroundColor: '#006dcc'} : null,
+          ]}
+          onPress={() => {
+            navigation.navigate('WalletScreen', {
+              wallet: 'main',
+              index: 0,
+            });
+          }}>
           <View style={{flexDirection: 'row'}}>
             <Image
               style={{width: 20, height: 20}}
@@ -107,13 +151,20 @@ const ProfileAdmin = ({navigation}) => {
           <Text style={{fontSize: 16, color: '#FFFFFF'}}>
             {formatPrice(user.lWallet[0].amount)}
           </Text>
-        </View>
+        </Pressable>
 
-        <View
-          style={[
+        <Pressable
+          style={({pressed}) => [
             styles.wallet,
             {backgroundColor: '#FCB813', zIndex: 1, marginTop: -22},
-          ]}>
+            pressed ? {backgroundColor: '#c98e03'} : null,
+          ]}
+          onPress={() => {
+            navigation.navigate('WalletScreen', {
+              wallet: 'cashback',
+              index: 1,
+            });
+          }}>
           <View style={{flexDirection: 'row'}}>
             <Image
               style={{width: 20, height: 20}}
@@ -128,7 +179,7 @@ const ProfileAdmin = ({navigation}) => {
             {' '}
             {formatPoint(user.lWallet[1].amount)}
           </Text>
-        </View>
+        </Pressable>
 
         <ImageBackground
           style={styles.rowTranfers}
@@ -172,6 +223,7 @@ const ProfileAdmin = ({navigation}) => {
         <InfoCard
           image={require('../../assets/Rectangle300.png')}
           text="Tài khoản ngân hàng"
+          onPress={() => navigation.navigate('BankAccount')}
         />
         <InfoCard
           image={require('../../assets/Rectangle295.png')}

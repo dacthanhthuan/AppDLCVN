@@ -8,6 +8,7 @@ import locationEpic from './locationEpic';
 import getDetailEpic from './getDetailEpic';
 import orderEpic from './orderEpic';
 import supplierEpic from './supplierEpic';
+import walletEpic from './walletEpic';
 
 const rootEpic = combineEpics(
   initialApiEpic,
@@ -19,6 +20,7 @@ const rootEpic = combineEpics(
   getDetailEpic,
   orderEpic,
   supplierEpic,
+  walletEpic,
 );
 
 export default rootEpic;

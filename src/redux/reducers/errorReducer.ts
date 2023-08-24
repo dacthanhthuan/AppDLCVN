@@ -12,11 +12,13 @@ export type NetworkErrorProps = {
 };
 
 type InitialType = {
+  networkLoading: boolean;
   normal: NormalErrorProps[];
   network: NetworkErrorProps;
 };
 
 const initialState: InitialType = {
+  networkLoading: false,
   normal: [],
   network: {
     error: undefined,
@@ -34,6 +36,7 @@ export default function ErrorHandlerReducer(
       return {
         ...state,
         network: action.payload,
+        networkLoading: true,
       };
     }
     case ERROR.NETWORK_HIDE: {
@@ -43,6 +46,7 @@ export default function ErrorHandlerReducer(
           message: undefined,
           visible: false,
         },
+        networkLoading: false,
       };
     }
 

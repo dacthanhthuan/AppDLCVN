@@ -1,23 +1,30 @@
 import React from 'react';
-import { TouchableOpacity, Image, FlatList } from 'react-native';
+import {TouchableOpacity, Image, FlatList} from 'react-native';
 import styles from './styles';
 
-const LogoBanking = ({ logo, isSelected, onSelect }) => {
-
+const LogoBanking = ({data, isSelected, onSelect}) => {
   return (
     <FlatList
-      data={logo}
+      data={data}
       horizontal
-      renderItem={({ item }) => {
-        const selected = isSelected === item;
+      removeClippedSubviews
+      renderItem={({item}) => {
+        const selected = JSON.stringify(isSelected) === JSON.stringify(item);
         return (
           <TouchableOpacity
-            onPress={() => { onSelect(item) }}
+            onPress={() => {
+              onSelect(item);
+            }}
             style={[styles.container, selected ? styles.selectedItem : {}]}>
-            <Image style={styles.imgBanking} resizeMode='contain' source={item} />
+            <Image
+              style={styles.imgBanking}
+              resizeMode="contain"
+              source={{uri: item.url}}
+            />
           </TouchableOpacity>
-        )
-      }} />
+        );
+      }}
+    />
   );
 };
 

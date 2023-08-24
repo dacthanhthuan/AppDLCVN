@@ -30,6 +30,14 @@ export const order_list_all = '/client_order/history_steps?apikey=';
 const delete_order = '/client_order/delete?apikey=';
 const supplier_list = '/supplier_tab/list_all?apikey=';
 const supplier_list_product = '/supplier_tab/product_list?apikey=';
+const main_wallet_list_bank = '/client_wallet/banks?apikey=';
+const main_wallet_fund_history_list = '/client_wallet/fund_history?apikey=';
+const main_wallet_deposit = '/client_wallet/deposit?apikey=';
+const main_wallet_withdraw = '/client_wallet/withdraw?apikey=';
+const get_bank_list = '/client_bank/list?apikey=';
+const main_wallet_cancel = '/client_wallet/cancel?apikey=';
+const main_wallet_add_bank_infor = '/client_wallet/bank_info?apikey=';
+const main_wallet_history = '/client_wallet/history?apikey=';
 
 export default {
   base_url,
@@ -49,4 +57,12 @@ export default {
   delete_order,
   supplier_list,
   supplier_list_product,
+  main_wallet_list_bank,
+  main_wallet_history_list: main_wallet_fund_history_list,
+  main_wallet_deposit,
+  main_wallet_withdraw,
+  get_bank_list,
+  main_wallet_cancel,
+  main_wallet_add_bank_infor,
+  main_wallet_history,
 };

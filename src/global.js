@@ -278,3 +278,20 @@ export const secondToGlobalDate = value => {
 };
 
 export const showmoreImage = require('./assets/Rectangle270.png');
+
+export const WalletStatusConvert = status => {
+  switch (status) {
+    case '0': {
+      return 'Đang xử lý';
+    }
+    case '1': {
+      return 'Thành công';
+    }
+    case '-1': {
+      return 'Đã huỷ';
+    }
+    case '-2': {
+      return 'Đã huỷ bởi admin';
+    }
+  }
+};
