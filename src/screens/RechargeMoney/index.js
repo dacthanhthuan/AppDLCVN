@@ -152,7 +152,6 @@ const RenderItem = ({item}) => {
         fontSize: 13,
         color: '#000000',
         fontWeight: '300',
-        textTransform: 'capitalize',
       }}
       style_4={{
         fontSize: 13,

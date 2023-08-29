@@ -161,7 +161,10 @@ const WithDraw = ({navigation}) => {
               />
               <Text style={styles.bankTitle}>
                 Chủ thẻ:
-                <Text> {user.bank_fullname}</Text>
+                <Text style={{textTransform: 'uppercase'}}>
+                  {' '}
+                  {user.bank_fullname}
+                </Text>
               </Text>
               <Text style={styles.bankTitle}>
                 Mã thẻ:

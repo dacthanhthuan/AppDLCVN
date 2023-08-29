@@ -52,7 +52,9 @@ const HistoryMoney = ({
         <View style={Style_Historymoney.view_3}>
           <Text style={style_1}>{datetime_2}</Text>
           <Text style={style_2}>{money_2}</Text>
-          <Text style={style_3}>{action_2}</Text>
+          <Text style={style_3} numberOfLines={1}>
+            {action_2}
+          </Text>
           <Text style={style_4}>{status_2}</Text>
         </View>
       </View>

@@ -148,7 +148,14 @@ const WalletScreen = ({navigation}) => {
             )}
             {lWallet[index].is_transfer && (
               <TouchableOpacity
-                onPress={() => navigation.navigate('TransferMoney')}
+                onPress={() =>
+                  navigation.navigate('TransferMoney', {
+                    wallet_id:
+                      wallet == 'main'
+                        ? lWallet[0].wallet_id
+                        : lWallet[1].wallet_id,
+                  })
+                }
                 style={Style_WalletScreen.view}>
                 <View style={Style_WalletScreen.view_2}>
                   <View style={Style_WalletScreen.borderIcon}>
@@ -166,7 +173,14 @@ const WalletScreen = ({navigation}) => {
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              onPress={() => navigation.navigate('WalletHistory')}
+              onPress={() =>
+                navigation.navigate('WalletHistory', {
+                  wallet_id:
+                    wallet == 'main'
+                      ? lWallet[0].wallet_id
+                      : lWallet[1].wallet_id,
+                })
+              }
               style={Style_WalletScreen.view}>
               <View style={Style_WalletScreen.view_2}>
                 <View style={Style_WalletScreen.borderIcon}>

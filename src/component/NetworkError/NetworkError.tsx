@@ -24,7 +24,7 @@ export default function CustomNetworkError() {
     if (visible) {
       timeoutThrottleInterval = setInterval(() => {
         dispatch(clientInitialApiStart);
-      }, 10000);
+      }, 20000);
     }
     if (!visible) {
       clearInterval(timeoutThrottleInterval);

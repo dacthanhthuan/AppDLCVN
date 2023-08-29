@@ -13,7 +13,7 @@ export default async function apiHelper(url: string, data: FormData) {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      timeout: 10000,
+      timeout: 20000,
     })
     .then(res => {
       if (res.status === 200) {

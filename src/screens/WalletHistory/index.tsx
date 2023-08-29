@@ -24,8 +24,10 @@ import {
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
 import StatusMenu from '../../component/StatusMenu';
 
-const WalletHistory = ({navigation}: any) => {
+const WalletHistory = ({navigation, route}: any) => {
   const dispatch = useDispatch();
+
+  const {wallet_id} = route.params;
 
   const lWallet = useSelector((state: any) => state.user.lWallet);
   const session_token = useSelector((state: any) => state.user.session_token);
@@ -45,7 +47,7 @@ const WalletHistory = ({navigation}: any) => {
 
   const [refreshing, setRefreshing] = useState(false);
   const [loadmore, setLoadmore] = useState(false);
-  const [selectedId, setSelectedId] = useState(lWallet[0].wallet_id);
+  const [selectedId, setSelectedId] = useState(wallet_id);
 
   //  get history wallet list
   const getWalletHistoryListApi = (page = 1, wallet_id?: any) => {

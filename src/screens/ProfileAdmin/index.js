@@ -35,6 +35,7 @@ import {
 } from '../../component/NotificationContext/context';
 import {NotificationType} from '../../component/NotificationContext/types';
 import {riseNetworkError} from '../../redux/actions/errorHandlerActions';
+import {WalletReferralList} from '../../redux/actions/walletActions';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
@@ -197,7 +198,11 @@ const ProfileAdmin = ({navigation}) => {
           <TranfersMoney
             image={require('../../assets/Rectangle305.png')}
             text="Chuyển tiền"
-            onPress={() => navigation.navigate('TransferMoney')}
+            onPress={() =>
+              navigation.navigate('TransferMoney', {
+                wallet_id: user.lWallet[0].wallet_id,
+              })
+            }
           />
           <TranfersMoney
             image={require('../../assets/Rectangle306.png')}
@@ -279,6 +284,7 @@ const ProfileAdmin = ({navigation}) => {
             // clear address book data and order list
             dispatch(addressBookClear);
             dispatch(clearListOrder());
+            dispatch(WalletReferralList.clear());
 
             // clear local
             removeData(LOCALSTORAGE.user);

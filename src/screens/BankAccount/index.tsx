@@ -211,6 +211,7 @@ export default function BankAccount() {
           placeholder={'Nhập họ và tên chủ thẻ'}
           onChangeText={setBankFullName}
           value={bankFullName}
+          upperCase
         />
         <BankInput
           label={'Mã thẻ:'}
@@ -248,6 +249,7 @@ export default function BankAccount() {
         inputPlaceholder="Nhập mật khẩu"
         onDeny={handleDenyPassword}
         onAccept={handleAcceptPassword}
+        secure={true}
       />
     </SafeAreaView>
   );

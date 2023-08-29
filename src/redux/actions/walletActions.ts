@@ -233,3 +233,70 @@ export const WalletAddBankInfor = {
   end: WalletAddBankInforEnd,
   fail: WalletAddBankInforFail,
 };
+
+type WalletTransferProps = {
+  token: string;
+  amount: string | number;
+  note: string;
+  to: string | number;
+  wallet_id: string | number;
+  password: string;
+};
+
+const WalletTransferStart = (data: WalletTransferProps) => {
+  const form = new FormData();
+  form.append('token', data.token);
+  form.append('amount', data.amount);
+  form.append('note', data.note);
+  form.append('to', data.to);
+  form.append('wallet_id', data.wallet_id);
+  form.append('password', data.password);
+
+  return {
+    type: WALLET.TRANSFER_START,
+    payload: form,
+  };
+};
+const WalletTransferEnd = (data: any) => ({
+  type: WALLET.TRANSFER_END,
+  payload: data,
+});
+const WalletTransferFail = (msg: string) => ({
+  type: WALLET.TRANSFER_FAIL,
+  payload: msg,
+});
+
+export const WalletTransfer = {
+  start: WalletTransferStart,
+  end: WalletTransferEnd,
+  fail: WalletTransferFail,
+};
+
+const WalletReferralListStart = (token: string, page: number | string) => {
+  const form = new FormData();
+  form.append('token', token);
+  form.append('page', page);
+
+  return {
+    type: WALLET.REFERRAL_LIST_START,
+    payload: form,
+  };
+};
+const WalletReferralListEnd = (data: any) => ({
+  type: WALLET.REFERRAL_LIST_END,
+  payload: data,
+});
+const WalletReferralListFail = (msg: string) => ({
+  type: WALLET.REFERRAL_LIST_FAIL,
+  payload: msg,
+});
+const WalletReferralListClear = () => ({
+  type: WALLET.REFERRAL_LIST_CLEAR,
+});
+
+export const WalletReferralList = {
+  start: WalletReferralListStart,
+  end: WalletReferralListEnd,
+  fail: WalletReferralListFail,
+  clear: WalletReferralListClear,
+};

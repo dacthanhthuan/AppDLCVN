@@ -1,4 +1,4 @@
-import React, {useState, useEffect, startTransition, useCallback} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import styles from './styles';
 import {
   Image,
@@ -114,7 +114,7 @@ const Warehouse = ({navigation}) => {
 
   // loadmore feature
   const onLoadmore = () => {
-    if (!listLoading) {
+    if (!listLoading && keyword.length == 0) {
       getChangePointListApi(nextpage);
     }
   };

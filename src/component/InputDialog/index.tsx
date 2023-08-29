@@ -11,6 +11,7 @@ type InputOverlayProps = {
   title?: string;
   inputPlaceholder?: string;
   inputValue?: string;
+  secure: boolean;
 };
 
 function InputOverlay({
@@ -20,6 +21,7 @@ function InputOverlay({
   title,
   inputValue,
   visible,
+  secure = true,
 }: InputOverlayProps) {
   const [text, setText] = useState(inputValue ? inputValue : '');
   const [error, setError] = useState('');
@@ -55,7 +57,7 @@ function InputOverlay({
         value={text}
         inputStyle={styles.inputStyle}
         focus={visible}
-        secure={true}
+        secure={secure}
         onSubmitEditing={undefined}
       />
       {error ? <Text style={styles.errorText}>{error}</Text> : null}

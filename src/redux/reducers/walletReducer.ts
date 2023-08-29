@@ -20,6 +20,12 @@ const initialState = {
   historyWalletNextPage: 1,
   historyWalletTotalRecord: 0,
   historyWalletCurrentRecord: 0,
+  transferLoading: false,
+  referralListLoading: false,
+  referralList: [],
+  referralListNextPage: 1,
+  referralListTotalRecord: 0,
+  referralListCurrentRecord: 0,
 };
 
 export default function walletReducer(state = initialState, action: AnyAction) {
@@ -216,6 +222,68 @@ export default function walletReducer(state = initialState, action: AnyAction) {
         historyWalletNextPage: 1,
         historyWalletTotalRecord: 0,
         historyWalletCurrentRecord: 0,
+      };
+    }
+
+    // transfer
+    case WALLET.TRANSFER_START: {
+      return {
+        ...state,
+        message: undefined,
+        transferLoading: true,
+      };
+    }
+    case WALLET.TRANSFER_END: {
+      return {
+        ...state,
+        message: undefined,
+        transferLoading: false,
+      };
+    }
+    case WALLET.TRANSFER_FAIL: {
+      return {
+        ...state,
+        message: action.payload,
+        transferLoading: true,
+      };
+    }
+
+    // referral list
+    case WALLET.REFERRAL_LIST_START: {
+      return {
+        ...state,
+        message: undefined,
+        referralListLoading: true,
+      };
+    }
+    case WALLET.REFERRAL_LIST_END: {
+      return {
+        ...state,
+        message: undefined,
+        referralListLoading: false,
+        referralList: [...state.referralList, ...action.payload.l],
+        referralListNextPage: state.referralListNextPage + 1,
+        referralListTotalRecord: action.payload.total_record,
+        referralListCurrentRecord:
+          state.referralListCurrentRecord + action.payload.l.length,
+      };
+    }
+    case WALLET.REFERRAL_LIST_FAIL: {
+      return {
+        ...state,
+        message: action.payload,
+        referralListLoading: false,
+      };
+    }
+    case WALLET.REFERRAL_LIST_CLEAR: {
+      return {
+        ...state,
+        message: undefined,
+        referralListLoading: false,
+        referralList: [],
+        referralListNextPage: 1,
+        referralListTotalRecord: 0,
+        referralListCurrentRecord: 0,
       };
     }
 

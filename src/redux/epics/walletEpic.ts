@@ -9,6 +9,8 @@ import {
   WalletDeposit,
   WalletFundHistoryList,
   WalletHistoryList,
+  WalletReferralList,
+  WalletTransfer,
   WalletWithdraw,
 } from '../actions/walletActions';
 import api_bank_wallet_list from '../../api/api_bank_wallet_list';
@@ -18,6 +20,8 @@ import api_wallet_withdraw from '../../api/api_wallet_withdraw';
 import api_wallet_cancel from '../../api/api_wallet_cancel';
 import api_wallet_add_bank_infor from '../../api/api_wallet_add_bank_infor';
 import api_wallet_history from '../../api/api_wallet_history';
+import api_wallet_transfer from '../../api/api_wallet_transfer';
+import api_referral_list from '../../api/api_referral_list';
 
 const walletEpic: Epic = (action$, state$) =>
   action$.pipe(
@@ -29,6 +33,8 @@ const walletEpic: Epic = (action$, state$) =>
       WALLET.CANCEL_START,
       WALLET.ADD_BANK_INFOR_START,
       WALLET.HISTORY_START,
+      WALLET.TRANSFER_START,
+      WALLET.REFERRAL_LIST_START,
     ),
     switchMap(async action => {
       switch (action.type) {
@@ -127,6 +133,34 @@ const walletEpic: Epic = (action$, state$) =>
                 });
               }
               return WalletHistoryList.fail(msg);
+            });
+        }
+
+        case WALLET.TRANSFER_START: {
+          return await api_wallet_transfer(action.payload)
+            .then(res => WalletTransfer.end(res))
+            .catch(msg => {
+              if (msg instanceof Error) {
+                return riseNetworkError({
+                  error: msg,
+                  visible: true,
+                });
+              }
+              return WalletTransfer.fail(msg);
+            });
+        }
+
+        case WALLET.REFERRAL_LIST_START: {
+          return await api_referral_list(action.payload)
+            .then(res => WalletReferralList.end(res))
+            .catch(msg => {
+              if (msg instanceof Error) {
+                return riseNetworkError({
+                  error: msg,
+                  visible: true,
+                });
+              }
+              return WalletReferralList.fail(msg);
             });
         }
       }

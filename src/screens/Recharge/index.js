@@ -19,9 +19,15 @@ import {riseNormalError} from '../../redux/actions/errorHandlerActions';
 import {WalletBankList, WalletDeposit} from '../../redux/actions/walletActions';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import {clientGetDetailUserStart} from '../../redux/actions/userActions';
+import {
+  NotificationActions,
+  useNotificationDispatch,
+} from '../../component/NotificationContext/context';
+import {NotificationType} from '../../component/NotificationContext/types';
 
 const Recharge = ({navigation}) => {
   const dispatch = useDispatch();
+  const notification = useNotificationDispatch();
 
   const session_token = useSelector(state => state.user.session_token);
   const bankList = useSelector(state => state.wallet.bankList);
@@ -52,7 +58,14 @@ const Recharge = ({navigation}) => {
 
   // handle continue button
   const handleContinue = async () => {
-    if (amount >= 50000) {
+    if (!bankSelect) {
+      dispatch(
+        riseNormalError({
+          duration: 2500,
+          message: 'Vui lòng chọn ngân hàng',
+        }),
+      );
+    } else if (amount >= 50000) {
       dispatch(
         WalletDeposit.start({
           amount: amount,
@@ -64,21 +77,12 @@ const Recharge = ({navigation}) => {
 
       setDepositPressed(true);
     } else {
-      if (!bankSelect) {
-        dispatch(
-          riseNormalError({
-            duration: 2500,
-            message: 'Vui lòng chọn ngân hàng',
-          }),
-        );
-      } else {
-        dispatch(
-          riseNormalError({
-            duration: 2000,
-            message: 'Số tiền nhập vào phải từ ' + formatPrice(50000),
-          }),
-        );
-      }
+      dispatch(
+        riseNormalError({
+          duration: 2000,
+          message: 'Số tiền nhập vào phải từ ' + formatPrice(50000),
+        }),
+      );
     }
   };
 
@@ -86,6 +90,18 @@ const Recharge = ({navigation}) => {
   useEffect(() => {
     if (!depositLoading && depositPressed && !walletMessage) {
       setDepositPressed(false);
+
+      // display notification
+      notification(
+        NotificationActions.rise({
+          data: {
+            message:
+              'Giao dịch đang được xử lý, có thể xem lại chi tiết tại lịch sử nạp tiền.',
+          },
+          duration: 3000,
+          type: NotificationType.NORMAL,
+        }),
+      );
 
       navigation.navigate('InforTranfer', {
         data: deposit,

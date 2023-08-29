@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import styles from './styles';
 import {
   FlatList,
@@ -8,6 +8,8 @@ import {
   Text,
   Image,
   TextInput,
+  RefreshControl,
+  Keyboard,
 } from 'react-native';
 import Header from '../../component/Header/index';
 import Input from '../../component/Input';
@@ -15,98 +17,168 @@ import CardMember from '../../component/CardMember';
 import Button from '../../component/Button';
 import Modal from 'react-native-modal';
 import CardSurplus from '../../component/CardSurplus';
-import {WINDOW_HEIGHT} from '../../global';
+import {WINDOW_HEIGHT, nomarlizeVietNamese} from '../../global';
+import CurrencyInput from 'react-native-currency-input';
+import {useDispatch, useSelector} from 'react-redux';
+import {WalletReferralList} from '../../redux/actions/walletActions';
+import {ActivityIndicator} from 'react-native';
+import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
+import {riseNormalError} from '../../redux/actions/errorHandlerActions';
 
-const data = [
-  {
-    image: require('../../assets/member.png'),
-    name: 'Lê Thành Tín',
-    phone: '0839020007',
-  },
-  {
-    image: require('../../assets/member1.png'),
-    name: 'Trần Thiện Lâm',
-    phone: '0839020007',
-  },
-  {
-    image: require('../../assets/member2.png'),
-    name: 'Lê Văn Long',
-    phone: '0839020007',
-  },
-  {
-    image: require('../../assets/member3.png'),
-    name: 'Lê Thu Mai',
-    phone: '0839020007',
-  },
-  {
-    image: require('../../assets/member1.png'),
-    name: 'Nguyễn Văn A',
-    phone: '0839020007',
-  },
-  {
-    image: require('../../assets/member2.png'),
-    name: 'Lê Như Ngọc Mai',
-    phone: '0839020007',
-  },
-];
+const TransferMoney = ({navigation, route}) => {
+  const dispatch = useDispatch();
 
-const TransferMoney = ({navigation}) => {
-  const [filteredUser, setFilteredUser] = useState(data);
-  // const [dataUser, setDatauser] = useState([]);
-  const [keywork, setKeywork] = useState('');
+  const {wallet_id} = route.params;
+
+  const lWallet = useSelector(state => state.user.lWallet);
+  const login = useSelector(state => state.user.login.status);
+  const session_token = useSelector(state => state.user.session_token);
+
+  const referralList = useSelector(state => state.wallet.referralList);
+  const referralListLoading = useSelector(
+    state => state.wallet.referralListLoading,
+  );
+  const referralListNextPage = useSelector(
+    state => state.wallet.referralListNextPage,
+  );
+  const referralListTotalRecord = useSelector(
+    state => state.wallet.referralListTotalRecord,
+  );
+  const referralListCurrentRecord = useSelector(
+    state => state.wallet.referralListCurrentRecord,
+  );
+
+  const wallet_type = wallet_id == lWallet[0].wallet_id ? 'tiền' : 'điểm';
+
+  const [data, setData] = useState([]);
+  const [searching, setSearching] = useState(false);
+
   const [showBottomSheet, setShowBottomSheet] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [note, setNote] = useState('');
+  const [selectUser, setSelectUser] = useState(undefined);
+  const [error, setError] = useState('');
 
-  // const CheckBoxClick = (user) => {
-  //   const newdata = filteredUser.map((item) => {
-  //     if (item.name === user.name) {
-  //       return (
-  //         ...item,
-  //         // isCheck: !item.isCheck,
-  //       )
-  //     }
-  //     return item;
-  //   });
-  //   setFilteredUser(newdata);
-  // };
+  const [refreshing, setRefreshing] = useState(false);
+  const [loadmore, setLoadmore] = useState(false);
 
-  // const Checkkkk = () => {
-  //   if (isCheck === true) {
-  //     setDatauser(dataUser.filter((item) => item.name))
-  //   }
-  // }
+  const _searchDebounceTimer = useRef(undefined);
 
-  // const handlercheck = (user) => {
-  //   if (dataUser.map((item) => item.name === user.name)) {
-  //     setDatauser(dataUser.filter((item) => item.name !== user.name))
-  //   } else {
-  //     setDatauser([...dataUser, name])
-  //   }
-  // };
-
+  // initial render: call api to get referral list or user login again
   useEffect(() => {
-    if (keywork?.length > 0) {
-      const filteredItems = data?.filter(rec =>
-        rec?.name?.toLocaleLowerCase()?.includes(keywork?.toLocaleLowerCase()),
-      );
-      setFilteredUser(filteredItems);
-    } else {
-      setFilteredUser(data);
+    if (referralList.length == 0) {
+      dispatch(WalletReferralList.start(session_token, 1));
     }
-  }, [keywork]);
+  }, [login]);
+
+  // whenever referral list data has change
+  useEffect(() => {
+    setData(referralList);
+    if (!referralListLoading) {
+      setRefreshing(false);
+      setLoadmore(false);
+    }
+  }, [referralList]);
 
   const openBottomSheet = () => {
     setShowBottomSheet(true);
   };
 
   const closeBottomSheet = () => {
+    setError('');
     setShowBottomSheet(false);
   };
+
+  // handle continue button
+  const handleContinueButton = () => {
+    if (!selectUser) {
+      // display error
+      dispatch(
+        riseNormalError({
+          duration: 3000,
+          message: 'Vui lòng chọn người nhận',
+        }),
+      );
+    } else {
+      openBottomSheet();
+    }
+  };
+
+  // handle continue bottom sheet
+  const handleContinueBottomSheet = () => {
+    if (amount == 0) {
+      // error
+      setError('Vui lòng nhập số ' + wallet_type);
+    } else {
+      closeBottomSheet();
+
+      navigation.navigate('TranferMoneyTwo', {
+        amount,
+        note,
+        selectUser,
+        wallet_id,
+      });
+    }
+  };
+
+  // handle select user
+  const handleSelect = item => {
+    setSelectUser(item);
+  };
+
+  // handle refreshing
+  const handleRefreshing = () => {
+    setRefreshing(true);
+    Keyboard.dismiss();
+    dispatch(WalletReferralList.clear());
+    dispatch(WalletReferralList.start(session_token, 1));
+  };
+
+  // handle loadmore
+  const handleLoadmore = () => {
+    if (
+      referralListCurrentRecord < referralListTotalRecord &&
+      !referralListLoading &&
+      !searching
+    ) {
+      setLoadmore(true);
+      dispatch(WalletReferralList.start(session_token, referralListNextPage));
+    }
+  };
+
+  // feature search
+  const handleSearchFeature = useCallback(
+    keyword => {
+      clearTimeout(_searchDebounceTimer.current);
+
+      if (keyword.length > 0) {
+        setSearching(true);
+
+        _searchDebounceTimer.current = setTimeout(() => {
+          const filter = referralList.filter(item => {
+            return (
+              nomarlizeVietNamese(item.fullname).includes(
+                nomarlizeVietNamese(keyword),
+              ) || item.mobile.startsWith(keyword)
+            );
+          });
+
+          setData(filter);
+        }, 300);
+      } else {
+        setSearching(false);
+
+        setData(referralList);
+      }
+    },
+    [searching],
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <Header
         iconLeft={require('../../assets/Arrow1.png')}
-        text="Chuyển tiền"
+        text={'Chuyển ' + wallet_type}
         onPressLeft={() => {
           navigation.goBack();
         }}
@@ -114,29 +186,56 @@ const TransferMoney = ({navigation}) => {
 
       <Input
         placeholder="Tìm kiếm thành viên"
-        value={keywork}
-        onChangeText={setKeywork}
+        value={refreshing ? '' : undefined}
+        onChangeText={handleSearchFeature}
       />
 
       <FlatList
-        data={filteredUser}
+        data={data}
         style={{marginTop: 15, flex: 1}}
+        keyExtractor={item => item.user_id}
+        ListEmptyComponent={
+          referralListLoading && !refreshing ? (
+            <ActivityIndicator color="#005aa9" />
+          ) : !refreshing ? (
+            <Text style={styles.listEmptyText}>
+              Không có liên kết thành viên
+            </Text>
+          ) : null
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            colors={['white']}
+            progressBackgroundColor={'#005AA9'}
+            onRefresh={handleRefreshing}
+          />
+        }
+        onEndReached={handleLoadmore}
         renderItem={({item}) => {
           return (
             <CardMember
-              image={item.image}
-              name={item.name}
-              phone={item.phone}
+              image={
+                item.avatar
+                  ? {uri: item.avatar}
+                  : require('../../assets/no_avatar.png')
+              }
+              name={item.fullname}
+              phone={item.mobile}
+              isSelected={selectUser?.user_id == item.user_id}
+              onPress={() => handleSelect(item)}
             />
           );
         }}
       />
 
+      {loadmore ? <LoadmoreIndicator /> : null}
+
       <View style={{alignItems: 'center'}}>
         <Button
           text="Tiếp theo"
           style={{bottom: WINDOW_HEIGHT * 0, width: '90%'}}
-          onPress={openBottomSheet}
+          onPress={handleContinueButton}
         />
       </View>
 
@@ -152,7 +251,9 @@ const TransferMoney = ({navigation}) => {
               alignItems: 'center',
             }}>
             <Text></Text>
-            <Text style={{fontSize: 20, color: '#005AA9'}}>Chuyển tiền</Text>
+            <Text style={{fontSize: 20, color: '#005AA9'}}>
+              Chuyển {wallet_type}
+            </Text>
             <TouchableOpacity onPress={closeBottomSheet}>
               <Image
                 style={{width: 24, height: 24}}
@@ -162,32 +263,42 @@ const TransferMoney = ({navigation}) => {
           </View>
 
           <CardSurplus
-            onPress={() => navigation.navigate('WalletScreen')}
             style={{marginTop: 35}}
+            isMainWallet={wallet_id == lWallet[0].wallet_id}
           />
 
-          <Text style={styles.title}>Bạn muốn chuyển bao nhiêu ?</Text>
+          <Text style={styles.title}>Bạn muốn chuyển bao nhiêu?</Text>
 
-          <TextInput
+          <CurrencyInput
             style={styles.value}
-            placeholder="0Đ"
+            value={amount}
+            onChangeValue={setAmount}
+            suffix={wallet_id == lWallet[0].wallet_id ? ' đ' : ' Point'}
+            precision={0}
+            placeholder={wallet_id == lWallet[0].wallet_id ? '0 đ' : '0 Point'}
             placeholderTextColor="#C2C2C2"
             keyboardType="number-pad"
+            maxValue={100000000}
+            autoFocus={showBottomSheet}
           />
+
+          {error && <Text style={styles.errorText}>*{error}</Text>}
 
           <View style={styles.messContainer}>
             <Text style={styles.textMessage}>Lời nhắn</Text>
             <TextInput
               style={styles.messInput}
               placeholderTextColor="#C2C2C2"
+              value={note}
+              onChangeText={setNote}
             />
           </View>
 
           <View style={{alignItems: 'center'}}>
             <Button
-              onPress={() => navigation.navigate('TranferMoneyTwo')}
+              onPress={handleContinueBottomSheet}
               text="Tiếp tục"
-              style={{width: '90%', bottom: WINDOW_HEIGHT * -0.05}}
+              style={{width: '90%', marginTop: 50}}
             />
           </View>
         </View>

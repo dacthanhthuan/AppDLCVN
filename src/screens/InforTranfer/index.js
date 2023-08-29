@@ -153,13 +153,7 @@ const InforTranfer = () => {
             <Text style={Style_InforTranfer.text_1}>
               {wallet ? 'Thời gian' : 'Ngân hàng'}
             </Text>
-            <Text
-              style={[
-                Style_InforTranfer.text_2,
-                {
-                  textTransform: 'capitalize',
-                },
-              ]}>
+            <Text style={[Style_InforTranfer.text_2]}>
               {wallet
                 ? secondToGlobalDate(data.created_at).toLocaleString()
                 : data?.bankInfo?.bank_name || data?.bank_name}

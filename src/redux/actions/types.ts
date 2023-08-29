@@ -152,4 +152,13 @@ export enum WALLET {
   ADD_BANK_INFOR_START = 'wallet/Add_Bank_Infor_Start',
   ADD_BANK_INFOR_END = 'wallet/Add_Bank_Infor_End',
   ADD_BANK_INFOR_FAIL = 'wallet/Add_Bank_Infor_Fail',
+
+  TRANSFER_START = 'wallet/Transfer_Start',
+  TRANSFER_END = 'wallet/Transfer_End',
+  TRANSFER_FAIL = 'wallet/Transfer_Fail',
+
+  REFERRAL_LIST_START = 'wallet/Referral_List_Start',
+  REFERRAL_LIST_END = 'wallet/Referral_List_End',
+  REFERRAL_LIST_FAIL = 'wallet/Referral_List_Fail',
+  REFERRAL_LIST_CLEAR = 'wallet/Referral_List_Clear',
 }
