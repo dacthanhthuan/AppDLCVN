@@ -8,6 +8,8 @@ import {
   View,
   Pressable,
   RefreshControl,
+  Platform,
+  ToastAndroid,
 } from 'react-native';
 import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import styles from './styles';
@@ -36,6 +38,13 @@ import {
 import {NotificationType} from '../../component/NotificationContext/types';
 import {riseNetworkError} from '../../redux/actions/errorHandlerActions';
 import {WalletReferralList} from '../../redux/actions/walletActions';
+import {
+  request,
+  PERMISSIONS,
+  check,
+  RESULTS,
+  openSettings,
+} from 'react-native-permissions';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
@@ -83,8 +92,8 @@ const ProfileAdmin = ({navigation}) => {
   useEffect(() => {
     // check biometric is available
     isBiometricSupport();
-    // reload user data
-    dispatch(clientGetDetailUserStart(user.session_token));
+    // reload user data if user login
+    if (login) dispatch(clientGetDetailUserStart(user.session_token));
   }, []);
 
   // handle refreshing detail user data
@@ -101,6 +110,65 @@ const ProfileAdmin = ({navigation}) => {
       setRefreshing(false);
     }
   }, [userLoading]);
+
+  // check permission before navigation to scan qr screen
+  const handleBeforeNavScanQr = async () => {
+    const cameraPermission =
+      Platform.OS == 'android'
+        ? await check(PERMISSIONS.ANDROID.CAMERA)
+        : await check(PERMISSIONS.IOS.CAMERA);
+
+    switch (cameraPermission) {
+      case RESULTS.UNAVAILABLE:
+        console.log(
+          'This feature is not available (on this device / in this context)',
+        );
+        ToastAndroid.show(
+          'Chức năng hiện không khả dụng trên thiết vị này',
+          ToastAndroid.LONG,
+        );
+
+        break;
+      case RESULTS.DENIED:
+        console.log(
+          'The permission has not been requested / is denied but requestable',
+        );
+
+        const permisson =
+          Platform.OS == 'android'
+            ? await request(PERMISSIONS.ANDROID.CAMERA)
+            : await request(PERMISSIONS.IOS.CAMERA);
+
+        if (permisson === RESULTS.GRANTED) {
+          navigation.navigate('ScanQr');
+        }
+
+        if (permisson === RESULTS.BLOCKED) {
+          ToastAndroid.show(
+            'Quyền truy cập đã bị chặn, vui lòng mở lại trong cài đặt ứng dụng',
+            ToastAndroid.LONG,
+          );
+
+          openSettings();
+        }
+
+        break;
+      case RESULTS.LIMITED:
+        console.log('The permission is limited: some actions are possible');
+
+        break;
+      case RESULTS.GRANTED:
+        console.log('The permission is granted');
+
+        navigation.navigate('ScanQr');
+
+        break;
+      case RESULTS.BLOCKED:
+        console.log('The permission is denied and not requestable anymore');
+
+        break;
+    }
+  };
 
   return !isReady ? (
     <LoadingOverlay />
@@ -189,6 +257,7 @@ const ProfileAdmin = ({navigation}) => {
           <TranfersMoney
             image={require('../../assets/Rectangle303.png')}
             text="Quét mã"
+            onPress={handleBeforeNavScanQr}
           />
           <TranfersMoney
             image={require('../../assets/Rectangle304.png')}

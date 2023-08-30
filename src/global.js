@@ -295,3 +295,10 @@ export const WalletStatusConvert = status => {
     }
   }
 };
+
+export function transformFileName(str) {
+  str = nomarlizeVietNamese(str);
+  str = str.replaceAll('-', '_');
+
+  return str;
+}

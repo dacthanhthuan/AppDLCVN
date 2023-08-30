@@ -70,6 +70,7 @@ import {useSelector} from 'react-redux';
 import {OrderAddressProvider} from './src/component/OrderAddressContext';
 import WalletHistory from './src/screens/WalletHistory';
 import BankAccount from './src/screens/BankAccount';
+import ScanQrScreen from './src/screens/ScanQrScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -126,6 +127,7 @@ const App = () => {
             <Stack.Screen name="UpdateAddress2" component={UpdateAddressMain} />
             <Stack.Screen name="WalletHistory" component={WalletHistory} />
             <Stack.Screen name="BankAccount" component={BankAccount} />
+            <Stack.Screen name="ScanQr" component={ScanQrScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </OrderAddressProvider>
