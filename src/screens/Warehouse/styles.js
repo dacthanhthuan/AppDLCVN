@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
   },
   pointContainer: {
     flexDirection: 'row',
+    width: 150,
     backgroundColor: '#09355C',
-    width: 133,
     borderRadius: 20,
     shadowColor: '#000',
     shadowOffset: {
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.34,
     shadowRadius: 6.27,
-
     elevation: 10,
+    paddingLeft: 4
   },
   pointText: {
     color: '#FFFFFF',

@@ -1,42 +1,39 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const Style_Information = StyleSheet.create({
-  container_1: {
+const styles = StyleSheet.create({
+  container: {
     width: '100%',
+    marginTop: 8
   },
-  text_1: {
-    fontSize: 13,
-    color: '#000000',
-    fontWeight: '300',
-  },
-  container_2: {
+  containerTitle: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  container_3: {
-    justifyContent: 'space-between',
-    height: 70,
+  icon: {
+    width: 31,
+    height: 26
   },
-  container_4: {
-    justifyContent: 'space-between',
-    height: 70,
-    alignItems: 'flex-end',
-  },
-  price_1: {
+  textTitle: {
     color: '#000000',
-    fontSize: 13,
-    fontWeight: '400',
+    marginLeft: 14,
+    fontSize: 16
   },
-  price_2: {
-    color: '#005AA9',
-    fontSize: 13,
-    fontWeight: '400',
+  containerText: {
+    flexDirection: 'row',
+    marginLeft: 14,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8
   },
-  price_3: {
-    color: '#0FA027',
-    fontSize: 13,
-    fontWeight: '400',
+  text: {
+    color: '#000000'
   },
+  textColor: {
+    color: '#005AA9'
+  },
+  textColorComission: {
+    color: '#0FA027'
+  }
 });
 
-export default Style_Information;
+export default styles;

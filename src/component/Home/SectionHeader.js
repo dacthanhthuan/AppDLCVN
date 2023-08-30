@@ -1,17 +1,18 @@
-import {View, Text, Pressable, StyleSheet} from 'react-native';
-import {memo} from 'react';
+import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
+import { memo } from 'react';
 
-const SectionHeader = ({title, isMore}) => {
+const SectionHeader = ({ title, isMore }) => {
   return (
     <View style={styles.categoryTitle}>
       <Text style={styles.textTitle}>{title}</Text>
       {isMore ? (
         <Pressable
-          style={({pressed}) => [
+          style={({ pressed }) => [
             styles.textPressable,
-            pressed ? {opacity: 0.5} : null,
+            pressed ? { opacity: 0.5 } : null,
           ]}>
           <Text style={styles.textButton}>Xem tất cả</Text>
+          <Image style={styles.icon} resizeMode='contain' source={require('../../assets/vectorRight.png')} />
         </Pressable>
       ) : null}
     </View>
@@ -30,22 +31,32 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     marginBottom: '2%',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
 
   textTitle: {
     textTransform: 'uppercase',
     fontSize: 16,
     fontWeight: '500',
-    color: 'black',
+    color: '#000000',
   },
 
   textPressable: {
     right: '7%',
     position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center'
   },
 
   textButton: {
     color: '#005AA9',
     fontSize: 14,
+    marginRight: 4
+
   },
+  icon: {
+    width: 16,
+    height: 16
+  }
 });

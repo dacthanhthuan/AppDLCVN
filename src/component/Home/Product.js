@@ -1,44 +1,47 @@
-import {WINDOW_WIDTH, WINDOW_HEIGHT, formatprice} from '../../global';
-import {memo} from 'react';
-import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { WINDOW_WIDTH, WINDOW_HEIGHT, formatprice } from '../../global';
+import { memo } from 'react';
+import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const Product = ({item}) => {
+const Product = ({ item, style }) => {
+  // console.log('item', item);
   const navigation = useNavigation();
 
   const goToDetailProduct = () => {
-    navigation.navigate('DetailProduct', {item});
+    navigation.navigate('DetailProduct', { item });
   };
   const price = formatprice(item?.price);
-  const commission = formatprice(item?.commission);
+  const commission = formatprice(item?.price_cal_commission);
 
   return (
-    <View style={[styles.renderItem]}>
+    <View style={[styles.renderItem, style]}>
       <Pressable
         onPress={goToDetailProduct}
-        style={({pressed}) => [
+        style={({ pressed }) => [
           styles.renderPressable,
-          pressed ? {opacity: 0.8} : null,
+          pressed ? { opacity: 0.8 } : null,
         ]}>
         <Image
-          source={item?.source}
+          source={item?.source || { uri: item?.img_1 }}
           style={[styles.renderImage]}
           resizeMode="contain"
         />
-        <Text style={styles.renderTitle} numberOfLines={2}>
-          {item?.title}
-        </Text>
-        <Text style={styles.renderProductId} numberOfLines={1}>
-          {item?.idProduct}
-        </Text>
-        <Text style={styles.renderProductId} numberOfLines={1}>
-          Giá bán: <Text style={styles.renderPrice}>{price}</Text>
-        </Text>
-        <Text style={styles.renderProductId} numberOfLines={1}>
-          Hoa hồng: <Text style={styles.renderCommission}>{commission}</Text>
-        </Text>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={styles.renderTitle} numberOfLines={2}>
+            {item?.product_name}
+          </Text>
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            {item?.product_id}
+          </Text>
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Giá bán: <Text style={styles.renderPrice}>{price}</Text>
+          </Text>
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Hoa hồng: <Text style={styles.renderCommission}>{commission}</Text>
+          </Text>
+        </View>
       </Pressable>
-    </View>
+    </View >
   );
 };
 
@@ -69,13 +72,15 @@ const styles = StyleSheet.create({
     height: '45%',
     width: '90%',
     alignSelf: 'center',
+    borderRadius: 10
   },
 
   renderTitle: {
-    paddingVertical: '1%',
     fontSize: 16,
     color: '#005AA9',
     fontWeight: '400',
+    marginTop: 8,
+    textAlign: 'center'
   },
 
   renderProductId: {

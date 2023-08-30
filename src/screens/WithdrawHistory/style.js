@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const Style_WithdrawHistory = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFFFFF',
@@ -8,4 +8,4 @@ const Style_WithdrawHistory = StyleSheet.create({
     },
 });
 
-export default Style_WithdrawHistory;
+export default styles;

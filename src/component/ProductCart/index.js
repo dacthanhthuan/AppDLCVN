@@ -6,7 +6,6 @@ import Checkbox from '../Checkbox';
 
 const ProductCart = ({ title, price, image, onChecked, style, allCheck, sl, onPressMinus, onPressPlus }) => {
   const [agreed, setAgreed] = useState(false);
-
   const onCheckbox = value => {
     setAgreed(value);
     onChecked(value);
@@ -17,7 +16,7 @@ const ProductCart = ({ title, price, image, onChecked, style, allCheck, sl, onPr
       <Checkbox onChecked={onCheckbox} check={allCheck} />
       <View style={styles.rightContainer}>
         <TouchableOpacity>
-          <Image style={styles.image} source={image} />
+          <Image style={styles.image} source={{ uri: image }} />
         </TouchableOpacity>
         <View style={styles.rightCard}>
           <Text style={styles.title}>{title}</Text>

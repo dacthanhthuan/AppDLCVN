@@ -1,81 +1,3 @@
-// import React, { useState } from "react";
-// import { SafeAreaView, View, Text, TouchableOpacity, Image, FlatList } from 'react-native'
-// import styles from "./styles";
-// import ProductCart from "../../component/ProductCart";
-// import Checkbox from "../../component/Checkbox";
-// import Button from "../../component/Button";
-// import { Swipeable } from "react-native-gesture-handler";
-// import Header from "../../component/Header";
-// import { formatprice } from "../../global";
-// import React, { useState, useEffect } from "react";
-// import { SafeAreaView, View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
-// import styles from "./styles";
-// import ProductCart from "../../component/ProductCart";
-// import Checkbox from "../../component/Checkbox/index";
-// import Button from "../../component/Button";
-// import { Swipeable } from "react-native-gesture-handler";
-// import Header from "../../component/Header";
-
-// const Cart = ({ navigation, route }) => {
-
-
-//   const [agreed, setAgreed] = useState(false);
-
-// const Cart = ({ navigation, route }) => {
-//     const itemdata = route.params;
-//     const price = formatprice(itemdata.itemdata.item.price);
-//     const totalprice = formatprice(itemdata.itemdata.item.price * parseFloat(itemdata.quantity));
-//     console.log(itemdata.quantity);
-
-//     const [agreed, setAgreed] = useState(false);
-//   const onCheckboxAll = () => {
-//     setAgreed(value => !value);
-//   };
-
-
-
-
-
-//   return (
-//     <SafeAreaView style={styles.container}>
-//       <Header
-//         iconLeft={require('../../assets/Arrow1.png')}
-//         text='Giỏ hàng'
-//         onPressLeft={() => { navigation.goBack() }}
-//       />
-
-//       <FlatList
-//         data={productData}
-//         style={{ marginTop: 35 }}
-//         keyExtractor={item => String(item.id)}
-//         renderItem={({ item }) => {
-//           return (
-//             <Swipeable renderRightActions={() => clearCard(item.id)}>
-//               <ProductCart
-//                 sl={quantity}
-//                 title={item.title}
-//                 price={item.price}
-//                 image={item.image}
-//                 checked={agreed}
-//               />
-//             </Swipeable>
-//           );
-//         }}
-//       />
-
-//       <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-//         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-//           <Checkbox onPress={onCheckboxAll} checked={agreed} />
-//           <Text style={{ fontSize: 14, color: '#000000', marginLeft: 10 }}>Chọn tất cả</Text>
-//         </View>
-//         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-//           <Text style={{ fontSize: 14, color: '#000000', marginLeft: 10 }}>Tổng giá bán</Text>
-//           <Text style={{ fontSize: 16, color: '#000000', marginLeft: 10, fontWeight: '500' }}>2,500,000 đ</Text>
-//         </View>
-//       </View>
-//       <Button text='Tạo đơn' onPress={() => navigation.navigate('CreateOrder')} />
-
-
 import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
@@ -92,54 +14,24 @@ import Button from '../../component/Button';
 import { Swipeable } from 'react-native-gesture-handler';
 import Header from '../../component/Header';
 import { formatprice } from "../../global";
+import { useSelector } from 'react-redux';
+import store from '../../redux/store';
+import { cleardeliveryAddress, removeFromCart, updateCartQuantity } from '../../redux/actions';
+import CardEmpty from '../CardEmpty';
+import { localSaveProductCart } from '../../Local/AsyncStorage';
 
-{/* const data = [
-  {
-    id: 1,
-    title: 'Nước rửa chén sinh học True - Bio Natural Dishwashing Liquid',
-    price: '206,000',
-    image: require('../../assets/Rectangle87.png'),
-  },
-  {
-    id: 2,
-    title: 'DL12 Probiotic',
-    price: '610,000',
-    image: require('../../assets/Group135.png'),
-  },
-]; */}
+const Cart = ({ navigation }) => {
 
-const Cart = ({ navigation, route }) => {
-
-  const { quantity, item } = route?.params || {};
-  const price = formatprice(item?.price);
-  const [action] = useState(false);
-  const [Isquantity, setIsquantity] = useState(quantity);
-  const totalprice = formatprice(item?.price * parseFloat(Isquantity));
-
-  // console.log(Isquantity);
-  // console.log("item", item);
-  // console.log("quantity", quantity);
-  const [productData, setProductData] = useState(route?.params ? [item] : []);
-
+  // Retrieve the cart products from the Redux store
+  const { cartItems } = useSelector(state => state.postReducers);
 
   const [allCheck, setallCheck] = useState(false);
   const [forceChange, setForceChange] = useState(false);
+  // Giá trị ban đầu tất cả sản phẩm == false
   const [listCheck, setListCheck] = useState(
-    new Array(productData.length).fill(false),
+    new Array(cartItems?.length).fill(false),
   );
   const [check, setCheck] = useState(-1);
-
-  const onPressClearCard = (productId) => {
-    const updatedProductData = productData.filter(item => item.id !== productId);
-    setProductData(updatedProductData);
-  };
-
-  // Không có đơn hàng chuyển qua trang NoOrders
-  useEffect(() => {
-    if (productData.length === 0) {
-      navigation.replace('CardEmpty');
-    }
-  }, [productData, navigation]);
 
   const onCheckboxAll = checked => {
     if (check === -1 && checked === false) {
@@ -162,6 +54,25 @@ const Cart = ({ navigation, route }) => {
     setCheck(check);
   }, [listCheck]);
 
+  // Khi sản phẩm trong giỏ hàng thay đổi sẽ lưu lại vào Local
+  useEffect(() => {
+    if (cartItems?.length > 0) {
+      localSaveProductCart(cartItems)
+    }
+  }, [cartItems])
+
+  // Xóa sản phẩm
+  const onPressClearCard = (productId) => {
+    store.dispatch(removeFromCart(productId));
+
+    // Cập nhật dữ liệu trong local storage sau khi đã xóa sản phẩm khỏi Redux state
+    const updatedCartItems = cartItems.filter(
+      item => item?.productData?.product_id !== productId
+    );
+    localSaveProductCart(updatedCartItems);
+  };
+
+  // Icon xóa sản phẩm 
   const clearCard = (productId) => {
     return (
       <TouchableOpacity onPress={() => onPressClearCard(productId)} style={{ alignItems: 'center', justifyContent: 'center', padding: 12 }}>
@@ -170,7 +81,38 @@ const Cart = ({ navigation, route }) => {
     );
   };
 
-  return (
+  // Cập nhật số lượng
+  const updateQuantity = (productId, newQuantity) => {
+    store.dispatch(updateCartQuantity(productId, newQuantity));
+  };
+
+
+  // Tính tổng tiền hàng
+  let totalprice = allCheck
+    ? cartItems?.reduce((total, item) => {
+      const productPrice = item?.productData?.price * parseFloat(item?.quantity);
+      return total + productPrice;
+    }, 0)
+    : cartItems?.reduce((total, item, index) => {
+      // console.log('listCheck[index]:>>', listCheck[index]);
+      if (listCheck[index]) { // Include in total if the item's checkbox is checked
+        const productPrice = item?.productData?.price * parseFloat(item?.quantity);
+        // console.log(productPrice);
+        return total + productPrice;
+      } else {
+        return total;
+      }
+    }, 0);
+
+  // useEffect(() => {
+  // console.log('allCheck:>>', allCheck);
+  // console.log('listCheck:>>', listCheck);
+  // console.log(listCheck?.length == true);
+  // }, [allCheck, listCheck])
+
+  return cartItems?.length === 0 ?
+    <CardEmpty />
+    :
     <SafeAreaView style={styles.container}>
       <Header
         iconLeft={require('../../assets/Arrow1.png')}
@@ -181,33 +123,33 @@ const Cart = ({ navigation, route }) => {
       />
 
       <FlatList
-        data={productData}
+        showsVerticalScrollIndicator={false}
+        data={cartItems}
         style={{ marginTop: 35 }}
         renderItem={({ item, index }) => {
+          const price = formatprice(item?.productData?.price);
           return (
-            <Swipeable renderRightActions={() => clearCard(item?.id)}>
+            <Swipeable renderRightActions={() => clearCard(item?.productData?.product_id)}>
               <ProductCart
                 onPressMinus={() => {
-                  setIsquantity(Isquantity - 1)
-                  if (Isquantity <= 1) {
-                    setIsquantity(1)
+                  if (item?.quantity > 1) {
+                    const updatedQuantity = item?.quantity - 1;
+                    updateQuantity(item?.productData?.product_id, updatedQuantity);
                   }
                 }}
                 onPressPlus={() => {
-                  setIsquantity(Isquantity + 1)
+                  const updatedQuantity = item?.quantity + 1;
+                  updateQuantity(item?.productData?.product_id, updatedQuantity);
                 }}
-                sl={Isquantity}
+                sl={item?.quantity}
                 onChecked={value =>
                   setListCheck(list =>
-                    list.map((item, i) => {
-                      if (i === index) return value;
-                      else return item;
-                    }),
+                    list.map((item, i) => (i === index ? value : item))
                   )
                 }
-                title={item?.title}
+                title={item?.productData?.product_name}
                 price={price}
-                image={item?.source}
+                image={item?.productData?.image ? item?.productData?.image : item?.productData?.img_1}
                 allCheck={allCheck ? allCheck : listCheck[index]}
               />
             </Swipeable>
@@ -241,7 +183,7 @@ const Cart = ({ navigation, route }) => {
                 marginLeft: 10,
                 fontWeight: '500',
               }}>
-              {totalprice}
+              {formatprice(totalprice)}
             </Text>
           ) : (
             <Text
@@ -251,25 +193,29 @@ const Cart = ({ navigation, route }) => {
                 marginLeft: 10,
                 fontWeight: '500',
               }}>
-              {formatprice(0)}
+              {formatprice(totalprice)}
             </Text>
           )
           }
         </View>
       </View>
-      {allCheck === true ? (
+      {listCheck.every(item => item == false) ? (
         <Button
           text="Tạo đơn"
-          onPress={() => navigation.navigate('CreateOrder', { item, Isquantity, })}
         />
       ) : (
         <Button
           text="Tạo đơn"
+          onPress={() => {
+            let selectedItems = cartItems.filter((item, index) => listCheck[index]);
+            console.log(selectedItems);
+            store.dispatch(cleardeliveryAddress())
+            navigation.navigate('CreateOrder', { cartItems: selectedItems, totalprice })
+          }}
         />
       )
       }
     </SafeAreaView>
-  );
 };
 
 export default React.memo(Cart);

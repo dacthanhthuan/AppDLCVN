@@ -61,5 +61,9 @@ const Style_Login = StyleSheet.create({
         color: '#005AA9',
         fontSize: 16,
     },
+    icon: {
+        width: 46,
+        height: 46,
+    }
 });
 export default Style_Login

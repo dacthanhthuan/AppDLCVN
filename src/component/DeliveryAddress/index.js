@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import styles from './styles';
 
-const DeliveryAddress = ({city, district, ward, apartmentNumber, onPress}) => {
+const DeliveryAddress = ({ city, district, ward, onPress, value, onChangeText }) => {
   return (
     <>
-      <View style={{marginLeft: 22}}>
+      <View style={{ marginLeft: 22 }}>
         <View
           style={{
             flexDirection: 'row',
@@ -21,7 +21,7 @@ const DeliveryAddress = ({city, district, ward, apartmentNumber, onPress}) => {
         <Text style={styles.textLeft}>{ward}</Text>
       </View>
       <View style={styles.line}></View>
-      <Text style={[styles.textLeft, {marginLeft: 25}]}>{apartmentNumber}</Text>
+      <TextInput style={[styles.textLeft, { marginLeft: 22 }]} value={value} onChangeText={onChangeText} />
     </>
   );
 };

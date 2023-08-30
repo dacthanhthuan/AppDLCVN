@@ -1,8 +1,8 @@
-import {View} from 'react-native';
-import {AnimatedImgButton} from '../ImageButton';
+import { Image, Text, View } from 'react-native';
+import { AnimatedImgButton } from '../ImageButton';
 import InputSearch from '../InputSearch';
-import {memo} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { memo } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 import Animated, {
   useSharedValue,
@@ -16,14 +16,17 @@ import {
   HEADER_EXPAND_HEIGHT,
   HEADER_COLLAPSE_HEIGHT,
 } from '../../../screens/Home/styles';
-import {WINDOW_WIDTH} from '../../../global';
+import { WINDOW_WIDTH } from '../../../global';
+import { useSelector } from 'react-redux';
 
 const logo = require('../../../assets/Home/Rectangle2.png');
 const cart = require('../../../assets/Home/Vector.png');
 const searchSetting = require('../../../assets/Home/Rectangle313.png');
 const search = require('../../../assets/Home/ei_search.png');
 
-const Header = () => {
+const Header = ({ totalIsQuantity }) => {
+
+  const { cartItems } = useSelector((state) => state.postReducers)
   const navigation = useNavigation();
   const headerHeight = useSharedValue(0);
 
@@ -36,6 +39,8 @@ const Header = () => {
   const goToSearch = () => {
     navigation.navigate('SearchRecent');
   };
+
+
 
   //header animate
   const headerCollapseStyle = useAnimatedStyle(() => {
@@ -137,7 +142,7 @@ const Header = () => {
   return (
     <View
       style={[styles.expandsStyle]}
-      onLayout={({nativeEvent}) => {
+      onLayout={({ nativeEvent }) => {
         // headerHeight.value = nativeEvent.layout.height;
         if (
           nativeEvent.layout.height >
@@ -160,6 +165,15 @@ const Header = () => {
           onPress={() => goToCart()}
           style={cartAnimatedStyle}
         />
+
+        {/* Phần hiển thị số lượng sản phẩm */}
+        {totalIsQuantity > 0 ?
+          (
+            <View style={{ backgroundColor: '#EC2739', padding: 12, width: 12, height: 12, borderRadius: 12, alignItems: 'center', justifyContent: 'center', marginRight: 4 }}>
+              <Text style={{ color: '#FFFFFF', position: 'absolute' }}>{totalIsQuantity}</Text>
+            </View>
+          ) : null
+        }
 
         <AnimatedImgButton
           containerStyle={styles.searchPressable}

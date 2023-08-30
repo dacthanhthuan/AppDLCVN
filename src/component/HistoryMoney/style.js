@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { WINDOW_WIDTH } from '../../global';
 
 const Style_Historymoney = StyleSheet.create({
     border: {
         borderRadius: 7,
         borderWidth: 1,
         borderColor: '#C2C2C2',
-        flexDirection: 'row',
         padding: 10,
         marginBottom: 10,
     },
@@ -33,6 +33,17 @@ const Style_Historymoney = StyleSheet.create({
         height: 80,
         alignItems: "flex-end"
     },
+    containerCancel: {
+        marginTop: 16,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#EA4335',
+        padding: 8,
+        width: '30%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        left: WINDOW_WIDTH - 180
+    }
 });
 
 export default Style_Historymoney;

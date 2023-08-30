@@ -1,16 +1,17 @@
-import {memo} from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import { memo } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
 const check = require('../../assets/UpdateAddress/Rectangle263.png');
 
-const ChooseItem = ({item, isSelected}) => {
+const ChooseItem = ({ item, onPress, isSelected }) => {
   return (
-    <View>
+    <TouchableOpacity style={{ marginBottom: 8, }} onPress={() => onPress(item)}>
       <Text style={styles.text}>{item.name}</Text>
       {isSelected ? (
         <Image source={check} style={styles.imageTextCheck} />
       ) : null}
-    </View>
+      <View style={[styles.line, { borderColor: isSelected ? '#005AA9' : '#C2C2C2' }]}></View>
+    </TouchableOpacity >
   );
 };
 
@@ -19,13 +20,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 20,
     height: 20,
-    right: '5%',
+    right: '2%',
   },
 
   text: {
-    fontSize: 13,
+    fontSize: 14,
     color: 'black',
   },
+  line: {
+    width: '100%',
+    borderColor: '#C2C2C2',
+    borderWidth: 1,
+    marginTop: 4
+  }
 });
 
 export default memo(ChooseItem, (pre, next) => {

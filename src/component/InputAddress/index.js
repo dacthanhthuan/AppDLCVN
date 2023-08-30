@@ -2,7 +2,7 @@ import React from 'react'
 import { View, TextInput, Text } from 'react-native'
 import styles from './styles'
 
-const InputAddress = ({ title, keyboardType , style}) => {
+const InputAddress = ({ title, keyboardType, style, value, onChangeText }) => {
     return (
         <View style={[styles.inputContainer, style]}>
             <Text style={styles.titleInput}>{title}</Text>
@@ -11,6 +11,8 @@ const InputAddress = ({ title, keyboardType , style}) => {
                 keyboardType={keyboardType}
                 multiline={true}
                 numberOfLines={2}
+                value={value}
+                onChangeText={onChangeText}
             />
         </View>
     )

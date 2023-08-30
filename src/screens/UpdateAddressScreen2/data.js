@@ -1,3 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+
 export const button = [
   {
     title: 'Tỉnh/Thành phố',
@@ -13,58 +16,68 @@ export const button = [
   },
 ];
 
-export const fetchProvince = async () => {
-  return await fetch('https://provinces.open-api.vn/api/p/').then(res =>
-    res.json(),
-  );
+const FORM_DATA_PROVINCE = ({ toKen }) => {
+  const data = new FormData();
+  data.append("token", toKen)
+  return data
+}
+
+const FORM_DATA_DISTRICT = ({ toKen, cityId }) => {
+  const data = new FormData();
+  data.append("token", toKen)
+  data.append("city_id", cityId)
+  return data
+}
+
+const FORM_DATA_WARD = ({ toKen, districtId }) => {
+  const data = new FormData();
+  data.append("token", toKen)
+  data.append("district_id", districtId)
+  return data
+}
+
+export const fetchProvince = async ({ toKen }) => {
+  // Get Domain && APIKEY dưới Local
+  const mainDomain = await AsyncStorage.getItem('domain');
+  const apiKey = await AsyncStorage.getItem('apiKey');
+  return await axios.post(`${mainDomain}/location/city?apikey=${apiKey}`, FORM_DATA_PROVINCE({ toKen }), {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data'
+    }
+  }).
+    then(res => {
+      return res.data.data
+    });
 };
 
-export const fetchDistrict = async provinceCode => {
-  return await fetch(
-    `https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`,
-  ).then(res => res.json());
-};
-
-export const fetchWard = async districtCode => {
-  return await fetch(
-    `https://provinces.open-api.vn/api/d/${districtCode}?depth=2`,
-  ).then(res => res.json());
-};
-
-export const fetchData = async selectItem => {
-  let data = [];
-  switch (selectItem?.value) {
-    case 'provinces':
-      await fetchProvince().then(res => {
-        data = res.map(item => ({
-          ...item,
-          value: item.codename,
-          type: 'province',
-        }));
-      });
-      break;
-    case 'districts':
-      button[0].code
-        ? await fetchDistrict(button[0].code).then(res => {
-            data = res.districts.map(item => ({
-              ...item,
-              value: item.codename,
-              type: 'district',
-            }));
-          })
-        : null;
-      break;
-    case 'wards':
-      button[1].code
-        ? await fetchWard(button[1].code).then(res => {
-            data = res.wards.map(item => ({
-              ...item,
-              value: item.codename,
-              type: 'ward',
-            }));
-          })
-        : null;
-      break;
+export const fetchDistrict = async ({ toKen, cityId }) => {
+  // Get Domain && APIKEY dưới Local
+  const mainDomain = await AsyncStorage.getItem('domain');
+  const apiKey = await AsyncStorage.getItem('apiKey');
+  return await axios.post(
+    `${mainDomain}/location/district?apikey=${apiKey}`, FORM_DATA_DISTRICT({ toKen, cityId }), {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data'
+    }
   }
-  return data;
+  ).then(res => {
+    return res.data.data
+  });
+};
+
+export const fetchWard = async ({ toKen, districtId }) => {
+  // Get Domain && APIKEY dưới Local
+  const mainDomain = await AsyncStorage.getItem('domain');
+  const apiKey = await AsyncStorage.getItem('apiKey');
+  return await axios.post(`${mainDomain}/location/ward?apikey=${apiKey}`, FORM_DATA_WARD({ toKen, districtId }), {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'multipart/form-data'
+    }
+  }
+  ).then(res => {
+    return res.data.data
+  });
 };

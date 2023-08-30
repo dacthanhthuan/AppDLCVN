@@ -61,6 +61,25 @@ const Style_Payment = StyleSheet.create({
         fontWeight: '300',
         color: '#000000'
     },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 8
+    },
+    textBig: {
+        fontSize: 16,
+        color: '#000000'
+    },
+    textBigColor: {
+        fontSize: 16,
+        color: '#005AA9'
+    },
+    textDefault: {
+        fontSize: 14,
+        color: '#000000'
+    }
+
 });
 
 export default Style_Payment;

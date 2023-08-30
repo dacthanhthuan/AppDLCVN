@@ -1,14 +1,14 @@
 import RadioButton from '../RadioButton';
 import Checkbox from '../Checkbox';
-import {StyleSheet} from 'react-native';
-import {} from 'react';
+import { StyleSheet } from 'react-native';
+import { } from 'react';
 
-const CheckBoxGroup = ({data, selected, checkNum, forceRender}) => {
+const CheckBoxGroup = ({ data, selected, checkNum, forceRender }) => {
   return (
     <RadioButton
       containerStyle={styles.container}
       data={data}
-      renderButton={({item, isSelected}) => {
+      renderButton={({ item, isSelected }) => {
         return (
           <Checkbox
             inactiveStyle={styles.checkbox}
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     width: 22,
     height: 22,
-    transform: [{scale: 0.5}],
+    transform: [{ scale: 0.5 }],
     backgroundColor: '#005AA9',
     alignSelf: 'center',
   },

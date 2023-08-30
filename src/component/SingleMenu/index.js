@@ -1,25 +1,40 @@
 import React from 'react';
-import {Pressable, Image, View, Text, FlatList} from 'react-native';
+import { Pressable, Image, View, Text, FlatList } from 'react-native';
 import styles from './styles';
-import {useNavigation} from '@react-navigation/native';
-import {WINDOW_WIDTH, formatprice} from '../../global';
+import { useNavigation } from '@react-navigation/native';
+import { formatprice } from '../../global';
 
-const SingleMenu = ({data, style}) => {
-  const isMore = data.slSp > 1;
-  const slicedImages = data?.goods?.length ? data?.goods?.slice(0, 5) : [];
-  const diffImages =
-    data?.slSp > 4 ? data?.goods?.length - slicedImages?.length + 1 : 0;
+const SingleMenu = ({ data, style }) => {
+
   const navigation = useNavigation();
+
+  // const slicedImages = data?.lItems ? imgLength?.slice(0, 5) : [];
+  // const diffImages = imgLength?.length > 4 ? imgLength?.length - slicedImages?.length + 1 : 0;
+  const isMore = data?.lItems?.length > 1;
+
+  // Chuyển đổi Unix timestamp sang đối tượng ngày tháng
+  const date = new Date(data?.last_update * 1000);
+
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Tháng bắt đầu từ 0, cần cộng thêm 1
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  const formattedMonth = month.toString().padStart(2, '0'); // Đảm bảo tháng có hai chữ số
+  const formattedMinutes = minutes.toString().padStart(2, '0'); // Đảm bảo phút có hai chữ số
+
+  const lastUpdate = `${day}/${formattedMonth}/${year} - ${hours}:${formattedMinutes}`;
 
   return (
     <Pressable
-      style={({pressed}) => [
+      style={({ pressed }) => [
         styles.container,
         style,
-        pressed ? {opacity: 0.8} : null,
+        pressed ? { opacity: 0.8 } : null,
       ]}
-      onPress={() => navigation.navigate('DetailOrder', {data})}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      onPress={() => navigation.navigate('DetailOrder', { data })}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View
           style={{
             backgroundColor: '#E8EEFF',
@@ -28,11 +43,11 @@ const SingleMenu = ({data, style}) => {
             alignItems: 'center',
           }}>
           <Image
-            style={{width: 29, height: 28}}
+            style={{ width: 29, height: 28 }}
             source={require('../../assets/Frame.png')}
           />
         </View>
-        <View style={{flexDirection: 'column', marginLeft: 15}}>
+        <View style={{ flexDirection: 'column', marginLeft: 15 }}>
           <Text
             style={{
               fontSize: 15,
@@ -40,107 +55,99 @@ const SingleMenu = ({data, style}) => {
               fontFamily: 'Montserrat',
               fontWeight: '600',
             }}>
-            Mã đơn hàng: {data.madh}
+            Mã đơn hàng: {data?.id}
           </Text>
-          <Text style={{fontSize: 12, color: 'grey', marginTop: 5}}>
-            {data.date} - {data.time}
+          <Text style={{ fontSize: 12, color: 'grey', marginTop: 5 }}>
+            {lastUpdate}
           </Text>
         </View>
       </View>
+
       <View style={styles.line}></View>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 20,
-        }}>
-        <FlatList
-          data={slicedImages}
-          horizontal
-          renderItem={({item, index}) =>
-            isMore ? (
-              <View
-                style={{
-                  backgroundColor: '#E7E7E7',
-                  borderRadius: 25,
-                  alignItems: 'center',
-                  padding: 10,
-                  width: 45,
-                  height: 45,
-                  marginRight: 10,
-                }}>
-                <Image style={{width: 25, height: 25}} source={item?.source} />
-                {diffImages > 0 && index === slicedImages?.length - 1 ? (
-                  <View style={styles.moreImagesContainer}>
-                    <Text style={styles.moreImages}>{`+${diffImages}`}</Text>
-                  </View>
-                ) : null}
+      {isMore ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: 20,
+          }}>
+          <FlatList
+            horizontal
+            data={data?.lItems}
+            renderItem={({ item }) => {
+              if (item.image !== '') {
+                return (
+                  <Image
+                    style={{ width: 50, height: 50, marginRight: 16 }}
+                    source={{ uri: item.image }}
+                  />
+                );
+              } else {
+                return null; // Render nothing for items with empty image source
+              }
+            }}
+          />
+          <Image
+            resizeMode='contain'
+            style={{ width: 15, height: 15 }}
+            source={require('../../assets/vectorRight.png')}
+          />
+        </View>
+      )
+        : (
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 16 }}>
+            <View style={{ flexDirection: 'row' }}>
+              {data?.lItems[0]?.image ? (
+                <Image
+                  style={{
+                    width: 50,
+                    height: 50,
+                  }}
+                  source={{ uri: data?.lItems[0]?.image }}
+                />
+              )
+                : null}
+              <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginLeft: 12 }}>
+                <Text style={styles.textName} numberOfLines={1}>{data?.lItems[0]?.product_name}</Text>
+                <View style={{ flexDirection: 'row', width: '100%' }}>
+                  <Text style={{ fontSize: 16, color: '#000000' }}>Giá bán: </Text>
+                  <Text style={styles.textName}>{formatprice(data?.lItems[0]?.price)}</Text>
+                </View>
               </View>
-            ) : null
-          }
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <Image
-          style={{width: 7, height: 13}}
-          source={require('../../assets/vectorRight.png')}
-        />
-      </View>
+            </View>
+            <Image
+              resizeMode='contain'
+              style={{ width: 15, height: 15 }}
+              source={require('../../assets/vectorRight.png')}
+            />
+          </View>
+        )
+      }
 
       {isMore ? (
-        <>
-          <Text style={styles.textName} numberOfLines={1}>
-            {data.goods[0].name}
-          </Text>
-          <Text style={styles.textName}>
-            <Text style={{color: '#000000', fontWeight: '400'}}>Giá bán:</Text>{' '}
-            {formatprice(data.goods[0].price)}
-          </Text>
-        </>
-      ) : (
-        <>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignSelf: 'center',
-              width: WINDOW_WIDTH * 0.8,
-              height: 70,
-            }}>
-            <Image
-              style={{
-                width: 50,
-                height: 50,
-                marginVertical: 10,
-                marginRight: 10,
-              }}
-              source={data?.goods[0].source}
-            />
-            <View style={{flexDirection: 'column'}}>
-              <Text style={styles.textName} numberOfLines={1}>
-                {data.goods[0].name}
-              </Text>
-              <Text style={styles.textName}>
-                <Text style={{color: '#000000', fontWeight: '400'}}>
-                  Giá bán:
-                </Text>{' '}
-                {formatprice(data.goods[0].price)}
-              </Text>
-            </View>
+        <View style={{ marginTop: 16 }}>
+          <Text style={styles.textName} numberOfLines={1}>{data?.lItems[0]?.product_name}</Text>
+          <View style={{ flexDirection: 'row', width: '100%' }}>
+            <Text style={{ fontSize: 16, color: '#000000' }}>Giá bán: </Text>
+            <Text style={styles.textName}>{formatprice(data?.lItems[0]?.price)}</Text>
           </View>
-        </>
-      )}
+        </View>
+      ) : null
+      }
+
 
       <View style={styles.line}></View>
 
       <View style={styles.rowFooter}>
         <Text
-          style={{fontSize: 12, color: '#000000', fontFamily: 'Montserrat'}}>
-          {data.slSp} sản phẩm
+          style={{ fontSize: 12, color: '#000000' }}>
+          {data?.lItems?.length} sản phẩm
         </Text>
-        <Text style={styles.textTotal}>{formatprice(data.total)}</Text>
+        <Text style={styles.textTotal}>{formatprice(data?.total_product)}</Text>
       </View>
-    </Pressable>
+    </Pressable >
   );
 };
 

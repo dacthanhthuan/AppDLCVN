@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#000000',
         fontWeight: '500',
-        marginLeft: 15
+        marginLeft: 16
     },
     address: {
         fontSize: 13,

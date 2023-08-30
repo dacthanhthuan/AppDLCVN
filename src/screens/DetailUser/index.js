@@ -1,13 +1,15 @@
 import React from "react";
-import { SafeAreaView, View, TextInput, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import { SafeAreaView, View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import Header from "../../component/Header";
 import { useNavigation } from "@react-navigation/native";
 import Style_User from "./style";
 import Detail_Input from "../../component/Detail_Input";
 import Button from "../../component/Button";
+import { useSelector } from "react-redux";
 
 const Detail_User = () => {
     const navigation = useNavigation();
+    const { data: profile } = useSelector((state) => state.postReducers);
     return (
         <SafeAreaView style={Style_User.container}>
             <Header onPressLeft={() => navigation.goBack()} text={'Chi tiết tài khoản'} iconLeft={require('../../assets/Arrow1.png')} containerStyle={{ paddingBottom: 10 }} />
@@ -23,7 +25,7 @@ const Detail_User = () => {
                 <Detail_Input text={'Điện thoại'} placeholder={'Chưa có thông tin'} />
                 <Detail_Input text={'Tên đăng nhập'} placeholder={'Chưa có thông tin'} />
                 <Detail_Input text={'Ngày sinh'} placeholder={'Chưa có thông tin'} />
-                <Detail_Input text={'Họ và tên'} placeholder={'Chưa có thông tin'} />
+                <Detail_Input text={'Họ và tên'} placeholder={'Chưa có thông tin'} value={profile?.data?.address_default?.fullname} />
                 <Detail_Input text={'Email'} placeholder={'Chưa có thông tin'} />
                 <Detail_Input text={'CMND/CCCD/Hộ chiếu(Người nước ngoài)'} placeholder={'Chưa có thông tin'} />
                 <Detail_Input text={'Tỉnh/ Thành'} placeholder={'Chưa có thông tin'} />

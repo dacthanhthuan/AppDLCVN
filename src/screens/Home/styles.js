@@ -1,9 +1,9 @@
-import {StyleSheet} from 'react-native';
-import {WINDOW_HEIGHT} from '../../global';
+import { StyleSheet } from 'react-native';
+import { WINDOW_HEIGHT } from '../../global';
 
 const HEADER_EXPAND_HEIGHT = 150;
 const HEADER_COLLAPSE_HEIGHT = 60;
-export {HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT};
+export { HEADER_EXPAND_HEIGHT, HEADER_COLLAPSE_HEIGHT };
 
 const styles = StyleSheet.create({
   container: {
@@ -31,3 +31,4 @@ const styles = StyleSheet.create({
 });
 
 export default styles;
+

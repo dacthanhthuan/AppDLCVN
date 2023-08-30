@@ -1,28 +1,16 @@
-import React, { useState } from 'react';
-import { TouchableOpacity, Text, View, Image } from 'react-native';
+import React from 'react';
+import { Text, View } from 'react-native';
 import styles from './styles';
-import Checkbox from '../Checkbox';
+import CheckboxAddress from '../CheckboxAddress';
 
-const CardAddress = ({ numberAddress, address, onPress }) => {
-
-
-    const [check, setCheck] = useState(false)
-
-    const onPressCheck = () => {
-        setCheck(value => !value)
-    }
+const CardAddress = ({ numberAddress, address, onPressCheck, check, showCheckbox }) => {
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Địa chỉ giao hàng</Text>
             <View style={styles.header}>
-                <Checkbox check={check} onPress={onPressCheck} />
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.numberAddress}>{numberAddress}</Text>
-                    <TouchableOpacity onPress={onPress}>
-                        <Text style={{ fontSize: 13, color: '#005AA9' }}>Sửa</Text>
-                    </TouchableOpacity>
-                </View>
+                <CheckboxAddress check={check} onPressCheck={onPressCheck} showCheckbox={showCheckbox} />
+                <Text style={styles.numberAddress}>{numberAddress}</Text>
             </View>
             <Text style={styles.address}>{address}</Text>
             <View style={styles.line}></View>

@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const Style_DetailOrder = StyleSheet.create({
   container: {
@@ -31,6 +31,7 @@ const Style_DetailOrder = StyleSheet.create({
   text_2: {
     fontSize: 16,
     color: '#000000',
+    width: '90%'
   },
   text_3: {
     fontSize: 13,
@@ -63,6 +64,10 @@ const Style_DetailOrder = StyleSheet.create({
   view_3: {
     marginLeft: 10,
   },
+  textNote: {
+    color: '#000000',
+    fontSize: 16
+  }
 });
 
 export default Style_DetailOrder;

@@ -1,42 +1,110 @@
-import React from "react";
-import { SafeAreaView, View, Text, Image, useWindowDimensions, FlatList, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, View, Text, Image, FlatList, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../component/Header/index";
 import Style_CreateOrder from "./style";
-import data_product from '../../data/products/data'
 import Detail_Input from "../../component/Detail_Input";
 import Information from "../../component/Information";
 import Line from "../../component/Line";
 import Button from "../../component/Button";
 import { formatprice, WINDOW_WIDTH } from "../../global";
+import { useSelector } from "react-redux";
 
 const CreateOrder = ({ route }) => {
-    const { item, Isquantity } = route?.params || {};
-    const price = formatprice(item.price);
-    const totalprice = formatprice(item.price * parseFloat(Isquantity));
-    // const commission = formatprice(item.commission);
+
+    const { data, subAddress } = useSelector((state) => state.postReducers)
+
+    // Lấy dữ liệu bên cart và CustomerInformation truyền qua.
+    const { cartItems, totalprice, deliveryAddress, dataProduct, returnTotal, returnCommision } = route?.params || {};
+
     const navigation = useNavigation();
 
-    const render_item = ({ }) => {
+    const [isNote, setIsNote] = useState('');
+
+    let commission = 0;
+    // Lấy ra phần trăm hoa hồng hoa hồng
+    cartItems?.forEach((item) => {
+        commission += parseInt(item?.productData?.decrement);
+        return commission;
+    })
+
+    // console.log(commission);
+
+    // Dữ liệu sau khi chọn địa chỉ giao hàng
+    const deliveryName = deliveryAddress?.fullname;
+    const deliveryMobile = deliveryAddress?.mobile;
+    const deliveryCity = deliveryAddress?.city;
+    const deliveryDistrict = deliveryAddress?.district;
+    const deliveryWard = deliveryAddress?.ward;
+    const deliveryRoad = deliveryAddress?.address;
+    const deliveryId = deliveryAddress?.id;
+
+    // dữ liệu lấy address default từ trong user
+    const session_token = data?.data?.session_token;
+    const nameAddress = deliveryName ? deliveryName : data?.data?.address_default?.fullname;
+    const mobileAddress = deliveryMobile ? deliveryMobile : data?.data?.address_default?.mobile;
+    const address = deliveryRoad ? deliveryRoad : data?.data?.address_default?.address;
+    const wardAddress = deliveryWard ? deliveryWard : data?.data?.address_default?.ward;
+    const districtAddress = deliveryDistrict ? deliveryDistrict : data?.data?.address_default?.district;
+    const cityAddress = deliveryCity ? deliveryCity : data?.data?.address_default?.city;
+    const shipAddress = address + ', ' + wardAddress + ', ' + districtAddress + ', ' + cityAddress;
+    const address_book_id = deliveryId ? deliveryId : data?.data?.address_default?.id;
+
+    let TOTAL_PRICE = returnTotal ? returnTotal : totalprice;
+    let DATA_MONEY = dataProduct ? dataProduct : cartItems;
+    let COMMISSION = returnCommision ? returnCommision : commission;
+
+
+    const render_item = ({ item }) => {
+        const overview = item?.productData;
+        const price = formatprice(overview?.price)
         return (
             <View style={Style_CreateOrder.flatlist}>
-                <Image style={{ width: 60, height: 60 }} source={item.source} />
+                <Image style={Style_CreateOrder.image} source={{ uri: overview?.image ? overview?.image : overview?.img_1 }} />
                 <View style={Style_CreateOrder.view_3}>
-                    <Text style={Style_CreateOrder.text_1}>{item.title}</Text>
+                    <Text style={Style_CreateOrder.text_1}>{overview?.product_name}</Text>
                     <Text style={Style_CreateOrder.text_3}>Giá nhà cung cấp: {price}</Text>
-                    <Text style={Style_CreateOrder.text_2}>Giá bán: {price}</Text>
-                    <Text style={Style_CreateOrder.text_3}>Số lượng: {Isquantity}</Text>
+                    <Text style={Style_CreateOrder.text_3}>Số lượng: {item?.quantity}</Text>
                 </View>
             </View>
-        )
-    }
+        );
+    };
+
+    const Items = [];
+
+    DATA_MONEY?.forEach((item) => {
+        Items.push({
+            unique_id: item?.productData?.unique_id,
+            product_id: item?.productData?.product_id,
+            amount: item?.quantity,
+            price: item?.productData?.price,
+            decrement: item?.productData?.decrement,
+        });
+    });
+
+    // Dữ liệu địa chỉ để hiện ra (FINAL)
+    let finalId = subAddress !== null ? subAddress?.id : address_book_id;
+    let finalName = subAddress !== null ? subAddress?.fullname : nameAddress;
+    let finalMobile = subAddress !== null ? subAddress?.mobile : mobileAddress;
+    let finalAddress = subAddress !== null ? subAddress?.address + ', ' + subAddress?.ward + ', ' + subAddress?.district + ', ' + subAddress?.city : shipAddress;
+
+    // Gộp dữ liệu vào một object để truyền qua screen Payment
+    const dataToPass = {
+        session_token: session_token,
+        nameAddress: finalName,
+        mobileAddress: finalMobile,
+        shipAddress: finalAddress,
+        isNote: isNote,
+        Items: Items,
+        address_book_id: finalId,
+    };
 
     return (
         <SafeAreaView style={Style_CreateOrder.container}>
             <Header onPressLeft={() => navigation.goBack()} iconLeft={require('../../assets/Arrow1.png')} text={'Tạo đơn hàng'} />
             <FlatList
                 style={{ width: WINDOW_WIDTH, alignSelf: "center" }}
-                data={[item]}
+                data={DATA_MONEY}
                 renderItem={render_item}
                 keyExtractor={(item, title) => title.toString()}
                 showsVerticalScrollIndicator={false}
@@ -50,18 +118,20 @@ const CreateOrder = ({ route }) => {
                             <View style={{ width: '90%' }}>
                                 <View style={Style_CreateOrder.view_1}>
                                     <Text style={Style_CreateOrder.text_1}>Địa chỉ giao hàng</Text>
-                                    <TouchableOpacity onPress={() => navigation.navigate('CustomerInformation')}>
+                                    <TouchableOpacity onPress={() => {
+                                        navigation.navigate('CustomerInformation', { previouscreen: 'CreateOrder', TOTAL_PRICE, DATA_MONEY, deliveryAddress, COMMISSION })
+                                    }}>
                                         <Text style={Style_CreateOrder.text_2}>Thay đổi</Text>
                                     </TouchableOpacity>
                                 </View>
                                 <View style={Style_CreateOrder.view_2}>
-                                    <Text style={Style_CreateOrder.text_2}>Chị Huyên</Text>
-                                    <Text style={Style_CreateOrder.text_3}>+ 84864456545</Text>
-                                    <Text style={Style_CreateOrder.text_3}>28E Tăng Bạt Hổ, Phường 11, Quận Bình Thạnh, TP.Hồ Chí Minh</Text>
+                                    <Text style={Style_CreateOrder.text_2}>{finalName}</Text>
+                                    <Text style={Style_CreateOrder.text_3}>{finalMobile}</Text>
+                                    <Text style={Style_CreateOrder.text_3}>{finalAddress}</Text>
                                 </View>
                             </View>
                         </View>
-                        <View style={{ alignItems: "center", marginTop: 15, marginBottom: 15 }}>
+                        <View style={{ alignItems: "center", marginVertical: 15 }}>
                             <Image style={{ width: WINDOW_WIDTH }} source={require('../../assets/imgOder/Group_203.png')} />
                         </View>
                         <View style={{ flexDirection: "row" }}>
@@ -81,53 +151,24 @@ const CreateOrder = ({ route }) => {
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <Image style={Style_CreateOrder.icon} source={require('../../assets/imgOder/Rectangle_231.png')} />
                             <View style={{ width: '85%', marginLeft: 20 }}>
-                                <Detail_Input style={{ padding: 5, paddingLeft: 15 }} text={'Ghi chú'} placeholder={'Chưa có ghi chú cho đơn hàng này!'} />
-                            </View>
-                        </View>
-                        <Line />
-                        <View style={{ flexDirection: "row" }}>
-                            <Image style={Style_CreateOrder.icon} source={require('../../assets/imgOder/Rectangle_230.png')} />
-                            <View style={{ width: '85%', marginLeft: 20 }}>
-                                <Text style={Style_CreateOrder.title_1}>Thông tin sản phẩm</Text>
-                                <Information
-                                    title_1={'Thông tin cho khách'}
-                                    text_1={'Tổng tiền hàng:'}
-                                    text_2={'Phí vận chuyển:'}
-                                    text_3={'Tổng số tiền cần thanh toán:'}
-                                    price_1={totalprice}
-                                    price_2={'Freeship'}
-                                    price_3={totalprice}
-                                    style_5={{
-                                        color: '#000000',
-                                        fontStyle: "italic",
-                                    }}
-                                    style_6={{
-                                        color: '#005AA9',
-                                    }}
+                                <Detail_Input
+                                    style={{ padding: 5, paddingLeft: 15 }}
+                                    text={'Ghi chú'}
+                                    placeholder={'Chưa có ghi chú cho đơn hàng này!'}
+                                    value={isNote}
+                                    onChangeText={(text) => setIsNote(text)}
                                 />
                             </View>
                         </View>
-                        <Line />
-                        <View style={{ flexDirection: "row" }}>
-                            <Image style={Style_CreateOrder.icon} source={require('../../assets/imgOder/Rectangle_230.png')} />
-                            <View style={{ width: '85%', marginLeft: 20 }}>
-                                <Text style={Style_CreateOrder.title_1}>Thông tin sản phẩm</Text>
-                                <Information
-                                    title_1={'Thông tin cho bạn'}
-                                    text_1={'Tổng giá nhà cung cấp:'}
-                                    text_2={'Tổng giá bán của bạn:'}
-                                    text_3={'Tổng hoa hồng của bạn:'}
-                                    price_1={'800,000đ'}
-                                    price_2={'1,500,000đ'}
-                                    price_3={'700,000đ'}
-                                    style_5={{
-                                        color: '#000000',
-                                    }}
-                                />
-                            </View>
-                        </View>
-                        <View style={{ flex: 1, paddingLeft: 30, paddingRight: 30, marginTop: 70, }}>
-                            <Button onPress={() => navigation.navigate('Payment', { totalprice })} text={'Tiến hành thanh toán'} />
+                        <Information title='Thông tin cho khách'
+                            textOne='Tổng tiền hàng:' textTwo='Phí vận chuyển:' textThree='Tổng số tiền cần thanh toán:'
+                            valueOne={formatprice(TOTAL_PRICE)} valueTwo='Free Ship' valueThree={formatprice(TOTAL_PRICE)} />
+                        <Information title='Thông tin cho bạn'
+                            textOne='Tổng giá nhà cung cấp:' textTwo='Tổng giá bán của bạn:' textThree='Tổng hoa hồng của bạn:'
+                            valueOne={formatprice(TOTAL_PRICE)} valueTwo='Free Ship' valueThree={formatprice(TOTAL_PRICE * COMMISSION / 100)} />
+
+                        <View style={{ flex: 1, paddingLeft: 30, paddingRight: 30, marginTop: 20, }}>
+                            <Button onPress={() => navigation.navigate('Payment', { totalprice: TOTAL_PRICE, dataToPass })} text={'Tiến hành thanh toán'} />
                         </View>
                     </View>
                 )}

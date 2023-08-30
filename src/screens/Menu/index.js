@@ -1,152 +1,173 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './styles';
-import {SafeAreaView, Text, View} from 'react-native';
+import { SafeAreaView, Text, View, ActivityIndicator, RefreshControl, FlatList, Image } from 'react-native';
 import Header from '../../component/Header';
 import SingleMenu from '../../component/SingleMenu';
 import StatusMenu from '../../component/StatusMenu';
 import StatusWallet from '../../component/StatusWallet';
-import {FlatList} from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
+import { fetchHistoryStep } from '../AddAddress/http';
+import { WINDOW_HEIGHT } from '../../global';
 
-const data = [
-  {
-    madh: '002220321D9M',
-    date: '25/03/2022',
-    time: '17:40',
-    goods: [
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/dlcbrazil.png'),
-        price: 1000000,
-        producerPrice: 600000,
-      },
+const Menu = ({ navigation }) => {
 
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/dlcred.png'),
-        price: 700000,
-        producerPrice: 400000,
-      },
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/dlcsoybean.png'),
-        price: 1300000,
-        producerPrice: 800000,
-      },
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/Group135.png'),
-        price: 1200000,
-        producerPrice: 800000,
-      },
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/Group135.png'),
-        price: 800000,
-        producerPrice: 600000,
-      },
-    ],
-    slSp: 5,
-    total: 5200000,
-    producerTotal: 3200000,
-    type: 'money/paying',
-  },
-  {
-    madh: '12C220321D9M',
-    date: '25/03/2022',
-    time: '17:40',
-    goods: [
-      {
-        name: 'Auslac Lactoferrin (Giá Ưu Đãi)',
-        source: require('../../assets/Ellipse83.png'),
-        price: 1100000,
-        producerPrice: 700000,
-      },
-      {
-        name: 'DLC Brazil Green Propolis',
-        source: require('../../assets/dlcred.png'),
-        price: 900000,
-        producerPrice: 500000,
-      },
-    ],
-    slSp: 2,
-    total: 2000000,
-    producerTotal: 1200000,
-    type: 'money/delivered',
-  },
-  {
-    madh: '002123321D9A',
-    date: '25/03/2022',
-    time: '17:40',
-    goods: [
-      {
-        source: require('../../assets/Ellipse83.png'),
-        name: 'Auslac Lactoferrin (Giá Ưu Đãi)',
-        price: 1100000,
-        producerPrice: 700000,
-      },
-    ],
-    slSp: 1,
-    total: 1100000,
-    producerTotal: 700000,
-    type: 'point/canceled',
-  },
-  {
-    madh: '002123321D9A',
-    date: '25/03/2022',
-    time: '17:40',
-    goods: [
-      {
-        source: require('../../assets/dlcsoybean.png'),
-        name: 'Viên uống DLC Antrodia Cinnamomea',
-        price: 800000,
-        producerPrice: 500000,
-      },
-    ],
-    slSp: 1,
-    total: 800000,
-    producerTotal: 500000,
-    type: 'point/paying',
-  },
-];
+  const { data, apiData } = useSelector((state) => state.postReducers)
 
-const ALL = 'Tất cả';
-const CTT = 'Chờ thanh toán';
+  // Client API
+  const walletMoney = apiData?.data?.payment_type_wallet_main; // ví tiền : 1
+  const walletPoint = apiData?.data?.payment_type_wallet_cashback; // ví điểm : 3 
 
-const Menu = ({navigation}) => {
+  const deliverySteps = apiData?.data?.lDeliverySteps;
+  const deliveryStepsFirst = apiData?.data?.lDeliverySteps[0];
+
+  const ALL = 'Tất cả';
+  const STATUS_FIRST = deliveryStepsFirst;
+
+  const session_token = data?.data?.session_token;
+  const [selectedStatus, setSelectedStatus] = useState(STATUS_FIRST);
   const [selectedCategory, setSelectedCategory] = useState(ALL);
-  const [selectedCategori, setSelectedCategori] = useState(CTT);
-  const [filterData, setFilterData] = useState(data);
+  const [filterData, setFilterData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadMore, setIsLoadMore] = useState(false);
+  const [isPage, setIsPage] = useState(1);
+  const [isTotalRecord, setIsTotalRecord] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Gọi API tất cả
+  const callAPIListOrder_AllWallet = async (type, page) => {
+    try {
+      const response = await fetchHistoryStep({
+        'TOKEN': session_token,
+        'TYPE': type,
+        'PAYMENT_TYPE': 0,
+        'PAGE': page
+      })
+
+      setIsTotalRecord(response?.data?.dInfo?.total_record)
+      setFilterData(response?.data?.data)
+
+      return response;
+
+    } catch (error) {
+      console.log('Error list order:', error);
+    }
+  }
+
+
+  // Gọi API Ví tiền
+  const callAPIListOrder_WalletCashback = async (type, page) => {
+    try {
+      const response = await fetchHistoryStep({
+        'TOKEN': session_token,
+        'TYPE': type,
+        'PAYMENT_TYPE': walletMoney,
+        'PAGE': page
+      })
+
+      setIsTotalRecord(response?.data?.dInfo?.total_record)
+      setFilterData(response?.data?.data)
+
+      return response;
+    } catch (error) {
+      console.log('Error list order:', error);
+    }
+  }
+
+  // Gọi API ví điểm
+  const callAPIListOrder_WalletPoint = async (type, page) => {
+    try {
+      const response = await fetchHistoryStep({
+        'TOKEN': session_token,
+        'TYPE': type,
+        'PAYMENT_TYPE': walletPoint,
+        'PAGE': page
+      })
+
+      setIsTotalRecord(response?.data?.dInfo?.total_record)
+      setFilterData(response?.data?.data)
+      return response;
+
+    } catch (error) {
+      console.log('Error list order:', error);
+    }
+  }
+
+  const listOrder = async () => {
+    setFilterData([])
+    setIsPage(1)
+    setIsLoadMore(false)
+    setIsLoading(true)
+    if (selectedCategory === ALL) {
+      await callAPIListOrder_AllWallet(selectedStatus?.id, 1);
+    } else if (selectedCategory === 'Ví VNĐ') {
+      await callAPIListOrder_WalletCashback(selectedStatus?.id, 1);
+    } else if (selectedCategory === 'Ví điểm') {
+      await callAPIListOrder_WalletPoint(selectedStatus?.id, 1);
+    }
+    setIsLoadMore(true)
+    setRefreshing(false)
+    setIsLoading(false)
+  }
 
   useEffect(() => {
-    switch (true) {
-      case selectedCategory.includes('Ví VNĐ'):
-        setFilterData(getFilteredData('money'));
-        break;
-      case selectedCategory.includes('Ví điểm'):
-        setFilterData(getFilteredData('point'));
-        break;
-      case selectedCategory.includes('Tất cả'):
-        setFilterData(getFilteredData('o'));
-        break;
-    }
-  }, [selectedCategory, selectedCategori]);
+    listOrder()
+  }, [selectedCategory, data, navigation, selectedStatus]);
 
-  const filterMyData = useCallback((payingType, payingState) => {
-    return data.filter(
-      item => item.type.includes(payingType) && item.type.includes(payingState),
-    );
-  }, []);
+  // Gọi API khi màn hình được gọi
+  useEffect(() => {
+    const unsubcribe = navigation.addListener('focus', () => { listOrder() })
 
-  const getFilteredData = payingType => {
-    switch (true) {
-      case selectedCategori.includes('Chờ thanh toán'):
-        return filterMyData(payingType, 'paying');
-      case selectedCategori.includes('Hoàn thành'):
-        return filterMyData(payingType, 'delivered');
-      case selectedCategori.includes('Đã hủy'):
-        return filterMyData(payingType, 'cancel');
+    return unsubcribe;
+  }, [selectedCategory, data, navigation, selectedStatus])
+
+  // LoadMore
+  const handleLoadMore = async () => {
+    if (filterData?.length < isTotalRecord && isLoadMore == true) {
+      setIsLoading(true);
+      try {
+        let nextPage = isPage + 1;
+        let response;
+
+        if (selectedCategory === ALL) {
+          response = await callAPIListOrder_AllWallet(selectedStatus?.id, nextPage);
+        } else if (selectedCategory === 'Ví VNĐ') {
+          response = await callAPIListOrder_WalletCashback(selectedStatus?.id, nextPage);
+        } else if (selectedCategory === 'Ví điểm') {
+          response = await callAPIListOrder_WalletPoint(selectedStatus?.id, nextPage);
+        }
+
+        if (response?.data?.data?.length > 0) {
+          setFilterData([...filterData, ...response?.data?.data]);
+          setIsPage(nextPage);
+        }
+        setIsLoading(false)
+      } catch (error) {
+        console.log('Error loading more data:', error);
+      }
+
+    } else {
+      setIsLoading(false);
     }
-  };
+  }
+
+  // onReFresh
+  const onRefreshs = () => {
+    setRefreshing(true);
+    listOrder();
+    setRefreshing(false);
+  }
+
+  // Hiện loading
+  const renderFooter = () => {
+    if (isLoading) {
+      return (
+        <View style={{ marginTop: 24 }}>
+          <ActivityIndicator size='large' />
+        </View>
+      );
+    }
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -159,9 +180,9 @@ const Menu = ({navigation}) => {
 
       <View style={styles.categoriContainer}>
         <StatusMenu
-          categori={['Chờ thanh toán', 'Hoàn thành', 'Đã hủy']}
-          selectedCatogory={selectedCategori}
-          onCategoryPress={setSelectedCategori}
+          dataStatus={deliverySteps}
+          selectedStatus={selectedStatus}
+          onCategoryPress={setSelectedStatus}
         />
         <StatusWallet
           categori={['Tất cả', 'Ví VNĐ', 'Ví điểm']}
@@ -170,19 +191,42 @@ const Menu = ({navigation}) => {
         />
       </View>
 
-      <Text style={{fontSize: 16, color: '#000000', marginVertical: 12}}>
+      <Text style={{ fontSize: 16, color: '#000000', marginVertical: 12 }}>
         Đơn đã đặt
       </Text>
 
       <FlatList
         data={filterData}
-        style={{flex: 1}}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item}) => {
-          return <SingleMenu style={{marginHorizontal: 2}} data={item} />;
+        style={{ flex: 1 }}
+        keyExtractor={(item, index) => `${item.id}_${index}`}
+        renderItem={({ item }) => {
+          return <SingleMenu key={item?.id} style={{ marginHorizontal: 2 }} data={item} />;
         }}
+        ListEmptyComponent={() => {
+          if (isLoadMore) {
+            return (
+              <View style={{
+                flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: WINDOW_HEIGHT / 6
+              }}>
+                < Image style={{ width: 95, height: 95 }} source={require('../../assets/sad.png')} />
+                <Text style={{ textAlign: 'center', color: '#000000', fontSize: 20, marginTop: 16 }}>Bạn chưa có đơn hàng</Text>
+              </View>
+            )
+          }
+          return null;
+        }}
+        refreshControl={
+          < RefreshControl
+            refreshing={refreshing}
+            colors={['white']}
+            progressBackgroundColor={'#005AA9'}
+            onRefresh={onRefreshs}
+          />
+        }
+        onEndReached={handleLoadMore}
+        ListFooterComponent={renderFooter}
       />
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 

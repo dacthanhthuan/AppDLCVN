@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF'
     },
     textBlue: {
-        fontSize: 13,
+        fontSize: 14,
         color: '#005AA9',
         marginLeft: 12
     },

@@ -1,5 +1,5 @@
-import {Pressable, Image, Text, View, StyleSheet} from 'react-native';
-import {memo, forwardRef, useImperativeHandle, useRef, useState} from 'react';
+import { Pressable, Image, Text, View } from 'react-native';
+import { memo, forwardRef } from 'react';
 import Animated from 'react-native-reanimated';
 
 const ImageButton = ({
@@ -11,15 +11,18 @@ const ImageButton = ({
   onPress,
   resizeMode,
 }) => {
+  // console.log("img"imagesource);
   return (
     <Pressable
-      style={({pressed}) => [containerStyle, pressed ? {opacity: 0.65} : null]}
+      style={({ pressed }) => [containerStyle, pressed ? { opacity: 0.65 } : null]}
       onPress={onPress}>
-      <Image
-        source={imagesource}
-        style={imageStyle}
-        resizeMode={resizeMode ? resizeMode : 'contain'}
-      />
+      {imagesource ? (
+        <Image
+          source={imagesource}
+          style={imageStyle}
+          resizeMode={resizeMode ? resizeMode : 'contain'}
+        />
+      ) : null}
       <Text style={textStlye}>{text}</Text>
     </Pressable>
   );
@@ -43,7 +46,7 @@ const AnimatedImageButton = forwardRef(
       <View style={[containerStyle, style]}>
         <Pressable
           ref={ref}
-          style={({pressed}) => (pressed ? {opacity: 0.4} : null)}
+          style={({ pressed }) => (pressed ? { opacity: 0.4 } : null)}
           onPress={onPress}>
           <Image
             source={imagesource}

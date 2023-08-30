@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const Style_DetailInput = StyleSheet.create({
     text: {
-        fontSize: 13,
+        fontSize: 16,
         color: '#000000',
         fontWeight: "400",
     },

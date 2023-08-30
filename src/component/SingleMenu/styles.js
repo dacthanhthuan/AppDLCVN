@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
@@ -43,10 +43,8 @@ const styles = StyleSheet.create({
   textName: {
     fontSize: 16,
     color: '#005AA9',
-    marginTop: 10,
-    // fontFamily: 'Montserrat',
-    fontWeight: '600',
-    width: '90%',
+    fontWeight: '500',
+    width: '80%'
   },
   rowFooter: {
     width: '100%',

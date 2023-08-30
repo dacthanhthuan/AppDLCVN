@@ -14,7 +14,7 @@ const LogoBanking = ({ logo, isSelected, onSelect }) => {
           <TouchableOpacity
             onPress={() => { onSelect(item) }}
             style={[styles.container, selected ? styles.selectedItem : {}]}>
-            <Image style={styles.imgBanking} resizeMode='contain' source={item} />
+            <Image style={styles.imgBanking} resizeMode='contain' source={{ uri: item?.url }} />
           </TouchableOpacity>
         )
       }} />

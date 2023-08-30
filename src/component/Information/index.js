@@ -1,34 +1,33 @@
 import React from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
-import Style_Information from './style';
+import { Image, SafeAreaView, Text, View } from 'react-native';
+import styles from './style';
+import Line from '../Line';
 
-const Information = ({
-  text_1,
-  text_2,
-  text_3,
-  price_1,
-  price_2,
-  price_3,
-  style_1,
-  style_2,
-  style_3,
-  style_4,
-  style_5,
-  style_6,
-}) => {
+const Information = ({ title, textOne, valueOne, textTwo, valueTwo, textThree, valueThree }) => {
   return (
-    <SafeAreaView style={Style_Information.container_1}>
-      <View style={Style_Information.container_2}>
-        <View style={Style_Information.container_3}>
-          <Text style={[Style_Information.text_1, style_1]}>{text_1}</Text>
-          <Text style={[Style_Information.text_1, style_2]}>{text_2}</Text>
-          <Text style={[Style_Information.text_1, style_3]}>{text_3}</Text>
-        </View>
-        <View style={Style_Information.container_4}>
-          <Text style={[Style_Information.price_1, style_4]}>{price_1}</Text>
-          <Text style={[Style_Information.price_2, style_5]}>{price_2}</Text>
-          <Text style={[Style_Information.price_3, style_6]}>{price_3}</Text>
-        </View>
+    <SafeAreaView style={styles.container}>
+      <Line />
+      <View style={styles.containerTitle}>
+        <Image style={styles.icon} source={require('../../assets/imgOder/Rectangle_230.png')} />
+        <Text style={styles.textTitle}>{title}</Text>
+      </View>
+      <View style={styles.containerText}>
+        <Text style={styles.text}>{textOne}</Text>
+        <Text style={styles.text}>{valueOne}</Text>
+      </View>
+      <View style={styles.containerText}>
+        <Text style={styles.text}>{textTwo}</Text>
+        <Text style={[styles.text, { color: '#005AA9' }]}>{valueTwo}</Text>
+      </View>
+      <View style={styles.containerText}>
+        <Text style={styles.text}>{textThree}</Text>
+        {
+          title == 'Thông tin cho bạn' ? (
+            <Text style={[styles.textColorComission, { color: '#0FA027' }]}>{valueThree}</Text>
+          ) : (
+            <Text style={[styles.textColor, { color: '#0FA027' }]}>{valueThree}</Text>
+          )
+        }
       </View>
     </SafeAreaView>
   );

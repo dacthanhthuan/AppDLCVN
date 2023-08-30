@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         width: 84,
         height: 42
     },
-    selectedItem:{
+    selectedItem: {
         borderColor: '#005AA9'
     }
 

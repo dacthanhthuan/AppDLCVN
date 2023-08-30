@@ -1,18 +1,19 @@
 import React from 'react'
-import { TouchableOpacity, View, Text, FlatList } from 'react-native'
+import { TouchableOpacity, Text, FlatList } from 'react-native'
 import styles from './styles'
 
-const StatusMenu = ({ categori, selectedCatogory, onCategoryPress }) => {
+const StatusMenu = ({ dataStatus, selectedStatus, onCategoryPress }) => {
     return (
         <FlatList
-            data={categori}
+            data={dataStatus}
             horizontal
             showsHorizontalScrollIndicator={false}
+            keyExtractor={item => String(item?.id)}
             renderItem={({ item }) => {
-                const selected = selectedCatogory === item;
+                const selected = JSON.stringify(selectedStatus) === JSON.stringify(item); // Compare based on the name property
                 return (
                     <TouchableOpacity onPress={() => onCategoryPress(item)} style={[styles.container, selected ? styles.selectedItemContainer : {}]}>
-                        <Text style={[styles.text, selected ? styles.selectedItem : {}]}>{item}</Text>
+                        <Text style={[styles.text, selected ? styles.selectedItem : {}]}>{item?.name}</Text>
                     </TouchableOpacity>
                 )
             }}

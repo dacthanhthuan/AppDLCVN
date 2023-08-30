@@ -1,20 +1,20 @@
 import { StyleSheet } from 'react-native'
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flexDirection: 'column',
-       alignItems: 'center', 
-       marginHorizontal: 18
+        alignItems: 'center',
+        marginHorizontal: 14
     },
-    icon:{
+    icon: {
         width: 35,
         height: 35,
     },
-    text:{
+    text: {
         fontSize: 16,
         color: '#000000',
         marginTop: 8
     }
-   
+
 })
 
 export default styles;

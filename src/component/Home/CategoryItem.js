@@ -1,21 +1,12 @@
 import ImageButton from './ImageButton';
-import {StyleSheet, FlatList} from 'react-native';
-import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../global';
-import {memo} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { StyleSheet, FlatList } from 'react-native';
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from '../../global';
+import { memo } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-const CategoryItem = ({item}) => {
+const CategoryItem = ({ item }) => {
   const navigation = useNavigation();
-  // const screens = [
-  //   { title: 'TPCN', screen: 'ProtectHealth' },
-  //   { title: 'Sữa', screen: 'FamilyCare' },
-  //   { title: 'Dưỡng da', screen: 'FamilyCare' },
-  //   { title: 'Chống nắng', screen: 'PersonalCare' }
-  // ];
-  // const getScreen = (title) => {
-  //   const foundScreen = screens.find(screen => screen.title === title);
-  //   return foundScreen ? foundScreen.screen : 'DefaultScreen';
-  // };
+
   return (
     <FlatList
       showsHorizontalScrollIndicator={false}
@@ -23,7 +14,7 @@ const CategoryItem = ({item}) => {
       horizontal={true}
       initialNumToRender={4}
       data={item}
-      renderItem={({item}) => (
+      renderItem={({ item }) => (
         <ImageButton
           // onPress={() => navigation.navigate(getScreen(item.title))}
           imagesource={item.source}
