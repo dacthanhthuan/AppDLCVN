@@ -11,6 +11,8 @@ import orderReducer from './orderReducer';
 import ErrorHandlerReducer from './errorReducer';
 import supplierReducer from './supplierReducer';
 import walletReducer from './walletReducer';
+import DetailMemberReducer from './detailMeberReducer';
+import ReferralInfoReducer from './referralInfoRecuder';
 
 const rootReducer = combineReducers({
   app: AppReducer,
@@ -25,6 +27,8 @@ const rootReducer = combineReducers({
   error: ErrorHandlerReducer,
   supplier: supplierReducer,
   wallet: walletReducer,
+  detailMember: DetailMemberReducer,
+  referral: ReferralInfoReducer,
 });
 
 export default rootReducer;

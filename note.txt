@@ -1,10 +1,2 @@
-Lấy từ initial api:
-	lDeliverySteps: các bước xác nhận đơn hàng truyền vào type
-
-	wallet_cashback_id: payment_type cho ví điểm
-	wallet_main_id: payment_type cho ví tiền
-
-Để lấy tất cả đơn hàng: api history all order, sau đó truyền type và payment_type đã lấy được từ intial api
-
-Đơn hàng wallet và đơn hàng cashback riêng biệt.
-Khi ấn chọn một địa chỉ từ màn hình CreateOrder, không thay đổi địa chỉ mặc định mà chỉ lấy địa chỉ đó để đặt hàng.
+(Initial API) referral_link_multiple_enabled == 1 ? 'Hiển thị QR code trong chia sẻ' : 'Hiển thị link chia sẻ không có QR code'
+(client Referral) descriptions: hiển thị đầu tiên, referral_link: danh sách hiển thị, render QR bằng uri: render_qrcode + referral_link

@@ -40,6 +40,8 @@ const main_wallet_add_bank_infor = '/client_wallet/bank_info?apikey=';
 const main_wallet_history = '/client_wallet/history?apikey=';
 const main_wallet_transfer = '/client_wallet/transfers?apikey=';
 const referral_list = '/client_info/referral_list?apikey=';
+const detail_member = 'client_info/detail_member?apikey=';
+const info_referral = '/client_info/referral?apikey=';
 
 export default {
   base_url,
@@ -69,4 +71,6 @@ export default {
   main_wallet_history,
   main_wallet_transfer,
   referral_list,
+  detail_member,
+  info_referral,
 };

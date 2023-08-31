@@ -120,9 +120,10 @@ const ProfileAdmin = ({navigation}) => {
 
     switch (cameraPermission) {
       case RESULTS.UNAVAILABLE:
-        console.log(
-          'This feature is not available (on this device / in this context)',
-        );
+        // console.log(
+        //   'This feature is not available (on this device / in this context)',
+        // );
+
         ToastAndroid.show(
           'Chức năng hiện không khả dụng trên thiết vị này',
           ToastAndroid.LONG,
@@ -130,9 +131,9 @@ const ProfileAdmin = ({navigation}) => {
 
         break;
       case RESULTS.DENIED:
-        console.log(
-          'The permission has not been requested / is denied but requestable',
-        );
+        // console.log(
+        //   'The permission has not been requested / is denied but requestable',
+        // );
 
         const permisson =
           Platform.OS == 'android'
@@ -154,17 +155,17 @@ const ProfileAdmin = ({navigation}) => {
 
         break;
       case RESULTS.LIMITED:
-        console.log('The permission is limited: some actions are possible');
+        // console.log('The permission is limited: some actions are possible');
 
         break;
       case RESULTS.GRANTED:
-        console.log('The permission is granted');
+        // console.log('The permission is granted');
 
         navigation.navigate('ScanQr');
 
         break;
       case RESULTS.BLOCKED:
-        console.log('The permission is denied and not requestable anymore');
+        // console.log('The permission is denied and not requestable anymore');
 
         break;
     }
@@ -203,7 +204,7 @@ const ProfileAdmin = ({navigation}) => {
           ]}
           onPress={() => {
             navigation.navigate('WalletScreen', {
-              wallet: 'main',
+              wallet: user.lWallet[0],
               index: 0,
             });
           }}>
@@ -230,7 +231,7 @@ const ProfileAdmin = ({navigation}) => {
           ]}
           onPress={() => {
             navigation.navigate('WalletScreen', {
-              wallet: 'cashback',
+              wallet: user.lWallet[1],
               index: 1,
             });
           }}>

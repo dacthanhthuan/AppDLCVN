@@ -162,3 +162,15 @@ export enum WALLET {
   REFERRAL_LIST_FAIL = 'wallet/Referral_List_Fail',
   REFERRAL_LIST_CLEAR = 'wallet/Referral_List_Clear',
 }
+
+export enum DETAIL_MEMBER {
+  START = 'client/detail_info_start',
+  END = 'client/detail_info_end',
+  FAIL = 'client/detail_info_fail',
+}
+
+export enum REFERRAL_INFO {
+  START = 'client/referral_info_start',
+  END = 'client/referral_info_end',
+  FAIL = 'client/referral_info_fail',
+}

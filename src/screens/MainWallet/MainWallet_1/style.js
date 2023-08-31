@@ -1,5 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import {TextInputAdapter} from 'react-native-reanimated';
+import {WINDOW_HEIGHT, WINDOW_WIDTH} from '../../../global';
 
 const {width: width, height: height} = Dimensions.get('window');
 const Style_WalletScreen = StyleSheet.create({
@@ -81,6 +82,88 @@ const Style_WalletScreen = StyleSheet.create({
   imgArrow: {
     width: 17,
     height: 17,
+  },
+
+  showMyQrView: {
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT,
+    position: 'absolute',
+    bottom: 0,
+  },
+
+  qrView: {
+    backgroundColor: 'white',
+    height: 550,
+    width: '100%',
+    borderTopEndRadius: 30,
+    borderTopStartRadius: 30,
+    paddingHorizontal: 15,
+    paddingVertical: 25,
+  },
+
+  outSideQrViewButton: {
+    flex: 1,
+  },
+
+  logo: {
+    width: 200,
+    height: 120,
+    alignSelf: 'center',
+  },
+
+  myQR: {
+    width: 210,
+    height: 210,
+    alignSelf: 'center',
+  },
+
+  myQrFullname: {
+    fontSize: 25,
+    color: '#005aa9',
+    textAlign: 'center',
+    fontWeight: '500',
+    marginTop: 20,
+  },
+
+  myQrButtonView: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+
+  myQrButton: {
+    flex: 1,
+    backgroundColor: '#f2f2f2',
+    margin: 5,
+    padding: 5,
+    borderRadius: 10,
+  },
+
+  myQrButtonImage: {
+    width: 30,
+    height: 30,
+    alignSelf: 'center',
+  },
+
+  myQrButtonTitle: {
+    textAlign: 'center',
+    color: 'black',
+    fontSize: 15,
+  },
+
+  myQrButtonClose: {
+    position: 'absolute',
+    right: 15,
+    top: 15,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 180,
+    padding: 5,
+    zIndex: 1,
+  },
+
+  myQrCaptureView: {
+    backgroundColor: 'white',
+    paddingHorizontal: 15,
+    paddingVertical: 25,
   },
 });
 
