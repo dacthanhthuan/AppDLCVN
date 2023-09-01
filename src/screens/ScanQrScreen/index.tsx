@@ -11,15 +11,29 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import RNQRGenerator from 'rn-qr-generator';
 import styles from './styles';
 import Header from '../../component/Header';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import BarcodeMask from 'react-native-barcode-mask';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../global';
+import {useDispatch, useSelector} from 'react-redux';
+import {DetailMember} from '../../redux/actions/detailMemberActions';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 const photos = require('../../assets/gallery.png');
 
 export default function ScanQrScreen() {
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+
+  const session_token = useSelector((state: any) => state.user.session_token);
+  const detailMember = useSelector((state: any) => state.detailMember.data);
+  const detailMemberLoading = useSelector(
+    (state: any) => state.detailMember.loading,
+  );
+  const detailMemberMsg = useSelector(
+    (state: any) => state.detailMember.message,
+  );
 
   const cameraRef = useRef<RNCamera | any>(null);
   const onReadQrTimer = useRef<number | any>(null);
@@ -29,14 +43,20 @@ export default function ScanQrScreen() {
     width: 0,
     height: 0,
   });
+  const [canScanQR, setCanScanQR] = useState(true);
+  const qrContent = useRef<any>(null);
 
   // handle read qr
   const handleOnReadQr = (data: any) => {
+    // debounce when this function is invoked many times.
     clearTimeout(onReadQrTimer.current);
+    // pause camera
     cameraRef.current.pausePreview();
 
     onReadQrTimer.current = setTimeout(() => {
+      setCanScanQR(false);
       handleResultQR(data.data);
+      clearTimeout(onReadQrTimer.current);
     }, 300);
   };
 
@@ -59,6 +79,9 @@ export default function ScanQrScreen() {
   // handle choose image to scan qr
   const handleChooseImage = async () => {
     try {
+      // pause camera
+      cameraRef.current.pausePreview();
+
       const {assets}: any = await launchImageLibrary({
         mediaType: 'photo',
       });
@@ -66,6 +89,8 @@ export default function ScanQrScreen() {
       const {values} = await RNQRGenerator.detect({uri: assets[0].uri});
 
       if (values.length > 0) {
+        // unactived scan feature
+        setCanScanQR(false);
         handleResultQR(values[0]);
       }
     } catch (error) {}
@@ -73,15 +98,78 @@ export default function ScanQrScreen() {
 
   // handle result qr is readed
   const handleResultQR = (result: string) => {
-    Alert.alert('Read QR', 'QR content: ' + result);
     if (result.startsWith('{') && result.endsWith('}')) {
-      const qrContent = JSON.parse(result);
-      console.log(typeof qrContent, qrContent);
+      // trasnform string to json object
+      qrContent.current = JSON.parse(result);
+
+      switch (qrContent.current.type) {
+        case 'transfer': {
+          dispatch(
+            DetailMember.start({
+              token: session_token,
+              keyword: qrContent.current.value.mobile,
+              type: 'exactly',
+            }),
+          );
+
+          break;
+        }
+
+        default: {
+          Alert.alert(
+            'Quét QR không thành công',
+            'Mã QR của bạn không hợp lệ, vui lòng thử lại',
+          );
+          cameraRef.current.resumePreview();
+          // can scan qr after 300ms
+          const timer = setTimeout(() => {
+            setCanScanQR(true);
+            clearTimeout(timer);
+          }, 300);
+          break;
+        }
+      }
+    } else {
+      // display alert when qr is invalid
+      Alert.alert(
+        'Quét QR không thành công',
+        'Mã QR của bạn không hợp lệ, vui lòng thử lại',
+      );
+      cameraRef.current.resumePreview();
+      // can scan qr after 300ms
+      const timer = setTimeout(() => {
+        setCanScanQR(true);
+        clearTimeout(timer);
+      }, 300);
     }
   };
 
+  // side effect: when loaded detail member data
+  useEffect(() => {
+    if (!detailMemberLoading && !canScanQR) {
+      // actived scan feature
+      setCanScanQR(true);
+      // resume camera after pause
+      cameraRef.current.resumePreview();
+
+      if (!detailMemberMsg) {
+        // pop current screen
+        navigation.dispatch(StackActions.pop());
+
+        // navigate to transfer screen
+        navigation.navigate('TransferMoney', {
+          wallet_id: qrContent.current.value.wallet_id,
+          transferee: detailMember, // người nhận
+        });
+      } else {
+        Alert.alert('Lỗi', detailMemberMsg);
+      }
+    }
+  }, [detailMemberLoading]);
+
   return (
     <SafeAreaView style={styles.container}>
+      {detailMemberLoading ? <LoadingOverlay /> : null}
       <Header
         text="Quét mã QR"
         iconLeft={require('../../assets/Arrow1.png')}
@@ -97,7 +185,7 @@ export default function ScanQrScreen() {
         style={styles.camera}
         type={RNCamera.Constants.Type.back}
         onBarCodeRead={handleOnReadQr}
-        barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
+        barCodeTypes={canScanQR ? [RNCamera.Constants.BarCodeType.qr] : []}
         // giới hạn khu vực quét qr (theo hướng màn hình nằm ngang, nút home ở bên phải)
         rectOfInterest={scanArea}
         // android only: chỉ định width và height để giới hạn khu vực quét qr.

@@ -93,7 +93,6 @@ const Style_WalletScreen = StyleSheet.create({
 
   qrView: {
     backgroundColor: 'white',
-    height: 550,
     width: '100%',
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
@@ -112,8 +111,8 @@ const Style_WalletScreen = StyleSheet.create({
   },
 
   myQR: {
-    width: 210,
-    height: 210,
+    width: 250,
+    height: 250,
     alignSelf: 'center',
   },
 

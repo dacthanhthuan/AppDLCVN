@@ -28,7 +28,7 @@ import {riseNormalError} from '../../redux/actions/errorHandlerActions';
 const TransferMoney = ({navigation, route}) => {
   const dispatch = useDispatch();
 
-  const {wallet_id} = route.params;
+  const {wallet_id, transferee} = route.params;
 
   const lWallet = useSelector(state => state.user.lWallet);
   const login = useSelector(state => state.user.login.status);
@@ -56,7 +56,7 @@ const TransferMoney = ({navigation, route}) => {
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [amount, setAmount] = useState(0);
   const [note, setNote] = useState('');
-  const [selectUser, setSelectUser] = useState(undefined);
+  const [selectUser, setSelectUser] = useState(transferee);
   const [error, setError] = useState('');
 
   const [refreshing, setRefreshing] = useState(false);
@@ -173,6 +173,12 @@ const TransferMoney = ({navigation, route}) => {
     },
     [searching],
   );
+
+  useEffect(() => {
+    if (transferee) {
+      handleContinueButton();
+    }
+  }, [transferee]);
 
   return (
     <SafeAreaView style={styles.container}>

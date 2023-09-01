@@ -11,7 +11,7 @@ import orderReducer from './orderReducer';
 import ErrorHandlerReducer from './errorReducer';
 import supplierReducer from './supplierReducer';
 import walletReducer from './walletReducer';
-import DetailMemberReducer from './detailMeberReducer';
+import DetailMemberReducer from './detailMemberReducer';
 import ReferralInfoReducer from './referralInfoRecuder';
 
 const rootReducer = combineReducers({

@@ -71,6 +71,7 @@ import {OrderAddressProvider} from './src/component/OrderAddressContext';
 import WalletHistory from './src/screens/WalletHistory';
 import BankAccount from './src/screens/BankAccount';
 import ScanQrScreen from './src/screens/ScanQrScreen';
+import ShareAppScreen from './src/screens/ShareAppScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -128,6 +129,7 @@ const App = () => {
             <Stack.Screen name="WalletHistory" component={WalletHistory} />
             <Stack.Screen name="BankAccount" component={BankAccount} />
             <Stack.Screen name="ScanQr" component={ScanQrScreen} />
+            <Stack.Screen name="ShareApp" component={ShareAppScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </OrderAddressProvider>
@@ -332,3 +334,13 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+type AppRootParamsList = {
+  TransferMoney: undefined | any;
+};
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends AppRootParamsList {}
+  }
+}

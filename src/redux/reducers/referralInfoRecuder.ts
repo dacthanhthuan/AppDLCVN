@@ -4,7 +4,7 @@ import {AnyAction} from 'redux';
 const initialState = {
   loading: false,
   message: undefined,
-  data: {},
+  data: undefined,
 };
 
 export default function ReferralInfoReducer(
@@ -20,7 +20,7 @@ export default function ReferralInfoReducer(
       };
     }
 
-    case REFERRAL_INFO.START: {
+    case REFERRAL_INFO.END: {
       return {
         ...state,
         loading: false,
@@ -29,7 +29,7 @@ export default function ReferralInfoReducer(
       };
     }
 
-    case REFERRAL_INFO.START: {
+    case REFERRAL_INFO.FAIL: {
       return {
         ...state,
         loading: false,

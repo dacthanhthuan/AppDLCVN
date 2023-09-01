@@ -90,10 +90,10 @@ const WalletScreen = ({navigation}) => {
       }),
       correctionLevel: 'H',
       base64: true,
-      width: 200,
-      height: 200,
+      width: 300,
+      height: 300,
       backgroundColor: '#005aa93f',
-      padding: {top: 10, right: 10, left: 10, bottom: 10},
+      padding: {top: 5, right: 5, left: 5, bottom: 5},
     })
       .then(res => {
         // set qr code base64 to display
@@ -441,7 +441,9 @@ const WalletScreen = ({navigation}) => {
                 resizeMethod="resize"
               />
 
-              <Text style={styles.myQrFullname}>{user.fullname}</Text>
+              <Text style={styles.myQrFullname}>
+                {`${user.fullname}\n${wallet.wallet_name}`}
+              </Text>
             </View>
 
             <View style={styles.myQrButtonView}>
