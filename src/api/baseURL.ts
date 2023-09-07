@@ -42,6 +42,12 @@ const main_wallet_transfer = '/client_wallet/transfers?apikey=';
 const referral_list = '/client_info/referral_list?apikey=';
 const detail_member = 'client_info/detail_member?apikey=';
 const info_referral = '/client_info/referral?apikey=';
+const referral_member_list = '/client_referral/list?apikey=';
+const referral_member_add_or_update = '/client_referral/members?apikey=';
+const referral_member_booking_list =
+  '/client_order/members_booking_order?apikey=';
+const referral_member_order_list =
+  '/client_order/members_history_order?apikey=';
 
 export default {
   base_url,
@@ -73,4 +79,8 @@ export default {
   referral_list,
   detail_member,
   info_referral,
+  referral_member_list,
+  referral_member_add_or_update,
+  referral_member_booking_list,
+  referral_member_order_list,
 };

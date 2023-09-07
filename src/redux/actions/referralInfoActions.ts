@@ -20,8 +20,13 @@ const referral_info_fail = (msg: string) => ({
   payload: msg,
 });
 
+const referral_info_clear = () => ({
+  type: REFERRAL_INFO.CLEAR,
+});
+
 export const ReferralInfo = {
   start: referral_info_start,
   end: referral_info_end,
   fail: referral_info_fail,
+  clear: referral_info_clear,
 };

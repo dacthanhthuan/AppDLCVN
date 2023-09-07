@@ -45,6 +45,7 @@ import {
   RESULTS,
   openSettings,
 } from 'react-native-permissions';
+import {ReferralInfo} from '../../redux/actions/referralInfoActions';
 
 // Data flow is: Local -> Redux -> Render on screen
 const ProfileAdmin = ({navigation}) => {
@@ -308,7 +309,7 @@ const ProfileAdmin = ({navigation}) => {
         <InfoCard
           image={require('../../assets/Rectangle298.png')}
           text="Danh sách đội nhóm"
-          onPress={() => navigation.navigate('TeamThree')}
+          onPress={() => navigation.navigate('ReferralTeam')}
         />
         <InfoCard
           image={require('../../assets/Rectangle299.png')}
@@ -355,6 +356,7 @@ const ProfileAdmin = ({navigation}) => {
             dispatch(addressBookClear);
             dispatch(clearListOrder());
             dispatch(WalletReferralList.clear());
+            dispatch(ReferralInfo.clear());
 
             // clear local
             removeData(LOCALSTORAGE.user);

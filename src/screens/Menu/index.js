@@ -109,7 +109,19 @@ const Menu = ({navigation}) => {
 
   // update order data after load
   useEffect(() => {
-    updateFilterData(orderList);
+    updateFilterData(
+      // update data sort by last update
+      orderList.sort((a, b) => {
+        console.log(parseInt(a.last_update) - parseInt(b.last_update));
+        if (parseInt(a.last_update) - parseInt(b.last_update) > 0) {
+          return -1;
+        } else if (parseInt(a.last_update) - parseInt(b.last_update) < 0) {
+          return 1;
+        }
+        return 0;
+      }),
+    );
+
     if (!listOrderState) {
       setLoadMore(false);
       setRefreshing(false);

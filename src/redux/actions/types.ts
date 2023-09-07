@@ -173,4 +173,26 @@ export enum REFERRAL_INFO {
   START = 'client/referral_info_start',
   END = 'client/referral_info_end',
   FAIL = 'client/referral_info_fail',
+  CLEAR = 'client/referral_info_clear',
+}
+
+export enum REFERRAL_MEMBER {
+  LIST_START = 'client/referral-member-list-start',
+  LIST_END = 'client/referral-member-list-end',
+  LIST_FAIL = 'client/referral-member-list-fail',
+  LIST_CLEAR = 'client/referral-member-list-clear',
+
+  UPDATE_ADD_MEMBER_START = 'client/referral-update-add-member-start',
+  UPDATE_ADD_MEMBER_END = 'client/referral-update-add-member-end',
+  UPDATE_ADD_MEMBER_FAIL = 'client/referral-update-add-member-fail',
+
+  BOOKING_ORDER_LIST_START = 'client/referral-member-booking-order-list-start',
+  BOOKING_ORDER_LIST_END = 'client/referral-member-booking-order-list-end',
+  BOOKING_ORDER_LIST_FAIL = 'client/referral-member-booking-order-list-fail',
+  BOOKING_ORDER_LIST_CLEAR = 'client/referral-member-booking-order-list-clear',
+
+  HISTORY_ORDERED_LIST_START = 'client/referral-member-history-order-list-start',
+  HISTORY_ORDERED_LIST_FAIL = 'client/referral-member-history-order-list-end',
+  HISTORY_ORDERED_LIST_END = 'client/referral-member-history-order-list-fail',
+  HISTORY_ORDERED_LIST_CLEAR = 'client/referral-member-history-order-list-clear',
 }

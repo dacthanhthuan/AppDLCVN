@@ -1,6 +1,7 @@
-import {TextInput, View, Text} from 'react-native';
+import {TextInput, View, Text, Image, TouchableOpacity} from 'react-native';
 import styles from './styles';
 import style from '../LoadingOverlay/style';
+import {useCallback, useRef} from 'react';
 
 type BankInputType = {
   label?: string;
@@ -19,19 +20,34 @@ export default function BankInput({
   value,
   upperCase,
 }: BankInputType) {
+  const inputRef = useRef<TextInput | any>(null);
+
+  const handleClearText = useCallback(() => {
+    inputRef.current.clear();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput
-        style={[
-          styles.textInput,
-          upperCase ? {textTransform: 'uppercase'} : null,
-        ]}
-        placeholder={placeholder}
-        onChangeText={onChangeText}
-        maxLength={maxLength}
-        value={value}
-      />
+      <View style={styles.inputView}>
+        <TextInput
+          ref={inputRef}
+          style={[
+            styles.textInput,
+            upperCase ? {textTransform: 'uppercase'} : null,
+          ]}
+          placeholder={placeholder}
+          onChangeText={onChangeText}
+          maxLength={maxLength}
+          value={value}
+        />
+        <TouchableOpacity style={styles.close} onPress={handleClearText}>
+          <Image
+            source={require('../../assets/Rectangle328.png')}
+            style={styles.image}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

@@ -72,6 +72,7 @@ import WalletHistory from './src/screens/WalletHistory';
 import BankAccount from './src/screens/BankAccount';
 import ScanQrScreen from './src/screens/ScanQrScreen';
 import ShareAppScreen from './src/screens/ShareAppScreen';
+import ReferralTeam from './src/screens/ReferralTeam';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -86,8 +87,10 @@ const App = () => {
             <Stack.Screen name="Cart" component={Cart} />
             <Stack.Screen name="PointCart" component={PointCart} />
             <Stack.Screen name="NoOrders" component={NoOrders} />
+            {/* đội nhóm */}
             <Stack.Screen name="Team" component={Team} />
             <Stack.Screen name="TeamThree" component={TeamThree} />
+
             <Stack.Screen name="CardEmpty" component={CartEmpty} />
             <Stack.Screen name="Notifications" component={Notifications} />
             <Stack.Screen name="SearchTeam" component={SearchTeam} />
@@ -120,9 +123,11 @@ const App = () => {
             <Stack.Screen name="OverView" component={OverView} />
             <Stack.Screen name="Payment" component={Payment} />
             <Stack.Screen name="RechargeHistory" component={RechargeHistory} />
+            {/* doanh số */}
             <Stack.Screen name="Sales" component={Sales} />
             <Stack.Screen name="Sales_2" component={Sales_2} />
             <Stack.Screen name="Sales_3" component={Sales_3} />
+
             <Stack.Screen name="Walk" component={Walk} />
             <Stack.Screen name="WithdrawHistory" component={WithdrawHistory} />
             <Stack.Screen name="UpdateAddress2" component={UpdateAddressMain} />
@@ -130,6 +135,7 @@ const App = () => {
             <Stack.Screen name="BankAccount" component={BankAccount} />
             <Stack.Screen name="ScanQr" component={ScanQrScreen} />
             <Stack.Screen name="ShareApp" component={ShareAppScreen} />
+            <Stack.Screen name="ReferralTeam" component={ReferralTeam} />
           </Stack.Navigator>
         </NavigationContainer>
       </OrderAddressProvider>

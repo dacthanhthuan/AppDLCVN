@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
 
   codeView: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 
   code: {
@@ -32,6 +31,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     width: '50%',
     marginVertical: 10,
+    alignSelf: 'flex-start',
   },
 
   codeContent: {
@@ -44,13 +44,14 @@ const styles = StyleSheet.create({
 
   copy: {
     marginVertical: 10,
-    width: '30%',
+    width: '50%',
     justifyContent: 'center',
   },
 
   copyContent: {
-    fontSize: 14,
+    fontSize: 15,
     textAlign: 'center',
+    fontWeight: '500',
   },
 });
 

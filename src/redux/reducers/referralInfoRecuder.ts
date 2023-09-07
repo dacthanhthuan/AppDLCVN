@@ -37,6 +37,10 @@ export default function ReferralInfoReducer(
       };
     }
 
+    case REFERRAL_INFO.CLEAR: {
+      return initialState;
+    }
+
     default:
       return state;
   }
