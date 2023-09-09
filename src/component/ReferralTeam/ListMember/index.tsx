@@ -1,4 +1,4 @@
-import {memo} from 'react';
+import {memo, useCallback} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -7,9 +7,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  GestureResponderEvent,
 } from 'react-native';
 import styles from './styles';
 import {formatPrice} from '../../../global';
+import {useNavigation} from '@react-navigation/native';
 
 type ListMemberProps = {
   data: Array<any>;
@@ -27,6 +29,16 @@ export default memo(
     onRefresh,
     onLoadmore,
   }: ListMemberProps) {
+    const navigation = useNavigation();
+
+    const handleOnPressItem = useCallback((item: any) => {
+      navigation.navigate({
+        name: 'ReferralDetailMember',
+        key: 'RDM-user_id:/' + item.user_id,
+        params: {data: item},
+      });
+    }, []);
+
     return (
       <FlatList
         style={styles.list}
@@ -39,6 +51,7 @@ export default memo(
             avatar={item?.avatar}
             totalSpent={item?.total_spent}
             totalLiabilities={item?.total_liabilities}
+            onPress={() => handleOnPressItem(item)}
           />
         )}
         ListEmptyComponent={
@@ -72,6 +85,7 @@ type ListMemberItemProps = {
   avatar: string;
   totalSpent: string;
   totalLiabilities: string;
+  onPress: (e: GestureResponderEvent) => void;
 };
 
 const ListMemberItem = memo(
@@ -81,9 +95,10 @@ const ListMemberItem = memo(
     name,
     totalSpent,
     totalLiabilities,
+    onPress,
   }: ListMemberItemProps) {
     return (
-      <TouchableOpacity style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={onPress}>
         <Image
           source={
             avatar ? {uri: avatar} : require('../../../assets/Rectangle312.png')

@@ -6,7 +6,7 @@ import {Image, TextInput, TouchableOpacity} from 'react-native';
 import styles from './styles';
 
 type DatePickerProps = {
-  defaultDate?: Date;
+  defaultDate?: Date | null;
   placeholder: string;
   onChangeDate?: (date: Date) => void;
 };
@@ -27,12 +27,14 @@ const DatePicker = memo(function ({
 
       // if date not undefined
       if (date) {
-        // set date to show input and display date picker
-        setDate(date);
+        if (e.type == 'set') {
+          // set date to show input and display date picker
+          setDate(date);
 
-        // callbacks
-        if (typeof onChangeDate == 'function') {
-          onChangeDate(date);
+          // callbacks
+          if (typeof onChangeDate == 'function') {
+            onChangeDate(date);
+          }
         }
       }
     },
@@ -51,7 +53,7 @@ const DatePicker = memo(function ({
         style={styles.input}
         placeholder={placeholder}
         placeholderTextColor={'grey'}
-        value={date.toLocaleDateString()}
+        value={date ? date.toLocaleDateString() : undefined}
       />
       <Image
         source={require('../../../../assets/calendar.png')}
@@ -59,7 +61,7 @@ const DatePicker = memo(function ({
       />
       {visible && (
         <DateTimePicker
-          value={date}
+          value={date ? date : new Date()}
           mode={'date'}
           onChange={handleOnChooseDate}
         />

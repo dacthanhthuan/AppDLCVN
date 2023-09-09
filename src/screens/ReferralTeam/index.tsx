@@ -7,42 +7,60 @@ import ImageButton from '../../component/Home/ImageButton';
 import ReferralTeamListGroup from '../../component/ReferralTeam/ListGroup';
 import ReferralTeamListMember from '../../component/ReferralTeam/ListMember';
 import ReferralTeamSearchFilter from '../../component/ReferralTeam/SearchFilter';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {ReferralMemberList} from '../../redux/actions/referralMemberActions';
+import {
+  MemberListStartFormData,
+  ReferralMemberList,
+} from '../../redux/actions/referralMemberActions';
 import LoadmoreIndicator from '../../component/Home/LoadmoreIndicator';
 import FabAddButton from '../../component/ReferralTeam/FabAddButton';
 import {Keyboard} from 'react-native';
+import api_referral_member_list from '../../api/api_referral_member_list';
+import {
+  riseNetworkError,
+  riseNormalError,
+} from '../../redux/actions/errorHandlerActions';
+
+let ignoreInitial = false;
 
 export default function ReferralTeam() {
   const navigation = useNavigation();
   const route = useRoute();
 
+  const {data}: any = route.params;
+
   const dispatch = useDispatch();
 
   const session_token = useSelector((state: any) => state.user.session_token);
 
-  const memberList = useSelector(
-    (state: any) => state.referralMember.memberList,
-  );
-  const statisticList = useSelector(
-    (state: any) => state.referralMember.statisticList,
-  );
+  const memberList = useSelector((s: any) => s.referralMember.memberList);
+  const statisticList = useSelector((s: any) => s.referralMember.statisticList);
   const memberListLoading = useSelector(
-    (state: any) => state.referralMember.memberListLoading,
+    (s: any) => s.referralMember.memberListLoading,
   );
   const memberListTotal = useSelector(
-    (state: any) => state.referralMember.memberListTotal,
+    (s: any) => s.referralMember.memberListTotal,
   );
   const memberListCurrent = useSelector(
-    (state: any) => state.referralMember.memberListCurrent,
+    (s: any) => s.referralMember.memberListCurrent,
   );
   const memberListNextPage = useSelector(
-    (state: any) => state.referralMember.memberListNextPage,
+    (s: any) => s.referralMember.memberListNextPage,
+  );
+  const updateAddState = useSelector(
+    (s: any) => s.referralMember.updateAddState,
   );
 
+  const [members, setMembers] = useState<any>([]);
+  const [statistics, setStatistics] = useState<any>([]);
+  const [loading, setLoading] = useState<any>(true);
+  const [total, setTotal] = useState<any>(0);
+  const current = useRef(0);
+  const nextPage = useRef(1);
+
   const [filterVisible, setFilterVisible] = useState(false);
-  const [filter, setFilter] = useState({
+  const filter = useRef({
     sort: '',
     type: '',
     date: '',
@@ -50,14 +68,15 @@ export default function ReferralTeam() {
   const [refreshing, setRefreshing] = useState(false);
   const [loadmore, setLoadmore] = useState(false);
   const [keyword, setKeyword] = useState('');
+  const groupId = useRef<any>(undefined);
 
   // event handle: dispatch action get member list
-  const callApiGetMemberList = (
+  const fetchApiRedux = (
     page: number | string = 1,
     sort?: string,
     type?: string,
     keyword?: string,
-    user_id?: string,
+    groupId?: string,
   ) => {
     dispatch(
       ReferralMemberList.start({
@@ -66,75 +85,239 @@ export default function ReferralTeam() {
         sort: sort ? sort : '',
         field: type ? type : '',
         keyword: keyword ? keyword : '',
-        user_id: user_id ? user_id : '',
+        user_id: data?.user_id ? data?.user_id : '',
+        member_group_id: groupId ? groupId : '',
       }),
     );
   };
 
-  // side effect: after initial rendering (run once)
+  // event handle: fetch data from api
+  const fetchScreenData = (
+    page: number | string = 1,
+    sort?: string,
+    type?: string,
+    keyword?: string,
+    groupId?: string,
+  ) => {
+    fetchData(
+      {
+        token: session_token,
+        page: page,
+        sort: sort ? sort : '',
+        field: type ? type : '',
+        keyword: keyword ? keyword : '',
+        user_id: data?.user_id ? data?.user_id : '',
+        member_group_id: groupId ? groupId : '',
+      },
+      res => {
+        setMembers((arr: any) => [...arr, ...res.list_members]);
+        setStatistics((arr: any) => [...arr, ...res.lStatistic]);
+        setLoading(false);
+        setRefreshing(false);
+        setTotal(res.total_record);
+        current.current = current.current + res.list_members.length;
+        nextPage.current = nextPage.current + 1;
+      },
+      msg => {
+        if (msg instanceof Error) {
+          dispatch(
+            riseNetworkError({
+              error: msg,
+              visible: true,
+            }),
+          );
+        } else {
+          dispatch(
+            riseNormalError({
+              duration: 3000,
+              message: msg,
+            }),
+          );
+        }
+      },
+    );
+  };
+
+  // side effect: initial rendering
   useEffect(() => {
-    // synchronous redux
-    callApiGetMemberList();
+    if (!data.user_id) {
+      if (memberList.length == 0) fetchApiRedux(1);
+    } else {
+      fetchScreenData(1);
+    }
+  }, []);
 
-    // clear data before navigate to another screen
+  // side effect: synchronous redux data with state
+  useEffect(() => {
+    // if have no user_id, set data to display from redux
+    if (!data.user_id) {
+      setMembers(memberList);
+
+      setStatistics(statisticList);
+
+      setLoading(memberListLoading);
+
+      setTotal(memberListTotal);
+    }
+
+    if (!memberListLoading) {
+      setRefreshing(false);
+      setLoadmore(false);
+    }
+  }, [memberList, statisticList, memberListLoading, memberListTotal]);
+
+  // side effect: synchronous redux data with ref
+  useEffect(() => {
+    if (!data.user_id) {
+      current.current = memberListCurrent;
+      nextPage.current = memberListNextPage;
+    }
+  }, [memberListCurrent, memberListNextPage]);
+
+  // side effect: whenever update or add state success:
+  useEffect(() => {
+    if (updateAddState && ignoreInitial) {
+      handleOnRefresh();
+    }
+
     return () => {
-      dispatch(ReferralMemberList.clear());
+      ignoreInitial = true;
     };
-  }, []);
+  }, [updateAddState]);
 
-  // handle apply filter
-  const handleApplyFilter = useCallback((item: any) => {
-    setFilterVisible(false);
-    setKeyword('');
-    setFilter(item);
+  // event handle: apply filter
+  const handleApplyFilter = useCallback(
+    (item: any) => {
+      setFilterVisible(false);
+      filter.current = item;
 
-    dispatch(ReferralMemberList.clear());
-    callApiGetMemberList(1, item.sort, item.type);
-  }, []);
+      if (!data.user_id) {
+        dispatch(ReferralMemberList.clear());
+        fetchApiRedux(1, item.sort, item.type, keyword, groupId.current);
+      } else {
+        setLoading(true);
+        setMembers((arr: any) => []);
+        setStatistics((arr: any) => []);
+        fetchScreenData(1, item.sort, item.type, keyword, groupId.current);
+      }
+    },
+    [groupId, keyword],
+  );
 
-  // handle on refreshing
+  // event handle: refreshing
   const handleOnRefresh = useCallback(() => {
     setRefreshing(true);
     Keyboard.dismiss();
     setKeyword('');
 
-    dispatch(ReferralMemberList.clear());
-    callApiGetMemberList(1, filter.sort, filter.type);
-  }, [filter]);
+    if (!data.user_id) {
+      dispatch(ReferralMemberList.clear());
+      fetchApiRedux(
+        1,
+        filter.current.sort,
+        filter.current.type,
+        '',
+        groupId.current,
+      );
+    } else {
+      setLoading(true);
+      setMembers((arr: any) => []);
+      setStatistics((arr: any) => []);
+      fetchScreenData(
+        1,
+        filter.current.sort,
+        filter.current.type,
+        '',
+        groupId.current,
+      );
+    }
+  }, [filter.current, groupId.current]);
 
-  // handle on load more
+  // event handle: load more
   const handleOnLoadmore = () => {
-    if (memberListCurrent < memberListTotal && !memberListLoading) {
+    if (current.current < total && !loading) {
       setLoadmore(true);
-      callApiGetMemberList(memberListNextPage, filter.sort, filter.type);
+      if (!data.user_id) {
+        fetchApiRedux(
+          nextPage.current,
+          filter.current.sort,
+          filter.current.type,
+          keyword,
+          groupId.current,
+        );
+      } else {
+        setLoading(true);
+        fetchScreenData(
+          nextPage.current,
+          filter.current.sort,
+          filter.current.type,
+          keyword,
+          groupId.current,
+        );
+      }
     }
   };
 
-  // side effect: synchronous with member list loading status (from redux)
-  useEffect(() => {
-    if (!memberListLoading) {
-      setRefreshing(false);
-      setLoadmore(false);
-    }
-  }, [memberListLoading]);
-
-  // handle on add new member
+  // event handle: add new member
   const handleOnAddMember = () => {
-    // navigation.navigate('')
+    navigation.navigate('ReferralAddMember');
   };
 
-  // handle search feature
+  // event handle: search feature
   const handleOnSearch = useCallback(() => {
     if (keyword.length > 0) {
-      dispatch(ReferralMemberList.clear());
-      callApiGetMemberList(1, filter.sort, filter.type, keyword);
+      if (!data.user_id) {
+        dispatch(ReferralMemberList.clear());
+        fetchApiRedux(
+          1,
+          filter.current.sort,
+          filter.current.type,
+          keyword,
+          groupId.current,
+        );
+      } else {
+        setLoading(true);
+        setMembers((arr: any) => []);
+        setStatistics((arr: any) => []);
+        fetchScreenData(
+          1,
+          filter.current.sort,
+          filter.current.type,
+          keyword,
+          groupId.current,
+        );
+      }
     }
-  }, [filter, keyword]);
+  }, [filter.current, keyword, groupId.current]);
+
+  // event handle: on choose group id
+  const handleOnChosenGroupId = useCallback(
+    (id: any) => {
+      groupId.current = id;
+
+      if (!data.user_id) {
+        dispatch(ReferralMemberList.clear());
+        fetchApiRedux(1, filter.current.sort, filter.current.type, keyword, id);
+      } else {
+        setLoading(true);
+        setMembers((arr: any) => []);
+        setStatistics((arr: any) => []);
+        fetchScreenData(
+          1,
+          filter.current.sort,
+          filter.current.type,
+          keyword,
+          id,
+        );
+      }
+    },
+    [keyword, filter.current],
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        text={`Thành viên (${memberListTotal})`}
+        text={`Thành viên (${total})`}
         iconLeft={require('../../assets/Arrow1.png')}
         onPressLeft={() => navigation.goBack()}
         containerStyle={styles.header}
@@ -166,15 +349,21 @@ export default function ReferralTeam() {
         />
       </View>
 
-      <ReferralTeamListGroup data={statisticList} />
+      <ReferralTeamListGroup
+        data={refreshing ? [] : statistics}
+        onChosen={handleOnChosenGroupId}
+        refreshing={refreshing}
+      />
 
       <ReferralTeamListMember
-        data={memberList}
-        loading={memberListLoading}
+        data={refreshing ? [] : members}
+        loading={loading}
         refreshing={refreshing}
         onRefresh={handleOnRefresh}
         onLoadmore={handleOnLoadmore}
       />
+
+      {!data.user_id && <FabAddButton onPress={handleOnAddMember} />}
 
       <ReferralTeamSearchFilter
         visible={filterVisible}
@@ -182,9 +371,32 @@ export default function ReferralTeam() {
         onApplyFilter={handleApplyFilter}
       />
 
-      <FabAddButton onPress={handleOnAddMember} />
-
       {loadmore && <LoadmoreIndicator />}
     </SafeAreaView>
   );
+}
+
+function fetchData(
+  data: MemberListStartFormData,
+  onSuccess: (result: any) => void,
+  onFailure: (msg: string | Error) => void,
+) {
+  const form = new FormData();
+  form.append('token', data.token);
+  form.append('page', data.page);
+  form.append('field', data.field);
+  form.append('sort', data.sort);
+  form.append('keyword', data.keyword);
+  form.append('user_id', data.user_id);
+  form.append('joined_at', data.joined_at ? data.joined_at : '');
+  form.append(
+    'member_group_id',
+    data.member_group_id ? data.member_group_id : '',
+  );
+  form.append(
+    'member_department_id',
+    data.member_department_id ? data.member_department_id : '',
+  );
+
+  api_referral_member_list(form).then(onSuccess).catch(onFailure);
 }

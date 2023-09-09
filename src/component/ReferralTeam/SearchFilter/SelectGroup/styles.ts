@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     maxHeight: 80,
-    marginVertical: 10,
   },
 
   contentList: {

@@ -309,7 +309,7 @@ const ProfileAdmin = ({navigation}) => {
         <InfoCard
           image={require('../../assets/Rectangle298.png')}
           text="Danh sách đội nhóm"
-          onPress={() => navigation.navigate('ReferralTeam')}
+          onPress={() => navigation.navigate('ReferralTeam', {data: {}})}
         />
         <InfoCard
           image={require('../../assets/Rectangle299.png')}

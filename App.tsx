@@ -73,6 +73,11 @@ import BankAccount from './src/screens/BankAccount';
 import ScanQrScreen from './src/screens/ScanQrScreen';
 import ShareAppScreen from './src/screens/ShareAppScreen';
 import ReferralTeam from './src/screens/ReferralTeam';
+import ReferralDetailMember from './src/screens/ReferralDetailMember';
+import ReferralEditUser from './src/screens/ReferralEditUser';
+import ReferralBookingList from './src/screens/ReferralBookingList';
+import ReferralHistoryList from './src/screens/ReferralHistoryList';
+import ReferralAddMember from './src/screens/ReferralAddMember';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -82,7 +87,14 @@ const App = () => {
     <GestureHandlerRootView style={{flex: 1}}>
       <OrderAddressProvider>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false,
+              animationTypeForReplace: 'push',
+              gestureEnabled: true,
+              gestureDirection: 'horizontal-inverted',
+              gestureResponseDistance: 35,
+            }}>
             <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Cart" component={Cart} />
             <Stack.Screen name="PointCart" component={PointCart} />
@@ -136,6 +148,26 @@ const App = () => {
             <Stack.Screen name="ScanQr" component={ScanQrScreen} />
             <Stack.Screen name="ShareApp" component={ShareAppScreen} />
             <Stack.Screen name="ReferralTeam" component={ReferralTeam} />
+            <Stack.Screen
+              name="ReferralDetailMember"
+              component={ReferralDetailMember}
+            />
+            <Stack.Screen
+              name="ReferralEditUser"
+              component={ReferralEditUser}
+            />
+            <Stack.Screen
+              name="ReferralBookingList"
+              component={ReferralBookingList}
+            />
+            <Stack.Screen
+              name="ReferralHistoryList"
+              component={ReferralHistoryList}
+            />
+            <Stack.Screen
+              name="ReferralAddMember"
+              component={ReferralAddMember}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </OrderAddressProvider>
@@ -343,6 +375,12 @@ export default App;
 
 type AppRootParamsList = {
   TransferMoney: undefined | any;
+  ReferralDetailMember: undefined | any;
+  ReferralTeam: any;
+  ReferralEditUser: any;
+  ReferralHistoryList: any;
+  ReferralBookingList: any;
+  ReferralAddMember: any;
 };
 
 declare global {

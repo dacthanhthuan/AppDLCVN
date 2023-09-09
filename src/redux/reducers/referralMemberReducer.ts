@@ -12,6 +12,7 @@ const initialState = {
   memberListNextPage: 1,
 
   updateAddLoading: false,
+  updateAddState: false,
 
   bookingOrderLoading: false,
   bookingOrder: [],
@@ -78,6 +79,7 @@ export default function ReferralMemberReducer(
         ...state,
         message: undefined,
         updateAddLoading: true,
+        updateAddState: false,
       };
     }
 
@@ -86,6 +88,7 @@ export default function ReferralMemberReducer(
         ...state,
         message: undefined,
         updateAddLoading: false,
+        updateAddState: true,
       };
     }
 
@@ -94,6 +97,7 @@ export default function ReferralMemberReducer(
         ...state,
         message: action.payload,
         updateAddLoading: false,
+        updateAddState: false,
       };
     }
 
@@ -153,7 +157,7 @@ export default function ReferralMemberReducer(
         ...state,
         message: undefined,
         historyOrderLoading: false,
-        historyOrder: [...state.historyOrder, action.payload.lItems],
+        historyOrder: [...state.historyOrder, ...action.payload.lItems],
         historyOrderTotal: action.payload.total_record,
         historyOrderCurrent:
           state.historyOrderCurrent + action.payload.lItems.length,

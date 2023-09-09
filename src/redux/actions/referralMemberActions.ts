@@ -1,6 +1,6 @@
 import {REFERRAL_MEMBER} from './types';
 
-type MemberListStartFormData = {
+export type MemberListStartFormData = {
   token: string;
   page: string | number;
   field?: string;
