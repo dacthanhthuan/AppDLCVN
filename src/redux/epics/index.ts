@@ -12,6 +12,7 @@ import walletEpic from './walletEpic';
 import detailMemberEpic from './detailMemberEpic';
 import referralInfoEpic from './referralInfoEpic';
 import referralMemberEpic from './referralMemberEpic';
+import reportCEOEpic from './reportCeoEpic';
 
 const rootEpic = combineEpics(
   initialApiEpic,
@@ -27,6 +28,7 @@ const rootEpic = combineEpics(
   detailMemberEpic,
   referralInfoEpic,
   referralMemberEpic,
+  reportCEOEpic,
 );
 
 export default rootEpic;

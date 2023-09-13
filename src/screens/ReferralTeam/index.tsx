@@ -141,7 +141,8 @@ export default function ReferralTeam() {
   // side effect: initial rendering
   useEffect(() => {
     if (!data.user_id) {
-      if (memberList.length == 0) fetchApiRedux(1);
+      dispatch(ReferralMemberList.clear());
+      fetchApiRedux(1);
     } else {
       fetchScreenData(1);
     }

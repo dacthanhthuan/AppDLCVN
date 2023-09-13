@@ -48,6 +48,9 @@ const referral_member_booking_list =
   '/client_order/members_booking_order?apikey=';
 const referral_member_order_list =
   '/client_order/members_history_order?apikey=';
+const report_ceo_shop_id = '/client_report/list_shop_and_member_group?apikey=';
+const report_ceo_summary = '/report_ceo/summary?apikey=';
+const report_ceo_chart = '/report_ceo/chart?apikey=';
 
 export default {
   base_url,
@@ -83,4 +86,7 @@ export default {
   referral_member_add_or_update,
   referral_member_booking_list,
   referral_member_order_list,
+  report_ceo_summary,
+  report_ceo_chart,
+  report_ceo_shop_id,
 };

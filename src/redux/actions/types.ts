@@ -196,3 +196,19 @@ export enum REFERRAL_MEMBER {
   HISTORY_ORDERED_LIST_END = 'client/referral-member-history-order-list-fail',
   HISTORY_ORDERED_LIST_CLEAR = 'client/referral-member-history-order-list-clear',
 }
+
+export enum REPORT_CEO {
+  SHOP_ID_START = 'clien/report-ceo-shop-id-start',
+  SHOP_ID_END = 'clien/report-ceo-shop-id-end',
+  SHOP_ID_FAIL = 'clien/report-ceo-shop-id-fail',
+
+  SUMMARY_START = 'client/report-ceo-summary-start',
+  SUMMARY_END = 'client/report-ceo-summary-end',
+  SUMMARY_FAIL = 'client/report-ceo-summary-fail',
+  SUMMARY_CLEAR = 'client/report-ceo-summary-clear',
+
+  CHART_START = 'client/report-ceo-chart-start',
+  CHART_END = 'client/report-ceo-chart-end',
+  CHART_FAIL = 'client/report-ceo-chart-fail',
+  CHART_CLEAR = 'client/report-ceo-chart-clear',
+}

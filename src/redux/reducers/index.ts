@@ -14,6 +14,7 @@ import walletReducer from './walletReducer';
 import DetailMemberReducer from './detailMemberReducer';
 import ReferralInfoReducer from './referralInfoRecuder';
 import ReferralMemberReducer from './referralMemberReducer';
+import reportCEOReducer from './reportCEOReducer';
 
 const rootReducer = combineReducers({
   app: AppReducer,
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   detailMember: DetailMemberReducer,
   referral: ReferralInfoReducer,
   referralMember: ReferralMemberReducer,
+  reportCEO: reportCEOReducer,
 });
 
 export default rootReducer;

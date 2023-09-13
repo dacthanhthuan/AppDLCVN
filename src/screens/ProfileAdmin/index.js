@@ -11,7 +11,6 @@ import {
   Platform,
   ToastAndroid,
 } from 'react-native';
-import ReactNativeBiometrics, {BiometryTypes} from 'react-native-biometrics';
 import styles from './styles';
 import InfoCard from '../../component/InfoCard';
 import CardProfile from '../../component/CardProfile';
@@ -22,7 +21,7 @@ import {
   clientClearUserData,
   clientGetDetailUserStart,
 } from '../../redux/actions/userActions';
-import {getData, multiRemoveData, removeData, storeData} from '../../storage';
+import {multiRemoveData, removeData, storeData} from '../../storage';
 import LoadingOverlay from '../../component/LoadingOverlay';
 import {formatPrice, BIOMETRIC, formatPoint, useIsReady} from '../../global';
 import {LOCALSTORAGE} from '../../storage/direct';
@@ -36,7 +35,6 @@ import {
   useNotificationDispatch,
 } from '../../component/NotificationContext/context';
 import {NotificationType} from '../../component/NotificationContext/types';
-import {riseNetworkError} from '../../redux/actions/errorHandlerActions';
 import {WalletReferralList} from '../../redux/actions/walletActions';
 import {
   request,
@@ -54,6 +52,7 @@ const ProfileAdmin = ({navigation}) => {
   const dispatch = useDispatch();
   const notification = useNotificationDispatch();
 
+  const app = useSelector(state => state.app.data);
   const user = useSelector(state => state.user);
   const login = useSelector(state => state.user.login.status);
   const userLoading = useSelector(state => state.user.loading);
@@ -313,17 +312,19 @@ const ProfileAdmin = ({navigation}) => {
         />
         <InfoCard
           image={require('../../assets/Rectangle299.png')}
-          text="Báo cáo doanh số"
+          text="Báo cáo"
           onPress={() => navigation.navigate('TeamThree')}
         />
-        <InfoCard
-          image={require('../../assets/Rectangle299.png')}
-          text="Báo cáo hoa hồng"
-          onPress={() => navigation.navigate('TeamThree')}
-        />
+        {app?.member_title_id_ceo.includes(user.member_title_id) && (
+          <InfoCard
+            image={require('../../assets/Rectangle299.png')}
+            text="Báo cáo CEO"
+            onPress={() => navigation.navigate('ReportCEO')}
+          />
+        )}
         {biometricOption ? (
           <InfoCard
-            image={require('../../assets/Rectangle270.png')}
+            image={require('../../assets/padlock.png')}
             text="Thiết lập đăng nhập"
             onPress={toggleLoginOptions}
           />
@@ -335,7 +336,7 @@ const ProfileAdmin = ({navigation}) => {
           onCancel={toggleLoginOptions}
         />
         <InfoCard
-          image={require('../../assets/Rectangle270.png')}
+          image={require('../../assets/log-out.png')}
           text="Đăng xuất"
           onPress={() => {
             // display notification

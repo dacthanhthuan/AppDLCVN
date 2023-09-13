@@ -6587,6 +6587,11 @@
     "lodash" "^4.17.21"
     "prop-types" "^15.7.2"
 
+"react-native-gifted-charts@^1.3.6":
+  "integrity" "sha512-jU3ikdxltRtpzcxRmCQGuovQ8dWnai8S+xScU0TgMMpfDuyLNHAFOi2Vu//7TPDWwtSWR2sIOHTtJLKJTqrriw=="
+  "resolved" "https://registry.npmjs.org/react-native-gifted-charts/-/react-native-gifted-charts-1.3.6.tgz"
+  "version" "1.3.6"
+
 "react-native-gradle-plugin@^0.71.18":
   "integrity" "sha512-7F6bD7B8Xsn3JllxcwHhFcsl9aHIig47+3eN4IHFNqfLhZr++3ElDrcqfMzugM+niWbaMi7bJ0kAkAL8eCpdWg=="
   "resolved" "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.18.tgz"
@@ -6602,7 +6607,7 @@
   "resolved" "https://registry.npmjs.org/react-native-keyboard-aware-scrollview/-/react-native-keyboard-aware-scrollview-2.1.0.tgz"
   "version" "2.1.0"
 
-"react-native-linear-gradient@^2.8.2":
+"react-native-linear-gradient@*", "react-native-linear-gradient@^2.8.2":
   "integrity" "sha512-hgmCsgzd58WNcDCyPtKrvxsaoETjb/jLGxis/dmU3Aqm2u4ICIduj4ECjbil7B7pm9OnuTkmpwXu08XV2mpg8g=="
   "resolved" "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.2.tgz"
   "version" "2.8.2"
@@ -6715,7 +6720,7 @@
   "resolved" "https://registry.npmjs.org/react-native-splash-screen/-/react-native-splash-screen-3.3.0.tgz"
   "version" "3.3.0"
 
-"react-native-svg@^13.12.0":
+"react-native-svg@*", "react-native-svg@^13.12.0":
   "integrity" "sha512-R+HvWfeps9z87CiXXlqIqr9OGPRKvZ7fCfUkDzDVv8wLMBzwi62sjZfAeCS+FxbVBPJ+xlvA4qfGjQZ7xRTBYw=="
   "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-13.12.0.tgz"
   "version" "13.12.0"

@@ -8,111 +8,76 @@ import Animated, {
 import styles from './styles';
 import {View} from 'react-native';
 import Button from '../../Button';
-import SelectGroup from './SelectGroup';
-import DatePicker from './DatePicker';
+import RowList from './RowList';
 
 type SearchFilterModalProps = {
   visible: boolean;
-  onCloseFilter: () => void;
-  onApplyFilter: (item?: any) => void;
+  onCloseFilter?: () => void;
+  onApplyFilter?: (item?: any) => void;
 };
 
-const types = [
-  {
-    id: 0,
-    value: 'total_spent',
-    name: 'Đã mua',
-  },
-  {
-    id: 1,
-    value: 'total_liabilities',
-    name: 'Công nợ',
-  },
-];
-
-const sorts = [
-  {
-    id: 0,
-    value: 'ASC',
-    name: 'Tăng dần',
-  },
-  {
-    id: 1,
-    value: 'DESC',
-    name: 'Giảm dần',
-  },
-];
+const y = new Date().getFullYear();
+const m = new Date().getMonth();
+const months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const years = [y - 3, y - 2, y - 1, y];
 
 export default memo(function ReferralTeamSearchFilter({
   visible,
   onCloseFilter,
   onApplyFilter,
 }: SearchFilterModalProps) {
-  const [type, setType] = useState(types[0]);
-  const [sort, setSort] = useState(sorts[0]);
-  const [date, setDate] = useState(new Date());
+  const [month, setMonth] = useState(months[m + 1]);
+  const [year, setYear] = useState(y);
   const draft = useRef({
-    sort,
-    type,
-    date,
+    month,
+    year,
   });
 
-  // handle on select type
-  const handleOnSelectType = useCallback((item: any) => {
-    draft.current.type = item;
+  // handle on select year
+  const handleOnSelectYear = useCallback((item: any) => {
+    draft.current.year = item;
   }, []);
 
-  // handle on select sort
-  const handleOnSelectSort = useCallback((item: any) => {
-    draft.current.sort = item;
-  }, []);
-
-  // handle on chosen date
-  const handleOnChooseDate = useCallback((date: Date) => {
-    draft.current.date = date;
+  // handle on select month
+  const handleOnSelectMonth = useCallback((item: any) => {
+    draft.current.month = item;
   }, []);
 
   // handle on apply filter
   const handleOnApplyFilter = useCallback(() => {
-    setType(draft.current.type);
-    setSort(draft.current.sort);
-    setDate(draft.current.date);
+    setMonth(draft.current.month);
+    setYear(draft.current.year);
     if (typeof onApplyFilter == 'function') {
       // callbacks
       onApplyFilter({
-        sort: draft.current.sort.value,
-        type: draft.current.type.value,
-        date: draft.current.date,
+        month: draft.current.month,
+        year: draft.current.year,
       });
     }
-  }, [type, sort, date]);
+  }, [onApplyFilter]);
 
   // handle on 'Xóa' button
   const handleOnDelete = useCallback(() => {
-    setType(types[0]);
-    setSort(sorts[0]);
-    setDate(new Date());
+    setMonth(months[m + 1]);
+    setYear(y);
 
-    draft.current.type = types[0];
-    draft.current.sort = sorts[0];
-    draft.current.date = new Date();
+    draft.current.month = months[m + 1];
+    draft.current.year = y;
 
     if (typeof onApplyFilter == 'function') {
       // callbacks
       onApplyFilter({
-        type: '',
-        sort: '',
-        date: '',
+        month: months[m + 1],
+        year: y,
       });
     }
-  }, []);
+  }, [onApplyFilter]);
 
   // event handle: close filter:
   const handleOnCloseFilter = () => {
     draft.current = {
-      sort,
-      type,
-      date,
+      month,
+      year,
     };
 
     if (typeof onCloseFilter == 'function') {
@@ -144,25 +109,18 @@ export default memo(function ReferralTeamSearchFilter({
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.title}>Chọn kiểu</Text>
-        <SelectGroup
-          data={types}
-          onSelect={handleOnSelectType}
-          defaultId={type.id}
+        <Text style={styles.title}>Tháng</Text>
+        <RowList
+          data={months}
+          defaultSelect={month}
+          onChosen={handleOnSelectMonth}
         />
 
-        <Text style={styles.title}>Sắp xếp theo</Text>
-        <SelectGroup
-          data={sorts}
-          onSelect={handleOnSelectSort}
-          defaultId={sort.id}
-        />
-
-        <Text style={styles.title}>Đăng ký từ ngày</Text>
-        <DatePicker
-          placeholder={'Chọn ngày'}
-          onChangeDate={handleOnChooseDate}
-          defaultDate={date}
+        <Text style={styles.title}>Năm</Text>
+        <RowList
+          data={years}
+          defaultSelect={year}
+          onChosen={handleOnSelectYear}
         />
 
         <Button

@@ -1,2 +1,4 @@
-(Initial API) referral_link_multiple_enabled == 1 ? 'Hiển thị QR code trong chia sẻ' : 'Hiển thị link chia sẻ không có QR code'
-(client Referral) descriptions: hiển thị đầu tiên, referral_link: danh sách hiển thị, render QR bằng uri: render_qrcode + referral_link
+(Initial API) member_title_id_ceo: member id của ceo, nếu member có member_title_id thì hiển thị ra báo cáo CEO, không thì thôi.
+ - gọi api /client_report/list_shop_and_member_group => hiển thị danh sách chi nhánh.
+ - api report ceo summary => truyền shop_id vào tùy vào lựa chọn chi nhánh của người dùng.
+ - api report ceo chart => hiển thị biểu đồ, cao nhất tô màu xanh lá, thấp nhất tô màu đỏ. truyền type vào tùy thuộc vào lựa chọn người dùng, mặc định là month.

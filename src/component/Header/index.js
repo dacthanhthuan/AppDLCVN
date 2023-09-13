@@ -10,6 +10,7 @@ const Header = ({
   containerStyle,
   showCartBadge,
   isWallet = true,
+  iconRightStyle = {},
 }) => {
   return (
     <View style={[styles.container, containerStyle]}>
@@ -20,7 +21,7 @@ const Header = ({
       {iconRight ? (
         <TouchableOpacity onPress={onPressRight} hitSlop={8}>
           <Image
-            style={styles.iconRight}
+            style={[styles.iconRight, iconRightStyle]}
             resizeMode="contain"
             source={iconRight}
           />

@@ -78,6 +78,7 @@ import ReferralEditUser from './src/screens/ReferralEditUser';
 import ReferralBookingList from './src/screens/ReferralBookingList';
 import ReferralHistoryList from './src/screens/ReferralHistoryList';
 import ReferralAddMember from './src/screens/ReferralAddMember';
+import ReportCEO from './src/screens/ReportCEO';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -91,9 +92,9 @@ const App = () => {
             screenOptions={{
               headerShown: false,
               animationTypeForReplace: 'push',
-              gestureEnabled: true,
-              gestureDirection: 'horizontal-inverted',
-              gestureResponseDistance: 35,
+              // gestureEnabled: true,
+              // gestureDirection: 'horizontal-inverted',
+              // gestureResponseDistance: 35,
             }}>
             <Stack.Screen name="MainTab" component={MainTab} />
             <Stack.Screen name="Cart" component={Cart} />
@@ -168,6 +169,7 @@ const App = () => {
               name="ReferralAddMember"
               component={ReferralAddMember}
             />
+            <Stack.Screen name="ReportCEO" component={ReportCEO} />
           </Stack.Navigator>
         </NavigationContainer>
       </OrderAddressProvider>
