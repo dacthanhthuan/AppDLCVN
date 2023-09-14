@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {SafeAreaView, View, Text, FlatList, ToastAndroid} from 'react-native';
 import styles from './styles';
 import ProductCart from '../../component/Cart/ProductCart';
@@ -14,11 +14,16 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import AllCheckBox from '../../component/Cart/AllCheckBoxGroup/AllCheckBox';
 import LoadingOverlay from '../../component/LoadingOverlay';
+import {
+  OrderAddressActions,
+  useOrderAddressDispatch,
+} from '../../component/OrderAddressContext';
 import {riseNormalError} from '../../redux/actions/errorHandlerActions';
+import FixProduct from '../../component/Cart/FixProduct';
 
 /**
  *
- * @returns PointCart Screen
+ * @returns Point Cart screen
  */
 const PointCart = () => {
   const isReady = useIsReady();
@@ -28,34 +33,83 @@ const PointCart = () => {
   const cartData = useSelector(state => state.cart.point);
   const isLogin = useSelector(state => state.user.login.status);
   const allcheck = useAllCheck();
+  const orderAddressDispatch = useOrderAddressDispatch();
 
-  const [totalpoint, setTotalpoint] = useState(0);
-  const [totalDecrementpoint, setTotalDecrementpoint] = useState(0);
+  const [priceAll, setPriceAll] = useState(0);
+  const [importPriceAll, setImportPriceAll] = useState(0);
+  const [profitAll, setProfitAll] = useState(0);
   const [productOrder, setProductOrder] = useState([]);
+  const priceOriginal = useRef();
+  const profitOriginal = useRef();
+
+  const [fixProductVisble, setFixProductVisible] = useState(false);
+  const [fixProduct, setFixProduct] = useState(null);
+
+  // event handler: open fix product layout
+  const handleOpenFixProduct = item => {
+    setFixProductVisible(true);
+
+    setFixProduct(item);
+  };
+
+  // event handler: hide fix product layout
+  const handleCloseFixProduct = useCallback(() => {
+    setFixProductVisible(false);
+  }, []);
+
+  // clear order address when user go to cart
+  useEffect(() => {
+    orderAddressDispatch(OrderAddressActions.clear());
+  }, []);
 
   // price calculate
   useEffect(() => {
     if (cartData.length > 0) {
-      let totalPoint = 0;
-      let totalDecrementPoint = 0;
+      let totalPrice = 0;
+      let totalImportPrice = 0;
+      let totalProfit = 0;
       let products = [];
+      let priceO = 0;
+      let profitO = 0;
 
       allcheck.checkboxs.map(unique => {
-        let product = cartData.at(unique);
-        let decrement = product?.product?.decrement;
-        products.push(product);
+        let p = cartData.at(unique);
 
-        totalPoint +=
-          parseInt(product?.product?.price) * parseInt(product?.quantity);
-        totalDecrementPoint +=
-          parseInt(product?.product?.price) *
-          parseInt(product?.quantity) *
-          ((100 - parseInt(decrement)) / 100);
+        const decrementInCart = p?.decrementInCart
+          ? parseFloat(p?.decrementInCart)
+          : 0;
+
+        const importPrice =
+          parseFloat(p?.product?.price) -
+          parseFloat(p?.product?.price) *
+            (parseFloat(p?.product?.decrement) / 100);
+
+        const price = p?.priceInCart
+          ? parseFloat(p?.priceInCart) -
+            parseFloat(p?.priceInCart) * (decrementInCart / 100)
+          : parseFloat(p?.product?.price);
+
+        const profit = price - importPrice;
+        const qty = parseFloat(p?.quantity);
+
+        products.push(p);
+
+        totalPrice += price * qty;
+        totalImportPrice += importPrice * qty;
+        totalProfit += profit * qty;
+        priceO += parseFloat(p?.product?.price) * qty;
+        profitO +=
+          parseFloat(p?.product?.price) *
+          (parseFloat(p?.product?.decrement) / 100) *
+          qty;
       });
 
-      setTotalpoint(totalPoint);
-      setTotalDecrementpoint(totalDecrementPoint);
       setProductOrder(products);
+      setPriceAll(totalPrice);
+      setImportPriceAll(totalImportPrice);
+      setProfitAll(totalProfit);
+      priceOriginal.current = priceO;
+      profitOriginal.current = profitO;
     }
   }, [allcheck.checkboxs, cartData]);
 
@@ -77,8 +131,14 @@ const PointCart = () => {
 
       <FlatList
         data={cartData}
-        style={{marginTop: 35}}
-        renderItem={RenderItem}
+        style={{marginTop: 10}}
+        renderItem={({item, index}) => (
+          <ProductCart
+            item={item}
+            index={index}
+            onFixPress={() => handleOpenFixProduct(item)}
+          />
+        )}
         removeClippedSubviews
         showsVerticalScrollIndicator={false}
         getItemLayout={(_, index) => {
@@ -86,57 +146,73 @@ const PointCart = () => {
         }}
         initialNumToRender={6}
         windowSize={11}
-        keyExtractor={(item, index) => item.product.product_id + index}
+        keyExtractor={item => item.product.product_id}
       />
+
+      <View style={styles.listFooterView}>
+        <View style={styles.listFooterItem}>
+          <Text style={styles.listFooterHeader}>Thông tin đơn hàng</Text>
+        </View>
+        <View style={styles.listFooterItem}>
+          <Text style={styles.listFooterLabel}>Tổng giá nhập</Text>
+          <Text style={styles.listFooterPrice}>
+            {formatPoint(importPriceAll)}
+          </Text>
+        </View>
+        <View style={styles.listFooterItem}>
+          <Text style={styles.listFooterLabel}>Tổng giá bán</Text>
+          <Text style={styles.listFooterPrice}>{formatPoint(priceAll)}</Text>
+        </View>
+        <View style={styles.listFooterItem}>
+          <Text style={styles.listFooterLabel}>Tổng lợi nhuận</Text>
+          <Text style={styles.listFooterProfit}>{formatPoint(profitAll)}</Text>
+        </View>
+      </View>
 
       <View
         style={{
           width: '100%',
           flexDirection: 'row',
-          alignItems: 'center',
+          alignItems: 'flex-end',
           justifyContent: 'space-between',
         }}>
         <AllCheckBox dataLength={cartData.length} text={'Chọn tất cả'} />
-
-        <View style={{flexDirection: 'column', alignItems: 'flex-end'}}>
-          <Text style={{fontSize: 13, color: '#000000'}}>Tổng giá bán</Text>
-          <Text
-            style={{
-              fontSize: 16,
-              color: 'green',
-              fontWeight: '500',
-            }}>
-            {formatPoint(totalDecrementpoint)}
-          </Text>
-        </View>
+        <Button
+          text="Tạo đơn"
+          style={styles.button}
+          onPress={() =>
+            isLogin && productOrder.length > 0
+              ? navigation.navigate('CreateOrder', {
+                  products: productOrder,
+                  type: 'point_payment',
+                  totalPrices: priceAll,
+                  totalProfit: profitAll,
+                  totalImportPrice: importPriceAll,
+                  totalPriceOriginal: priceOriginal.current,
+                  totalProfitOriginal: profitOriginal.current,
+                })
+              : productOrder.length == 0
+              ? dispatch(
+                  riseNormalError({
+                    duration: 2000,
+                    message: 'Chưa chọn mặt hàng cần thanh toán.',
+                  }),
+                )
+              : navigation.navigate('Login')
+          }
+        />
       </View>
-      <Button
-        text="Tạo đơn"
-        onPress={() =>
-          isLogin && productOrder.length > 0
-            ? navigation.navigate('CreateOrder', {
-                products: productOrder,
-                totalPoint: totalpoint,
-                totalDecrementPoint: totalDecrementpoint,
-                type: 'point_payment',
-              })
-            : productOrder.length == 0
-            ? dispatch(
-                riseNormalError({
-                  duration: 2000,
-                  message: 'Chưa chọn mặt hàng cần thanh toán.',
-                }),
-              )
-            : navigation.navigate('Login')
-        }
-      />
+
+      {fixProductVisble && (
+        <FixProduct
+          visible={fixProductVisble}
+          onCloseFilter={handleCloseFixProduct}
+          item={fixProduct}
+        />
+      )}
     </SafeAreaView>
   );
 };
-
-function RenderItem({item, index}) {
-  return <ProductCart item={item} index={index} />;
-}
 
 function WrapperCart() {
   return (

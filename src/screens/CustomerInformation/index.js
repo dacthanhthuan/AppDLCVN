@@ -31,10 +31,11 @@ const CustomerInformation = () => {
   const {
     ship_location_id,
     products,
-    totalPoint,
     totalPrices,
-    totalDecrementPrices,
-    totalDecrementPoint,
+    totalProfit,
+    totalImportPrice,
+    totalPriceOriginal,
+    totalProfitOriginal,
     type,
   } = route.params || {};
 
@@ -57,10 +58,11 @@ const CustomerInformation = () => {
           if (go_back) {
             navigation.navigate('CreateOrder', {
               products,
-              totalPoint,
               totalPrices,
-              totalDecrementPrices,
-              totalDecrementPoint,
+              totalProfit,
+              totalImportPrice,
+              totalPriceOriginal,
+              totalProfitOriginal,
               type,
             });
 

@@ -1,4 +1,23 @@
-(Initial API) member_title_id_ceo: member id của ceo, nếu member có member_title_id thì hiển thị ra báo cáo CEO, không thì thôi.
- - gọi api /client_report/list_shop_and_member_group => hiển thị danh sách chi nhánh.
- - api report ceo summary => truyền shop_id vào tùy vào lựa chọn chi nhánh của người dùng.
- - api report ceo chart => hiển thị biểu đồ, cao nhất tô màu xanh lá, thấp nhất tô màu đỏ. truyền type vào tùy thuộc vào lựa chọn người dùng, mặc định là month.
+trong products:
+	thiết kế layout từ trên xuống dưới.
+	- Giá giảm: sales (nếu sales > 0).
+	- Giá bán: price.
+	- Điểm tích lũy: cashback_point (nếu cashback_point > 0).
+	- Lợi nhuận: decrement (%), tính giá lợi nhuận bằng price * decrement/100 (nếu decrement > 0).
+
+trong giỏ hàng:
+	Mỗi một sản phẩm:
+		- Hiển thị giá gốc từ NXS là bằng (Giá nhập): price - price * decrement/100
+		- Hiển thị giá bán cho khách hàng (Giá bán): price
+		- Cho phép sửa giá bán cho khách hàng.
+
+	Tổng lợi nhuận sẽ bằng tổng giá bán - tổng giá nhập
+
+Thông tin nhận hàng: 
+	Thông tin xuất: thông tin xuất cho khách hàng
+
+	Thông tin đơn hàng: thông tin cho bản thân
+		-Tổng tiền hàng: tổng tiền hàng giá bán.
+		-Lợi nhuận: lợi nhuận nếu mua bằng bán với giá bán
+		-Lợi nhuận đơn hàng: lợi nhuận nếu bán với giá cao hơn
+		-Tổng thành tiền: tổng thành tiền giá bán của nhà sản xuất.

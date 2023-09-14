@@ -166,6 +166,47 @@ export default function CartReducer(state = initialState, action: AnyAction) {
         point: going_type == 'point' ? filterData : state.point,
       };
 
+    // udpate product in cart (change quantity, price, and decrement)
+    case CART.UPDATE: {
+      const payload = action.payload.data;
+      const cartData = going_type == 'money' ? state.wallet : state.point;
+
+      filterData = cartData.map((item: any) => {
+        // if product id == going_product id
+        if (item?.product?.product_id == going_product_id) {
+          return {
+            ...item,
+            ...payload,
+          };
+        } else {
+          // return item
+          return item;
+        }
+      });
+
+      // store local data
+      getData(LOCALSTORAGE.cart, (err, res) => {
+        let data = JSON.parse(res!);
+        if (going_type == 'money') {
+          storeData(LOCALSTORAGE.cart, {
+            wallet: filterData,
+            point: data?.point,
+          });
+        } else {
+          storeData(LOCALSTORAGE.cart, {
+            wallet: data?.wallet,
+            point: filterData,
+          });
+        }
+      });
+
+      return {
+        ...state,
+        wallet: going_type == 'money' ? filterData : state.wallet,
+        point: going_type == 'point' ? filterData : state.point,
+      };
+    }
+
     case CART.REMOVE_ALL:
       return initialState;
 

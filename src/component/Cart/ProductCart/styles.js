@@ -3,14 +3,11 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '96%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     marginTop: 10,
     marginBottom: 6,
-    paddingHorizontal: 6,
-    height: 80,
   },
   rightContainer: {
     marginLeft: 12,
@@ -30,22 +27,23 @@ const styles = StyleSheet.create({
     shadowRadius: 5.46,
     // Android
     elevation: 4,
+    width: '90%',
   },
   image: {
-    width: 64,
-    height: 64,
+    width: 80,
+    height: 80,
   },
   rightCard: {
     flexDirection: 'column',
     flex: 1,
     justifyContent: 'center',
     marginLeft: 8,
+    gap: 5,
   },
   title: {
-    width: 214,
     fontSize: 13,
+    textTransform: 'uppercase',
     color: '#000000',
-    paddingVertical: 10,
   },
   id: {
     fontSize: 13,
@@ -62,7 +60,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   rowSL: {
     flexDirection: 'row',
@@ -72,24 +70,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 4,
     paddingHorizontal: 8,
+    width: '50%',
   },
   buttonSL: {
     color: '#FFFFFF',
-    marginHorizontal: 4,
-    paddingHorizontal: 3,
+    paddingHorizontal: 10,
   },
   decrementBadge: {
-    width: 50,
-    backgroundColor: 'red',
+    paddingHorizontal: 10,
+    backgroundColor: '#BB2525',
     color: 'white',
     borderRadius: 5,
-    position: 'absolute',
-    right: 10,
-    top: 5,
     textAlign: 'center',
     verticalAlign: 'middle',
     zIndex: 1,
     fontSize: 13,
+    left: 5,
   },
 
   stroke_line: {
@@ -104,6 +100,17 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     maxWidth: 80,
     flexWrap: 'wrap',
+  },
+
+  fixButton: {
+    left: 20,
+    width: '25%',
+    alignItems: 'center',
+  },
+
+  fixLabel: {
+    fontWeight: '500',
+    color: '#252B48',
   },
 });
 

@@ -1,4 +1,9 @@
-import {WINDOW_WIDTH, WINDOW_HEIGHT, formatPrice} from '../../global';
+import {
+  WINDOW_WIDTH,
+  WINDOW_HEIGHT,
+  formatPrice,
+  formatDecimal,
+} from '../../global';
 import {memo} from 'react';
 import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -12,12 +17,15 @@ const Product = ({item}) => {
   const goToDetailProduct = () => {
     navigation.navigate('DetailProduct', {product: item, type: 'money'});
   };
-  const decrement = item.decrement != 0 ? item.decrement : undefined;
+
+  const sales = formatPrice(item?.sales);
   const price = formatPrice(item?.price);
-  const priceDecrement = formatPrice(
-    parseInt(item?.price) * ((100 - parseInt(decrement)) / 100),
+  const profit = formatPrice(
+    parseInt(item?.price) * (parseInt(item?.decrement) / 100),
   );
-  const commission = formatPrice(item?.commission_vnd);
+  const caschback = formatDecimal.format(
+    parseFloat(item?.cashback_point).toFixed(2),
+  );
 
   return (
     <View style={[styles.renderItem]}>
@@ -27,10 +35,6 @@ const Product = ({item}) => {
           styles.renderPressable,
           pressed ? {opacity: 0.8} : null,
         ]}>
-        {decrement ? (
-          <Text style={styles.decrementBadge}>-{decrement}%</Text>
-        ) : null}
-
         <Image
           source={
             item?.img_1
@@ -44,30 +48,29 @@ const Product = ({item}) => {
         <Text style={styles.renderTitle} numberOfLines={1}>
           {item?.product_name}
         </Text>
-        {/* 
-        <Text style={styles.renderProductId} numberOfLines={1}>
-          {item?.product_id}
-        </Text> */}
 
-        <Text style={styles.renderProductId} numberOfLines={1}>
-          Giá bán:{' '}
-          <Text
-            style={[styles.renderPrice, decrement ? styles.stroke_text : null]}>
-            {price}
+        {item?.sales != 0 && (
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Giá gốc: <Text style={[styles.renderDecrement]}>{sales}</Text>
           </Text>
-        </Text>
+        )}
 
         <Text style={styles.renderProductId} numberOfLines={1}>
-          {decrement ? (
-            <Text style={styles.renderDecrement}>Sale: {priceDecrement}</Text>
-          ) : (
-            ''
-          )}
+          Giá bán: <Text style={[styles.renderPrice]}>{price}</Text>
         </Text>
 
-        {/* <Text style={styles.renderProductId} numberOfLines={1}>
-          Hoa hồng: <Text style={styles.renderCommission}>{commission}</Text>
-        </Text> */}
+        {item?.decrement != 0 && (
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Lợi nhuận: <Text style={styles.renderProfit}>{profit}</Text>
+          </Text>
+        )}
+
+        {item?.cashback_point != 0 && (
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Tích điểm: <Text style={styles.renderCommission}>{caschback}</Text>
+          </Text>
+        )}
+
         <Pressable
           style={({pressed}) => [
             styles.addToCartContainer,
@@ -96,7 +99,7 @@ export default memo(Product, (pre, next) => {
 const styles = StyleSheet.create({
   renderItem: {
     width: (WINDOW_WIDTH * 0.94) / 2,
-    height: 250,
+    height: 280,
     justifyContent: 'center',
   },
 
@@ -132,29 +135,27 @@ const styles = StyleSheet.create({
   },
 
   renderPrice: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#005AA9',
     fontWeight: '500',
   },
 
   renderCommission: {
     fontSize: 13,
-    color: '#19A538',
+    color: '#1A5D1A',
+    fontWeight: '500',
+  },
+
+  renderProfit: {
+    fontSize: 13,
+    color: '#141E46',
     fontWeight: '500',
   },
 
   renderDecrement: {
-    fontSize: 15,
+    fontSize: 13,
     color: 'red',
-    fontWeight: '500',
-  },
-
-  stroke_text: {
     textDecorationLine: 'line-through',
-    paddingVertical: '1%',
-    fontSize: 14,
-    paddingVertical: 8,
-    color: '#005AA9',
     fontWeight: '500',
   },
 

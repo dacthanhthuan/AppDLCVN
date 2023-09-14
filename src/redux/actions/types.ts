@@ -41,6 +41,7 @@ export enum CART {
   CHANGE_QTY = 'Cart_Change_Quantity',
   MERGE = 'Cart_Merge',
   REMOVE_ALL = 'Cart_Remove_All',
+  UPDATE = 'Cart_Update',
 }
 
 export enum SEARCH_RECENT {

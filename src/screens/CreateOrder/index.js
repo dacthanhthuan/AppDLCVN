@@ -24,10 +24,11 @@ const CreateOrder = ({route}) => {
 
   const {
     products,
-    totalPoint,
     totalPrices,
-    totalDecrementPrices,
-    totalDecrementPoint,
+    totalProfit,
+    totalImportPrice,
+    totalPriceOriginal,
+    totalProfitOriginal,
     type,
   } = route?.params || {};
 
@@ -67,16 +68,20 @@ const CreateOrder = ({route}) => {
   };
 
   const render_item = useCallback(({item}) => {
-    const decrement =
-      item?.product.decrement != 0 ? item?.product.decrement : undefined;
-    const decrementPrice =
-      parseInt(item?.product.price) * ((100 - parseInt(decrement)) / 100);
+    const decrementInCart = item?.decrementInCart
+      ? parseFloat(item?.decrementInCart)
+      : 0;
+    const price = item?.priceInCart
+      ? parseFloat(item?.priceInCart) -
+        parseFloat(item?.priceInCart) * (decrementInCart / 100)
+      : parseFloat(item?.product?.price);
+    const profit =
+      parseFloat(item?.product?.price) *
+      (parseFloat(item?.product?.decrement) / 100);
+    const importPrice = parseFloat(item?.product?.price) - profit;
 
     return (
       <View style={styles.flatlist}>
-        {decrement ? (
-          <Text style={styles.decrementBadge}>-{decrement}%</Text>
-        ) : null}
         <Image
           style={{width: 80, height: 80}}
           source={
@@ -89,25 +94,25 @@ const CreateOrder = ({route}) => {
           <Text style={[styles.text_1]} numberOfLines={2}>
             {item.product.product_name}
           </Text>
-          <Text
-            style={[
-              styles.text_2,
-              item.pType === 'point' ? {color: 'green'} : null,
-              decrement ? styles.stroke_line : null,
-            ]}>
-            Giá bán:{' '}
+          <Text style={[styles.text_2]}>
+            Giá nhập:{' '}
             {item.pType === 'money'
-              ? formatPrice(item.product.price)
-              : formatPoint(item.product.price)}
+              ? formatPrice(importPrice)
+              : formatPoint(importPrice)}
           </Text>
-          {decrement ? (
-            <Text style={[styles.decrementPrice]}>
+          <View style={styles.priceView}>
+            <Text style={[styles.text_2]}>
               Giá bán:{' '}
-              {item.pType === 'money'
-                ? formatPrice(decrementPrice)
-                : formatPoint(decrementPrice)}
+              <Text style={styles.price}>
+                {item.pType === 'money'
+                  ? formatPrice(price)
+                  : formatPoint(price)}
+              </Text>
             </Text>
-          ) : null}
+            {decrementInCart != 0 && (
+              <Text style={styles.decrementBadge}>-{decrementInCart}%</Text>
+            )}
+          </View>
           <Text style={styles.text_3}>Số lượng: {item.quantity}</Text>
         </View>
       </View>
@@ -152,19 +157,22 @@ const CreateOrder = ({route}) => {
                         goback: true,
                         ship_location_id: ship_location?.id,
                         products,
-                        totalPoint,
                         totalPrices,
-                        totalDecrementPrices,
-                        totalDecrementPoint,
+                        totalProfit,
+                        totalImportPrice,
+                        totalPriceOriginal,
+                        totalProfitOriginal,
                         type,
                       })
                     }
                     hitSlop={10}>
-                    <Text style={styles.text_2}>Thay đổi</Text>
+                    <Text style={[styles.text_2, {color: '#005aa9'}]}>
+                      Thay đổi
+                    </Text>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.view_2}>
-                  <Text style={styles.text_2}>{ship_name}</Text>
+                  <Text style={styles.name}>{ship_name}</Text>
                   <Text style={styles.text_3}>{ship_mobile}</Text>
                   <Text style={styles.text_3}>{ship_address}</Text>
                 </View>
@@ -212,60 +220,116 @@ const CreateOrder = ({route}) => {
               </View>
             </View>
             <Line />
-            <View style={{flexDirection: 'row'}}>
+
+            <View style={{flexDirection: 'row', gap: 10}}>
               <Image
                 style={styles.icon}
-                source={require('../../assets/imgOder/Rectangle_230.png')}
+                source={require('../../assets/packingnote.png')}
               />
-              <View style={{width: '85%', marginLeft: 20}}>
-                <Text style={styles.title_1}>Thông tin sản phẩm</Text>
-                <TextViewRow
-                  title="Tổng tiền hàng:"
-                  price={
-                    type == 'money_payment'
-                      ? formatPrice(totalPrices)
-                      : undefined
-                  }
-                  point={
-                    type == 'point_payment'
-                      ? formatPoint(totalPoint)
-                      : undefined
-                  }
-                />
-                <Line />
-                <TextViewRow title="Phí vận chuyển:" between="Freeship" />
-                <Line />
-                <TextViewRow
-                  title="Tổng giảm giá:"
-                  price={
-                    type == 'money_payment'
-                      ? formatPrice(totalPrices - totalDecrementPrices)
-                      : formatPoint(totalPoint - totalDecrementPoint)
-                  }
-                  priceStyle={{color: 'red'}}
-                />
-                <Line />
-                <TextViewRow
-                  title="Tổng số tiền cần thanh toán:"
-                  price={
-                    type == 'money_payment'
-                      ? formatPrice(totalDecrementPrices)
-                      : undefined
-                  }
-                  point={
-                    type == 'point_payment'
-                      ? formatPoint(totalDecrementPoint)
-                      : undefined
-                  }
-                />
-              </View>
+              <Text style={styles.title_1}>Thông tin xuất bán</Text>
             </View>
+            <View style={{marginLeft: 15}}>
+              <TextViewRow
+                title="Tổng tiền hàng:"
+                price={
+                  type == 'money_payment'
+                    ? formatPrice(totalPrices)
+                    : formatPoint(totalPrices)
+                }
+                priceStyle={{color: 'black', fontWeight: '400'}}
+              />
+              <TextViewRow title="Phí vận chuyển:" between="Freeship" />
+              <TextViewRow
+                title="Tổng thành tiền:"
+                price={
+                  type == 'money_payment'
+                    ? formatPrice(totalPrices)
+                    : formatPoint(totalPrices)
+                }
+                priceStyle={{color: 'black', fontWeight: '400'}}
+              />
+              <TextViewRow
+                title="Tổng số tiền cần thanh toán:"
+                price={
+                  type == 'money_payment'
+                    ? formatPrice(totalPrices)
+                    : formatPoint(totalPrices)
+                }
+                titleStyle={{fontSize: 16, fontWeight: '500'}}
+                priceStyle={{fontSize: 16, color: '#12aa34', fontWeight: '500'}}
+              />
+            </View>
+
+            <Line />
+            <View style={{flexDirection: 'row', gap: 10}}>
+              <Image
+                style={styles.icon}
+                source={require('../../assets/ordernote.png')}
+              />
+              <Text style={styles.title_1}>Thông tin đơn hàng</Text>
+            </View>
+            <View style={{marginLeft: 15}}>
+              <TextViewRow
+                title="Tổng tiền hàng:"
+                price={
+                  type == 'money_payment'
+                    ? formatPrice(totalPriceOriginal)
+                    : formatPoint(totalPriceOriginal)
+                }
+                priceStyle={{color: 'black', fontWeight: '400'}}
+              />
+              <TextViewRow
+                title="Lợi nhuận:"
+                price={
+                  type == 'money_payment'
+                    ? formatPrice(totalProfitOriginal)
+                    : formatPoint(totalProfitOriginal)
+                }
+                priceStyle={{color: '#005aa9', fontWeight: '500'}}
+              />
+              <TextViewRow
+                title="Lợi nhuận đơn hàng:"
+                price={
+                  type == 'money_payment'
+                    ? formatPrice(totalProfit)
+                    : formatPoint(totalProfit)
+                }
+                priceStyle={{color: '#005aa9', fontWeight: '500'}}
+              />
+              <TextViewRow
+                title="Phí giao hàng:"
+                price={
+                  type == 'money_payment' ? formatPrice(0) : formatPoint(0)
+                }
+                priceStyle={{color: 'black', fontWeight: '400'}}
+              />
+              <TextViewRow
+                title="Tổng thành tiền:"
+                price={
+                  type == 'money_payment'
+                    ? formatPrice(totalImportPrice)
+                    : formatPoint(totalImportPrice)
+                }
+                priceStyle={{color: 'black', fontWeight: '400'}}
+              />
+              <TextViewRow
+                title="Số tiền thanh toán:"
+                price={
+                  type == 'money_payment'
+                    ? formatPrice(totalImportPrice)
+                    : formatPoint(totalImportPrice)
+                }
+                titleStyle={{fontSize: 16, fontWeight: '500'}}
+                priceStyle={{fontSize: 16, color: '#12aa34', fontWeight: '500'}}
+              />
+            </View>
+
             <View
               style={{
                 flex: 1,
                 paddingLeft: 30,
                 paddingRight: 30,
-                marginTop: 50,
+                marginTop: 20,
               }}>
               <Button
                 onPress={() =>

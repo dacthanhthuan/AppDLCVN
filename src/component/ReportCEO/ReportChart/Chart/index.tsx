@@ -78,12 +78,13 @@ const RPChart = memo(
             xAxisLabelTextStyle={styles.chartXAxisText}
             hideOrigin={true}
             xAxisColor={'#005aa9'}
-            capColor={'black'}
             barBorderTopLeftRadius={10}
             barBorderTopRightRadius={10}
             renderTooltip={(item: any) => <ChartToolTip item={item} />}
             onPress={handleOnPress}
             scrollToIndex={chartData.length - 1}
+            isAnimated
+            animationDuration={300}
           />
         )}
 

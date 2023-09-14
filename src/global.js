@@ -23,7 +23,7 @@ export const formatPrice = value => {
 
 export const formatPoint = value => {
   if (typeof value == 'string') value = parseInt(value);
-  return formatDecimal.format(value) + ' Point';
+  return formatDecimal.format(value) + ' PV';
 };
 
 export const nomarlizeVietNamese = str => {

@@ -35,3 +35,22 @@ export const changeProductQuantity = (data: RCProductFromCartData) => ({
 export const removeAllCartProduct = {
   type: CART.REMOVE_ALL,
 };
+
+type DataCanUpdate = {
+  quantity: number;
+  priceInCart: number;
+  decrementInCart: number;
+};
+
+export const updateProductCart = (
+  data: DataCanUpdate,
+  productId: string,
+  pType: string,
+) => ({
+  type: CART.UPDATE,
+  payload: {
+    data,
+    productId,
+    pType,
+  },
+});

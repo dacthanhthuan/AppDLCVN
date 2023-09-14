@@ -14,17 +14,25 @@ import {
   useDispatchAllCheck,
   AllCheckActions,
 } from '../AllCheckBoxGroup/context';
+import {TouchableOpacity} from 'react-native';
 
-const ProductCart = ({item, index, debounceTime = 400}) => {
+const ProductCart = ({item, index, debounceTime = 400, onFixPress}) => {
   const [qty, setQty] = useState(item?.quantity);
   const [initialRender, setInitialRender] = useState(true);
   const dispatch = useDispatch();
   const allcheckDispatch = useDispatchAllCheck();
 
-  const decrement =
-    item.product.decrement != 0 ? item.product.decrement : undefined;
-  const decrementPrice =
-    parseInt(item.product.price) * ((100 - parseInt(decrement)) / 100);
+  const decrementInCart = item?.decrementInCart
+    ? parseFloat(item?.decrementInCart)
+    : 0;
+  const price = item?.priceInCart
+    ? parseFloat(item?.priceInCart) -
+      parseFloat(item?.priceInCart) * (decrementInCart / 100)
+    : parseFloat(item?.product?.price);
+  const profit =
+    parseFloat(item?.product?.price) *
+    (parseFloat(item?.product?.decrement) / 100);
+  const importPrice = parseFloat(item?.product?.price) - profit;
 
   // debouce when user change quantity is fast
   let quantityDebounceTimer;
@@ -62,6 +70,10 @@ const ProductCart = ({item, index, debounceTime = 400}) => {
     setInitialRender(false);
   }, [qty]);
 
+  useEffect(() => {
+    setQty(item.quantity);
+  }, [item]);
+
   return qty < 1 ? null : (
     <Swipeable
       childrenContainerStyle={styles.container}
@@ -80,60 +92,81 @@ const ProductCart = ({item, index, debounceTime = 400}) => {
           }}
         />
       )}>
-      <CheckBoxInFlatList index={index} />
-      <View style={styles.rightContainer}>
-        {decrement ? (
-          <Text style={styles.decrementBadge}>-{decrement}%</Text>
-        ) : null}
-        <Image
-          style={styles.image}
-          source={
-            item?.product?.img_1
-              ? {uri: item?.product?.img_1}
-              : require('../../../assets/noimage.png')
-          }
-        />
-        <View style={styles.rightCard}>
-          <Text style={styles.title} numberOfLines={1}>
-            {item?.product?.product_name}
-          </Text>
-          <View style={styles.rowPriceSL}>
-            <Text style={[styles.price, decrement ? styles.stroke_line : null]}>
-              {item?.pType === 'point'
-                ? formatPoint(item?.product.price)
-                : formatPrice(item?.product.price)}
+      <CheckBoxInFlatList index={index}>
+        <View style={styles.rightContainer}>
+          <Image
+            style={styles.image}
+            source={
+              item?.product?.img_1
+                ? {uri: item?.product?.img_1}
+                : require('../../../assets/noimage.png')
+            }
+          />
+
+          <View style={styles.rightCard}>
+            <Text style={styles.title} numberOfLines={2}>
+              {item?.product?.product_name}
             </Text>
-            {decrement ? (
-              <Text style={styles.decrementPrice}>
+
+            <Text>
+              Giá nhập:{' '}
+              <Text>
                 {item?.pType === 'point'
-                  ? formatPoint(decrementPrice)
-                  : formatPrice(decrementPrice)}
+                  ? formatPoint(importPrice)
+                  : formatPrice(importPrice)}
               </Text>
-            ) : null}
-            <View style={styles.rowSL}>
-              <Pressable
+            </Text>
+
+            <View style={styles.rowPriceSL}>
+              <Text>
+                Giá bán:{' '}
+                <Text style={styles.price}>
+                  {item?.pType === 'point'
+                    ? formatPoint(price)
+                    : formatPrice(price)}
+                </Text>
+              </Text>
+              {item.decrementInCart != 0 &&
+                item.decrementInCart != undefined && (
+                  <Text style={styles.decrementBadge}>
+                    -{item.decrementInCart}%
+                  </Text>
+                )}
+            </View>
+
+            <View style={styles.rowPriceSL}>
+              <View style={styles.rowSL}>
+                <Pressable
+                  hitSlop={10}
+                  onPress={() => {
+                    setQty(qty => qty - 1);
+                  }}>
+                  <Text style={styles.buttonSL}>-</Text>
+                </Pressable>
+                <Text style={styles.buttonSL}>{qty}</Text>
+                <Pressable
+                  hitSlop={10}
+                  onPress={() => {
+                    setQty(qty => qty + 1);
+                  }}>
+                  <Text style={styles.buttonSL}>+</Text>
+                </Pressable>
+              </View>
+
+              <TouchableOpacity
+                style={styles.fixButton}
                 hitSlop={10}
-                onPress={() => {
-                  setQty(qty => qty - 1);
-                }}>
-                <Text style={styles.buttonSL}>-</Text>
-              </Pressable>
-              <Text style={styles.buttonSL}>{qty}</Text>
-              <Pressable
-                hitSlop={10}
-                onPress={() => {
-                  setQty(qty => qty + 1);
-                }}>
-                <Text style={styles.buttonSL}>+</Text>
-              </Pressable>
+                onPress={onFixPress}>
+                <Text style={styles.fixLabel}>Sửa</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
-      </View>
+      </CheckBoxInFlatList>
     </Swipeable>
   );
 };
 
 export default React.memo(ProductCart, (pre, next) => {
-  return JSON.stringify(pre.item) === JSON.stringify(next.item);
+  return JSON.stringify(pre) === JSON.stringify(next);
 });

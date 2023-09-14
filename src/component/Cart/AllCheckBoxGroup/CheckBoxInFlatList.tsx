@@ -1,4 +1,4 @@
-import React, {memo, useEffect} from 'react';
+import React, {ReactNode, memo, useEffect} from 'react';
 import {ViewStyle} from 'react-native';
 import {
   Pressable,
@@ -17,6 +17,7 @@ type CheckboxType = {
   textStyle?: StyleProp<TextStyle>;
   disable?: boolean;
   index?: number;
+  children?: any;
 };
 
 const CheckboxInFlatList = ({
@@ -26,6 +27,7 @@ const CheckboxInFlatList = ({
   textStyle,
   disable,
   index,
+  children,
 }: CheckboxType) => {
   // state check of checkbox
   const [checked, setChecked] = React.useState(false);
@@ -65,21 +67,18 @@ const CheckboxInFlatList = ({
         style={[styles.container, checked ? styles.checkedBox : inactiveStyle]}>
         {checked ? <View style={styles.innerSquare} /> : null}
       </View>
+      {children}
       {text ? <Text style={[styles.text, textStyle]}>{text}</Text> : null}
     </Pressable>
   );
 };
 
-export default memo(CheckboxInFlatList, (pre, next) => {
-  return JSON.stringify(pre) === JSON.stringify(next);
-});
+export default CheckboxInFlatList;
 
 const styles = StyleSheet.create({
   pressable: {
     flexDirection: 'row',
-    height: 40,
-    width: 40,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
 
