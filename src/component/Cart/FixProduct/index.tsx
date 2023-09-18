@@ -29,7 +29,11 @@ export default memo(function ({visible, onCloseFilter, item}: FixProductProps) {
   const dispatch = useDispatch();
 
   const [quantity, setQuantity] = useState(item.quantity);
-  const [price, setPrice] = useState<any>(parseFloat(item.priceInCart) | 0);
+  const [price, setPrice] = useState<any>(
+    item.priceInCart > 0
+      ? parseFloat(item.priceInCart)
+      : parseFloat(item.product.price),
+  );
   const [decrement, setDecrement] = useState<any>(
     parseFloat(item.decrementInCart) | 0,
   );
@@ -42,7 +46,13 @@ export default memo(function ({visible, onCloseFilter, item}: FixProductProps) {
 
   // handle on apply filter
   const handleOnApplyFilter = useCallback(() => {
-    if (price < lowestPrice && price != 0 && price != null) {
+    const tempPrice =
+      price == 0 || price == null ? parseFloat(item.product.price) : price;
+    const tempDecrement = decrement == null ? 0 : decrement;
+
+    const tempSell = tempPrice * ((100 - tempDecrement) / 100);
+
+    if (tempSell < lowestPrice) {
       xValue.value = withSequence(
         withRepeat(
           withSequence(
@@ -57,14 +67,12 @@ export default memo(function ({visible, onCloseFilter, item}: FixProductProps) {
 
       colorValue.value = withTiming(1, {duration: 100});
     } else {
-      const decrementIC = !price ? 0 : !decrement ? 0 : decrement;
-
       dispatch(
         updateProductCart(
           {
             quantity: quantity,
-            priceInCart: price,
-            decrementInCart: decrementIC,
+            priceInCart: tempPrice,
+            decrementInCart: tempDecrement,
           },
           item.product.product_id,
           item.pType,
@@ -133,8 +141,9 @@ export default memo(function ({visible, onCloseFilter, item}: FixProductProps) {
         <FixProductRowItem label={'Số lượng'}>
           <View style={styles.quantityChange}>
             <TouchableOpacity
+              disabled={quantity == 0}
               hitSlop={10}
-              onPress={() => setQuantity((q: number) => q - 1)}>
+              onPress={() => setQuantity((q: number) => (q > 0 ? q - 1 : 0))}>
               <Text style={styles.quantityChangeText}>-</Text>
             </TouchableOpacity>
 
@@ -168,7 +177,7 @@ export default memo(function ({visible, onCloseFilter, item}: FixProductProps) {
             style={styles.input}
             suffix="%"
             delimiter={'.'}
-            precision={3}
+            precision={0}
             minValue={0}
             maxValue={100}
             placeholder="%"

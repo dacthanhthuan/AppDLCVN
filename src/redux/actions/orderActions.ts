@@ -12,6 +12,8 @@ type NewOrderStartProps = {
   payment_cashback: string;
   payment_cod: string;
   payment_wallet: string;
+  rate_id: string;
+  rate_info: string;
 };
 
 export const newOrderStart = (data: NewOrderStartProps) => {

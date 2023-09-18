@@ -40,8 +40,9 @@ const Style_Detail = StyleSheet.create({
     width: '100%',
   },
   nameproduct: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#000000',
+    fontWeight: '500',
   },
   price_1: {
     marginTop: 8,

@@ -4,7 +4,6 @@ import {useNavigation} from '@react-navigation/native';
 import styles from './style';
 import Header from '../../component/Header';
 import Line from '../../component/Line';
-import Information from '../../component/Information';
 import Detail_Input from '../../component/Detail_Input';
 import {formatPoint, formatPrice, WINDOW_WIDTH} from '../../global';
 import TextViewRow from '../../component/TextViewRow';
@@ -31,14 +30,33 @@ const DetailOrder = ({route}) => {
   const orderMsg = useSelector(state => state.order.message);
 
   const data = route?.params?.data;
-  const totalDecrement =
-    parseInt(data.total_product) -
-    parseInt(data.total) +
-    parseInt(data.ship_fee);
 
   const [deletePress, setDeletePress] = useState(false);
   const [cfVisible, setCfVisible] = useState(false);
   const isPoint = data.payment_name == 'Ví Điểm' ? true : false;
+
+  let totalSalePrice = 0;
+  let totalImportPrice = 0;
+
+  data.lItems.map((item, index) => {
+    if (data.ship_fee > 0 && index == data.lItems.length - 1) {
+      return;
+    }
+
+    if (parseFloat(item.sale_price) > 0) {
+      totalSalePrice +=
+        parseFloat(item.sale_price) *
+        ((100 - parseFloat(item.sale_decrement)) / 100) *
+        parseFloat(item.quantity);
+    } else {
+      totalSalePrice += parseFloat(item.price) * parseFloat(item.quantity);
+    }
+
+    totalImportPrice +=
+      parseFloat(item.price) *
+      ((100 - parseFloat(item.decrement)) / 100) *
+      parseFloat(item.quantity);
+  });
 
   // handle accept delete
   const handleOnAcceptDelete = () => {
@@ -144,66 +162,68 @@ const DetailOrder = ({route}) => {
               title={'Tổng tiền hàng:'}
               price={
                 isPoint
-                  ? formatPoint(data.total_product)
-                  : formatPrice(data.total_product)
+                  ? formatPoint(totalSalePrice)
+                  : formatPrice(totalSalePrice)
               }
               priceStyle={{color: 'black'}}
             />
             <TextViewRow
               title={'Phí vận chuyển:'}
-              between={
-                data.ship_fee == 0
-                  ? 'FreeShip'
-                  : isPoint
-                  ? formatPoint(data.ship_fee)
-                  : formatPrice(data.ship_fee)
-              }
-              betweenStyle={{color: 'green', fontSize: 15}}
+              price={formatPrice(data.ship_fee)}
+              priceStyle={{color: 'green', fontSize: 15, fontWeight: '500'}}
             />
-            {totalDecrement != 0 ? (
-              <TextViewRow
-                title={'Tổng giảm giá:'}
-                price={
-                  '-' + isPoint
-                    ? formatPoint(totalDecrement)
-                    : formatPrice(totalDecrement)
-                }
-                priceStyle={{color: 'red'}}
-              />
-            ) : null}
             <TextViewRow
               title={'Tổng số tiền cần thanh toán:'}
               price={
-                isPoint ? formatPoint(data.total) : formatPrice(data.total)
+                isPoint
+                  ? formatPoint(totalSalePrice + data.ship_fee)
+                  : formatPrice(totalSalePrice + data.ship_fee)
               }
+              priceStyle={{fontWeight: '500'}}
             />
           </View>
         </View>
 
         <Line />
 
-        {/* <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
-        <Image
-          style={Style_DetailOrder.icon_1}
-          source={require('../../assets/imgOder/Rectangle_230.png')}
-        />
-        <View style={{width: '87%', marginLeft: 20}}>
-          <Text style={Style_DetailOrder.title_1}>Thông tin cho bạn</Text>
-          <Information
-            text_1={'Tổng giá nhà cung cấp:'}
-            text_2={'Tổng giá bán của bạn:'}
-            text_3={'Tổng hoa hồng của bạn:'}
-            price_1={formatPrice(data?.producerTotal)}
-            price_2={formatPrice(data?.total)}
-            price_3={formatPrice(data?.total - data?.producerTotal)}
-            style_5={{
-              color: '#000000',
-            }}
+        <View style={{flexDirection: 'row', paddingHorizontal: 16}}>
+          <Image
+            style={styles.icon_1}
+            source={require('../../assets/imgOder/Rectangle_230.png')}
           />
+          <View style={{width: '87%', marginLeft: 20}}>
+            <Text style={styles.title_1}>Thông tin cho bạn</Text>
+            <TextViewRow
+              title={'Tổng giá nhà cung cấp:'}
+              price={
+                isPoint
+                  ? formatPoint(totalImportPrice)
+                  : formatPrice(totalImportPrice)
+              }
+              priceStyle={{color: 'black'}}
+            />
+            <TextViewRow
+              title={'Tổng giá bán của bạn:'}
+              price={
+                isPoint
+                  ? formatPoint(totalSalePrice)
+                  : formatPrice(totalSalePrice)
+              }
+              priceStyle={{color: 'green', fontSize: 15, fontWeight: '500'}}
+            />
+            <TextViewRow
+              title={'Tổng lợi nhuận của bạn:'}
+              price={
+                isPoint
+                  ? formatPoint(totalSalePrice - totalImportPrice)
+                  : formatPrice(totalSalePrice - totalImportPrice)
+              }
+              priceStyle={{fontWeight: '500'}}
+            />
+          </View>
         </View>
-      </View> */}
 
-        {/* <Line /> */}
+        <Line />
 
         <View
           style={{
@@ -240,18 +260,19 @@ const DetailOrder = ({route}) => {
             </View>
           </View>
           {data?.lItems.map((item, index) => {
-            const decrement =
-              item.decrement != 0 ? parseInt(item.decrement) : undefined;
-            const decrementPrice =
+            const decrement = parseInt(item.decrement);
+            const importPrice =
               parseInt(item.price) * ((100 - decrement) / 100);
+            const salePrice =
+              parseFloat(item.sale_price) > 0
+                ? parseFloat(item.sale_price) *
+                  ((100 - parseFloat(item.sale_decrement)) / 100)
+                : item.price;
 
             return (
               <View
                 key={index + new Date() + item.name}
                 style={styles.flatlist}>
-                {decrement ? (
-                  <Text style={styles.decrementBadge}>-{decrement}%</Text>
-                ) : null}
                 <Image
                   source={
                     item.image
@@ -264,28 +285,31 @@ const DetailOrder = ({route}) => {
                   <Text style={styles.text_2} numberOfLines={2}>
                     {item.name}
                   </Text>
-                  {/* <Text style={Style_DetailOrder.text_4}>
-                  Giá nhà cung cấp: 600,000đ
-                </Text> */}
+                  <Text style={{fontSize: 14, color: 'grey'}}>
+                    Giá nhập:{' '}
+                    {isPoint
+                      ? formatPoint(importPrice)
+                      : formatPrice(importPrice)}
+                  </Text>
+                  <Text
+                    style={[{fontSize: 14, fontWeight: '400', color: 'black'}]}>
+                    Giá bán:{' '}
+                    {isPoint
+                      ? formatPoint(item.price)
+                      : formatPrice(item.price)}
+                  </Text>
                   <View style={styles.priceView}>
-                    <Text
-                      style={[
-                        styles.text_3,
-                        decrement ? styles.stroke_line : null,
-                      ]}>
-                      Giá bán:{' '}
+                    <Text style={[styles.text_3, {fontWeight: '500'}]}>
+                      Giá bán của bạn:{' '}
                       {isPoint
-                        ? formatPoint(item.price)
-                        : formatPrice(item.price)}
+                        ? formatPoint(salePrice)
+                        : formatPrice(salePrice)}
                     </Text>
-                    {decrement ? (
-                      <Text style={styles.decrementPrice}>
-                        Giá bán:{' '}
-                        {isPoint
-                          ? formatPoint(decrementPrice)
-                          : formatPrice(decrementPrice)}
+                    {parseFloat(item.sale_decrement) > 0 && (
+                      <Text style={styles.decrementBadge}>
+                        -{parseFloat(item.sale_decrement)}%
                       </Text>
-                    ) : null}
+                    )}
                   </View>
                   <Text style={styles.text_4}>
                     Số lượng: {parseInt(item.quantity)}

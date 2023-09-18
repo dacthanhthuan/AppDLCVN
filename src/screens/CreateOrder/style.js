@@ -93,6 +93,28 @@ const Style_CreateOrder = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
   },
+
+  ship: {
+    justifyContent: 'center',
+    marginLeft: 15,
+  },
+
+  shipName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+
+  shipPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fa1234',
+  },
+
+  shipImage: {
+    position: 'absolute',
+    right: 20,
+  },
 });
 
 export default Style_CreateOrder;

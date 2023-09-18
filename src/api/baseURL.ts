@@ -51,6 +51,7 @@ const referral_member_order_list =
 const report_ceo_shop_id = '/client_report/list_shop_and_member_group?apikey=';
 const report_ceo_summary = '/report_ceo/summary?apikey=';
 const report_ceo_chart = '/report_ceo/chart?apikey=';
+const get_delivery_fee_url = '/client_order/get_delivery_fee?apikey=';
 
 export default {
   base_url,
@@ -89,4 +90,5 @@ export default {
   report_ceo_summary,
   report_ceo_chart,
   report_ceo_shop_id,
+  get_delivery_fee_url,
 };

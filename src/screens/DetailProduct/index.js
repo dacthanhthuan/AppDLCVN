@@ -10,7 +10,6 @@ import {
 import styles from './style';
 import Button from '../../component/Button';
 import Header from '../../component/Header/index';
-import Information from '../../component/Information';
 import Line from '../../component/Line';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -58,6 +57,10 @@ const DetailProduct = ({route}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {product, type} = route?.params || {}; // get product data from route and product type
+
+  const importPrice =
+    parseFloat(product.price) * ((100 - parseFloat(product.decrement)) / 100);
+  const profit = parseFloat(product.price) - importPrice;
 
   // cart data state
   const cartData =
@@ -318,36 +321,46 @@ const DetailProduct = ({route}) => {
         </View>
         <View style={styles.container_2}>
           <Text style={styles.nameproduct}>{product.product_name}</Text>
-          <Text style={[styles.price_1, decrement ? styles.stroke_line : null]}>
-            {price}
+          {product.sales && parseFloat(product.sales) > 0 && (
+            <Text style={styles.text_1}>
+              Giá gốc:{' '}
+              <Text
+                style={[
+                  styles.price_1,
+                  styles.stroke_line,
+                  {color: '#fd1234'},
+                ]}>
+                {type == 'money'
+                  ? formatPrice(product.sales)
+                  : formatPoint(product.sales)}
+              </Text>
+            </Text>
+          )}
+          <Text style={[styles.text_1, {fontWeight: 'bold'}]}>
+            Giá bán:{' '}
+            <Text style={[styles.price_1]}>
+              {type == 'money'
+                ? formatPrice(product.price)
+                : formatPoint(product.price)}
+            </Text>
           </Text>
-          {decrement ? (
-            <Text style={styles.decrementPrice}>{priceDecrement}</Text>
-          ) : null}
-          <Text style={styles.text_1}>Giá nhà cung cấp</Text>
         </View>
         <Line />
         <Text style={styles.title_1}>Thông tin sản phẩm</Text>
         <TextViewRow
           title={'Giá nhà cung cấp:'}
-          price={price}
-          priceStyle={decrement ? {textDecorationLine: 'line-through'} : null}
+          price={
+            type == 'money'
+              ? formatPrice(importPrice)
+              : formatPoint(importPrice)
+          }
         />
-        {decrement ? (
-          <>
-            <TextViewRow
-              title={'Sale:'}
-              price={'-' + decrement + '%'}
-              priceStyle={{color: 'red', fontSize: 15, fontWeight: '500'}}
-            />
-            <TextViewRow
-              title={'Giá đã giảm:'}
-              price={priceDecrement}
-              priceStyle={{color: 'red', fontWeight: '500'}}
-            />
-          </>
-        ) : null}
-        {type == 'money' && <TextViewRow title="Hoa hồng" point={commission} />}
+        <TextViewRow title="Giá bán lẻ" price={price} />
+        <TextViewRow
+          title="Lợi nhuận"
+          point={type == 'money' ? formatPrice(profit) : formatPoint(profit)}
+          pointStyle={{fontWeight: '500'}}
+        />
         <View style={styles.container_3}>
           <Text style={styles.title_2}>Giới thiệu sản phẩm</Text>
           <Text style={styles.text_1}>{product.short_description}</Text>

@@ -171,6 +171,34 @@ const ProfileAdmin = ({navigation}) => {
     }
   };
 
+  // event handler: handle logout
+  const handleLogout = () => {
+    // display notification
+    notification(
+      NotificationActions.rise({
+        data: {
+          message: 'Bạn đã đăng xuất',
+        },
+        duration: 2500,
+        type: NotificationType.NORMAL,
+      }),
+    );
+
+    // clear user and cart data
+    dispatch(clientClearUserData);
+    dispatch(removeAllCartProduct);
+    // clear address book data and order list
+    dispatch(addressBookClear);
+    dispatch(clearListOrder());
+    dispatch(WalletReferralList.clear());
+    dispatch(ReferralInfo.clear());
+
+    // clear local
+    removeData(LOCALSTORAGE.user);
+    removeData(LOCALSTORAGE.cart);
+    removeData(LOCALSTORAGE.order_list);
+  };
+
   return !isReady ? (
     <LoadingOverlay />
   ) : !login ? (
@@ -193,9 +221,7 @@ const ProfileAdmin = ({navigation}) => {
           id={user.user_id}
           onPress={() => navigation.navigate('Detail_User')}
         />
-
         <Text style={styles.title}>Quản lí ví</Text>
-
         <Pressable
           style={({pressed}) => [
             styles.wallet,
@@ -222,7 +248,6 @@ const ProfileAdmin = ({navigation}) => {
             {formatPrice(user.lWallet[0].amount)}
           </Text>
         </Pressable>
-
         <Pressable
           style={({pressed}) => [
             styles.wallet,
@@ -250,7 +275,6 @@ const ProfileAdmin = ({navigation}) => {
             {formatPoint(user.lWallet[1].amount)}
           </Text>
         </Pressable>
-
         <ImageBackground
           style={styles.rowTranfers}
           resizeMode="contain"
@@ -280,9 +304,7 @@ const ProfileAdmin = ({navigation}) => {
             onPress={() => navigation.navigate('WithDraw')}
           />
         </ImageBackground>
-
         <Text style={styles.title}>Bảng điều khiển</Text>
-
         <InfoCard
           image={require('../../assets/Rectangle294.png')}
           text="Chia sẻ app"
@@ -336,33 +358,18 @@ const ProfileAdmin = ({navigation}) => {
           onCancel={toggleLoginOptions}
         />
         <InfoCard
+          image={require('../../assets/changeaccount.png')}
+          text="Đổi tài khoản"
+          onPress={() => {
+            handleLogout();
+            navigation.navigate('Login');
+          }}
+        />
+        <InfoCard
           image={require('../../assets/log-out.png')}
           text="Đăng xuất"
           onPress={() => {
-            // display notification
-            notification(
-              NotificationActions.rise({
-                data: {
-                  message: 'Bạn đã đăng xuất',
-                },
-                duration: 2500,
-                type: NotificationType.NORMAL,
-              }),
-            );
-
-            // clear user and cart data
-            dispatch(clientClearUserData);
-            dispatch(removeAllCartProduct);
-            // clear address book data and order list
-            dispatch(addressBookClear);
-            dispatch(clearListOrder());
-            dispatch(WalletReferralList.clear());
-            dispatch(ReferralInfo.clear());
-
-            // clear local
-            removeData(LOCALSTORAGE.user);
-            removeData(LOCALSTORAGE.cart);
-            removeData(LOCALSTORAGE.order_list);
+            handleLogout();
             navigation.dispatch(TabActions.jumpTo('Home'));
           }}
         />

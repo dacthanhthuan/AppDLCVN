@@ -79,6 +79,7 @@ import ReferralBookingList from './src/screens/ReferralBookingList';
 import ReferralHistoryList from './src/screens/ReferralHistoryList';
 import ReferralAddMember from './src/screens/ReferralAddMember';
 import ReportCEO from './src/screens/ReportCEO';
+import ShipmentList from './src/screens/ShipmentList';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -170,6 +171,7 @@ const App = () => {
               component={ReferralAddMember}
             />
             <Stack.Screen name="ReportCEO" component={ReportCEO} />
+            <Stack.Screen name="ShipmentList" component={ShipmentList} />
           </Stack.Navigator>
         </NavigationContainer>
       </OrderAddressProvider>
@@ -383,6 +385,7 @@ type AppRootParamsList = {
   ReferralHistoryList: any;
   ReferralBookingList: any;
   ReferralAddMember: any;
+  CreateOrder: any;
 };
 
 declare global {

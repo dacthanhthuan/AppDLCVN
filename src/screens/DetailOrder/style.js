@@ -46,6 +46,7 @@ const Style_DetailOrder = StyleSheet.create({
     fontSize: 16,
     color: '#000000',
     marginBottom: 10,
+    fontWeight: '500',
   },
   view_2: {
     marginLeft: 10,
@@ -67,18 +68,15 @@ const Style_DetailOrder = StyleSheet.create({
   },
 
   decrementBadge: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    fontSize: 12,
+    fontSize: 13,
     color: 'white',
-    backgroundColor: 'red',
-    position: 'absolute',
-    left: -10,
-    top: -10,
+    backgroundColor: '#ff1234',
     zIndex: 1,
     textAlign: 'center',
     verticalAlign: 'middle',
+    fontWeight: '400',
+    borderRadius: 5,
+    width: 40,
   },
 
   stroke_line: {
@@ -102,6 +100,11 @@ const Style_DetailOrder = StyleSheet.create({
     width: '40%',
     margin: 10,
     alignSelf: 'center',
+  },
+
+  priceView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

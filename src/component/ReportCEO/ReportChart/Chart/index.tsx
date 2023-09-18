@@ -1,23 +1,8 @@
 import {BarChart} from 'react-native-gifted-charts';
 import styles from './styles';
-import {memo, useCallback, useState} from 'react';
+import {memo, useCallback, useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {WINDOW_WIDTH, secondToGlobalDate} from '../../../../global';
-
-const data = [
-  {value: 8.1231, label: '1/1/2023'},
-  {value: 9, label: '2/2/2023'},
-  {value: 2, label: '3/3/2023'},
-  {value: 3, label: '4/4/2023'},
-  {value: 1, label: '5/5/2023'},
-  {value: 6, label: '6/6/2023'},
-  {value: 5, label: '7/7/2023'},
-  {value: 9, label: '8/8/2023'},
-  {value: 7, label: '8/9/2023'},
-  {value: 8.4, label: '8/10/2023'},
-  {value: 1.4, label: '8/11/2023'},
-  {value: 5.4, label: '8/12/2023'},
-];
 
 type RPChartProps = {
   item: any;
@@ -60,6 +45,11 @@ const RPChart = memo(
       setDetailItem(item);
     }, []);
 
+    // side effect: clear detail when data has change
+    useEffect(() => {
+      setDetailItem(undefined);
+    }, [item]);
+
     return (
       <View style={styles.container}>
         {item && (
@@ -80,7 +70,6 @@ const RPChart = memo(
             xAxisColor={'#005aa9'}
             barBorderTopLeftRadius={10}
             barBorderTopRightRadius={10}
-            renderTooltip={(item: any) => <ChartToolTip item={item} />}
             onPress={handleOnPress}
             scrollToIndex={chartData.length - 1}
             isAnimated
@@ -97,12 +86,12 @@ const RPChart = memo(
 
         <Text style={styles.chartTitle}>{item?.seriesName}</Text>
         <Text style={styles.chartSmallTitle}>
-          Biểu đồ thống kê theo{' '}
+          Biểu đồ thống kê theo {item?.data?.length}
           {chartType == 'day'
-            ? item?.data?.length + ' ngày'
+            ? ' ngày'
             : chartType == 'month'
-            ? item?.data?.length + ' tháng'
-            : item?.data?.length + ' quý'}{' '}
+            ? ' tháng'
+            : ' quý'}{' '}
           gần nhất
         </Text>
       </View>
@@ -112,15 +101,3 @@ const RPChart = memo(
 );
 
 export default RPChart;
-
-type ChartToolTipProps = {
-  item: any;
-};
-
-const ChartToolTip = memo(function ({item}: ChartToolTipProps) {
-  return (
-    <View style={styles.tooltipView}>
-      <Text style={styles.tooltipText}>{item.value}M</Text>
-    </View>
-  );
-});

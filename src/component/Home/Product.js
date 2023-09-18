@@ -49,7 +49,7 @@ const Product = ({item}) => {
           {item?.product_name}
         </Text>
 
-        {item?.sales != 0 && (
+        {item?.sales && item?.sales > 0 && (
           <Text style={styles.renderProductId} numberOfLines={1}>
             Giá gốc: <Text style={[styles.renderDecrement]}>{sales}</Text>
           </Text>

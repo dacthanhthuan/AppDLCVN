@@ -42,7 +42,7 @@ export default CardShowmore;
 const styles = StyleSheet.create({
   renderItem: {
     width: (WINDOW_WIDTH * 0.94) / 2,
-    height: 250,
+    height: 280,
     backgroundColor: 'white',
     justifyContent: 'center',
   },

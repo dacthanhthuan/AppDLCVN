@@ -4,7 +4,7 @@ import {WINDOW_WIDTH, WINDOW_HEIGHT} from '../../../global';
 const styles = StyleSheet.create({
   container: {
     width: (WINDOW_WIDTH * 0.94) / 2,
-    height: 250,
+    height: 280,
     flexDirection: 'column',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
@@ -73,12 +73,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     paddingLeft: 12,
-  },
-
-  stroke_text: {
     textDecorationLine: 'line-through',
-    fontSize: 14,
-    fontWeight: '500',
   },
 
   addToCartContainer: {
@@ -100,6 +95,30 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     verticalAlign: 'middle',
     borderRadius: 20,
+  },
+
+  renderPrice: {
+    fontSize: 14,
+    color: '#09355C',
+    fontWeight: '500',
+  },
+
+  renderCommission: {
+    fontSize: 13,
+    color: '#1A5D1A',
+    fontWeight: '500',
+  },
+
+  renderProfit: {
+    fontSize: 13,
+    color: '#141E46',
+    fontWeight: '500',
+  },
+
+  renderProductId: {
+    marginLeft: 10,
+    fontSize: 13,
+    color: '#8B8787',
   },
 });
 

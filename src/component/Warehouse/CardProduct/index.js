@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, Text, Pressable, View} from 'react-native';
 import styles from './styles';
 import {useNavigation} from '@react-navigation/native';
-import {formatPoint} from '../../../global';
+import {formatPoint, formatDecimal} from '../../../global';
 import {useDispatch} from 'react-redux';
 import {addProduct2Cart} from '../../../redux/actions/cartActions';
 
@@ -14,9 +14,13 @@ const CardProduct = ({item}) => {
     navigation.navigate('DetailProduct', {product: item, type: 'point'});
   };
 
-  const decrement = item.decrement != 0 ? item.decrement : undefined;
-  const priceDecrement = formatPoint(
-    parseInt(item?.price) * ((100 - parseInt(decrement)) / 100),
+  const sales = formatPoint(item?.sales);
+  const price = formatPoint(item?.price);
+  const profit = formatPoint(
+    parseInt(item?.price) * (parseInt(item?.decrement) / 100),
+  );
+  const caschback = formatDecimal.format(
+    parseFloat(item?.cashback_point).toFixed(2),
   );
 
   return (
@@ -27,9 +31,6 @@ const CardProduct = ({item}) => {
           pressed ? {opacity: 0.8} : {opacity: 1},
         ]}
         onPress={navigateToDetailProduct}>
-        {decrement ? (
-          <Text style={styles.decrementBadge}>-{decrement}%</Text>
-        ) : null}
         <Image
           style={styles.image}
           resizeMode="contain"
@@ -38,13 +39,29 @@ const CardProduct = ({item}) => {
         <Text style={styles.title} numberOfLines={1}>
           {item.product_name}
         </Text>
-        {/* <Text style={styles.id}>{item.product_id}</Text> */}
-        <Text style={[styles.price, decrement ? styles.stroke_text : null]}>
-          {formatPoint(item.price)}
+
+        {item.sales && item.sales > 0 && (
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Giá gốc: <Text style={[styles.renderDecrement]}>{sales}</Text>
+          </Text>
+        )}
+
+        <Text style={styles.renderProductId} numberOfLines={1}>
+          Giá bán: <Text style={[styles.renderPrice]}>{price}</Text>
         </Text>
-        <Text style={styles.renderDecrement}>
-          {decrement ? priceDecrement : ''}
-        </Text>
+
+        {item?.decrement != 0 && (
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Lợi nhuận: <Text style={styles.renderProfit}>{profit}</Text>
+          </Text>
+        )}
+
+        {item?.cashback_point != 0 && (
+          <Text style={styles.renderProductId} numberOfLines={1}>
+            Tích điểm: <Text style={styles.renderCommission}>{caschback}</Text>
+          </Text>
+        )}
+
         <Pressable
           style={({pressed}) => [
             styles.addToCartContainer,

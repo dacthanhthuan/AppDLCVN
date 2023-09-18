@@ -92,6 +92,8 @@ const Payment = () => {
           payment_cashback: payment_type === 'cash_back' ? total : 0,
           payment_wallet: payment_type === 'wallet' ? total : 0,
           payment_cod: payment_type === 'cod' ? total : 0,
+          rate_id: ship.rate_id,
+          rate_info: JSON.stringify(ship.rate_info),
         }),
       );
 
@@ -161,11 +163,34 @@ const Payment = () => {
         </View>
       </View>
       <TextViewRow
-        title="Tổng thanh toán"
+        title="Tổng tiền hàng"
         price={type == 'wallet' ? formatPrice(total) : undefined}
         point={type == 'cashback' ? formatPoint(total) : undefined}
+        priceStyle={{color: 'black'}}
+        pointStyle={{color: 'black'}}
       />
-      <TextViewRow title="Tổng phí vận chuyển" between="Freeship" />
+
+      <TextViewRow
+        title="Tổng phí vận chuyển"
+        price={formatPrice(ship.ship_fee)}
+        priceStyle={{color: 'black'}}
+      />
+
+      {type == 'wallet' ? (
+        <TextViewRow
+          title="Tổng tiền cần thanh toán"
+          price={formatPrice(total + ship.ship_fee)}
+          priceStyle={{fontSize: 16, fontWeight: '500'}}
+        />
+      ) : (
+        <TextViewRow
+          title="Tổng tiền cần thanh toán"
+          price={formatPrice(ship.ship_fee)}
+          point={formatPoint(total)}
+          priceStyle={{fontSize: 16, fontWeight: '500'}}
+          pointStyle={{fontSize: 16, fontWeight: '500'}}
+        />
+      )}
 
       <Text style={Style_Payment.text_2}>Chọn phương thức thanh toán</Text>
 

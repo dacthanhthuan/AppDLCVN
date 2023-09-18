@@ -21,3 +21,6 @@ Thông tin nhận hàng:
 		-Lợi nhuận: lợi nhuận nếu mua bằng bán với giá bán
 		-Lợi nhuận đơn hàng: lợi nhuận nếu bán với giá cao hơn
 		-Tổng thành tiền: tổng thành tiền giá bán của nhà sản xuất.
+
+API phí vận chuyển:
+	

@@ -17,6 +17,8 @@ import {formatPoint, formatPrice, WINDOW_WIDTH} from '../../global';
 import {useSelector} from 'react-redux';
 import TextViewRow from '../../component/TextViewRow';
 import {useOrderAddress} from '../../component/OrderAddressContext';
+import api_get_delivery_fee from '../../api/api_get_delivery_fee';
+import LoadingOverlay from '../../component/LoadingOverlay';
 
 const CreateOrder = ({route}) => {
   const navigation = useNavigation();
@@ -30,8 +32,11 @@ const CreateOrder = ({route}) => {
     totalPriceOriginal,
     totalProfitOriginal,
     type,
+    chosenShipment,
   } = route?.params || {};
 
+  const app = useSelector(s => s.app.data);
+  const session_token = useSelector(s => s.user.session_token);
   // address default
   const address_default = useSelector(state => state.user.address_default);
   const ship_location = orderAddress.address
@@ -53,9 +58,15 @@ const CreateOrder = ({route}) => {
       amount: item?.quantity,
       price: item?.product.price,
       decrement: item?.product.decrement,
+
+      sale_price: item.priceInCart ? item.priceInCart : item.product.price,
+
+      sale_decrement: item.decrementInCart ? item.decrementInCart : 0,
     };
   });
-  const ship_fee = 0;
+  const [feeLoading, setFeeLoading] = useState(true);
+  const [shipFeeList, setShipFeeList] = useState([]);
+  const [shipment, setShipment] = useState(chosenShipment);
 
   const ship = {
     address_book_id: address_book_id,
@@ -64,8 +75,52 @@ const CreateOrder = ({route}) => {
     ship_mobile: ship_mobile,
     ship_note: ship_note,
     litems: litems,
-    ship_fee: ship_fee,
+    ship_fee: shipment?.total_fee ? shipment.total_fee : 0,
+    rate_id: shipment?.id,
+    rate_info: shipment,
   };
+
+  // const default supplier id
+  const supplier_id = app.default_supplier;
+
+  const lOrder = [
+    {
+      supplier_id,
+      COD_total: totalPrices,
+      lItems: litems,
+    },
+  ];
+
+  // side effect: run once after initial rendering
+  useEffect(() => {
+    setFeeLoading(true);
+    fetchDeliveryFee(
+      session_token,
+      address_book_id,
+      lOrder,
+      res => {
+        const feeList = res[0]?.lShipFee;
+
+        feeList.sort((a, b) => {
+          if (a.total_fee < b.total_fee) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+
+        setShipment(feeList[0]);
+        setShipFeeList(feeList);
+        setFeeLoading(false);
+      },
+      err => {},
+    );
+  }, [address_book_id]);
+
+  // side effect: synchorous shipment which is user chosen
+  useEffect(() => {
+    if (chosenShipment) setShipment(chosenShipment);
+  }, [chosenShipment]);
 
   const render_item = useCallback(({item}) => {
     const decrementInCart = item?.decrementInCart
@@ -121,6 +176,7 @@ const CreateOrder = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {feeLoading && <LoadingOverlay />}
       <Header
         onPressLeft={() => navigation.goBack()}
         iconLeft={require('../../assets/Arrow1.png')}
@@ -194,7 +250,7 @@ const CreateOrder = ({route}) => {
               />
               <View style={{width: '90%'}}>
                 <View style={styles.view_1}>
-                  <Text style={styles.text_1}>Sản phẩm đặt mua</Text>
+                  <Text style={styles.title_1}>Sản phẩm đặt mua</Text>
                   <Text style={styles.text_4}></Text>
                 </View>
               </View>
@@ -219,6 +275,61 @@ const CreateOrder = ({route}) => {
                 />
               </View>
             </View>
+
+            <Line />
+            <View
+              style={{
+                backgroundColor: '#df123420',
+                paddingVertical: 10,
+                borderRadius: 10,
+              }}>
+              <View style={{flexDirection: 'row', gap: 10}}>
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/shipment.png')}
+                />
+                <Text style={styles.text_1}>
+                  Phương thức vận chuyển (Nhấn để chọn)
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.ship}
+                onPress={() =>
+                  navigation.navigate('ShipmentList', {
+                    data: shipFeeList,
+                    products,
+                    totalPrices,
+                    totalProfit,
+                    totalImportPrice,
+                    totalPriceOriginal,
+                    totalProfitOriginal,
+                    type,
+                  })
+                }>
+                <Text
+                  style={[styles.text_2, {color: 'black', fontWeight: '400'}]}>
+                  Dịch vụ giao hàng:{' '}
+                  <Text style={styles.shipName}>{shipment?.service}</Text>
+                </Text>
+                <Text
+                  style={[styles.text_2, {color: 'black', fontWeight: '400'}]}>
+                  Đơn vị vận chuyển:{' '}
+                  <Text style={styles.shipName}>{shipment?.carrier_name}</Text>
+                </Text>
+                <Text
+                  style={[styles.text_2, {color: 'black', fontWeight: '400'}]}>
+                  Phí vận chuyển:{' '}
+                  <Text style={styles.shipPrice}>
+                    {formatPrice(shipment?.total_fee)}
+                  </Text>
+                </Text>
+                <Image
+                  source={require('../../assets/vectorRight.png')}
+                  style={styles.shipImage}
+                />
+              </TouchableOpacity>
+            </View>
+
             <Line />
 
             <View style={{flexDirection: 'row', gap: 10}}>
@@ -238,13 +349,23 @@ const CreateOrder = ({route}) => {
                 }
                 priceStyle={{color: 'black', fontWeight: '400'}}
               />
-              <TextViewRow title="Phí vận chuyển:" between="Freeship" />
+              <TextViewRow
+                title="Phí vận chuyển:"
+                price={formatPrice(
+                  shipment?.total_fee ? shipment.total_fee : 0,
+                )}
+                priceStyle={{color: '#fd2345', fontWeight: '400'}}
+              />
               <TextViewRow
                 title="Tổng thành tiền:"
                 price={
                   type == 'money_payment'
-                    ? formatPrice(totalPrices)
-                    : formatPoint(totalPrices)
+                    ? formatPrice(
+                        shipment?.total_fee
+                          ? totalPrices + shipment.total_fee
+                          : totalPrices + 0,
+                      )
+                    : formatPrice(shipment?.total_fee)
                 }
                 priceStyle={{color: 'black', fontWeight: '400'}}
               />
@@ -252,8 +373,12 @@ const CreateOrder = ({route}) => {
                 title="Tổng số tiền cần thanh toán:"
                 price={
                   type == 'money_payment'
-                    ? formatPrice(totalPrices)
-                    : formatPoint(totalPrices)
+                    ? formatPrice(
+                        shipment?.total_fee
+                          ? totalPrices + shipment.total_fee
+                          : totalPrices + 0,
+                      )
+                    : formatPrice(shipment?.total_fee)
                 }
                 titleStyle={{fontSize: 16, fontWeight: '500'}}
                 priceStyle={{fontSize: 16, color: '#12aa34', fontWeight: '500'}}
@@ -298,17 +423,21 @@ const CreateOrder = ({route}) => {
               />
               <TextViewRow
                 title="Phí giao hàng:"
-                price={
-                  type == 'money_payment' ? formatPrice(0) : formatPoint(0)
-                }
+                price={formatPrice(
+                  shipment?.total_fee ? shipment.total_fee : 0,
+                )}
                 priceStyle={{color: 'black', fontWeight: '400'}}
               />
               <TextViewRow
                 title="Tổng thành tiền:"
                 price={
                   type == 'money_payment'
-                    ? formatPrice(totalImportPrice)
-                    : formatPoint(totalImportPrice)
+                    ? formatPrice(
+                        shipment?.total_fee
+                          ? totalImportPrice + shipment.total_fee
+                          : totalImportPrice,
+                      )
+                    : formatPrice(shipment?.total_fee)
                 }
                 priceStyle={{color: 'black', fontWeight: '400'}}
               />
@@ -316,8 +445,12 @@ const CreateOrder = ({route}) => {
                 title="Số tiền thanh toán:"
                 price={
                   type == 'money_payment'
-                    ? formatPrice(totalImportPrice)
-                    : formatPoint(totalImportPrice)
+                    ? formatPrice(
+                        shipment?.total_fee
+                          ? totalImportPrice + shipment.total_fee
+                          : totalImportPrice,
+                      )
+                    : formatPrice(shipment?.total_fee)
                 }
                 titleStyle={{fontSize: 16, fontWeight: '500'}}
                 priceStyle={{fontSize: 16, color: '#12aa34', fontWeight: '500'}}
@@ -332,16 +465,13 @@ const CreateOrder = ({route}) => {
                 marginTop: 20,
               }}>
               <Button
-                onPress={() =>
+                onPress={() => {
                   navigation.navigate('Payment', {
                     ship: ship,
-                    total:
-                      type == 'money_payment'
-                        ? totalDecrementPrices
-                        : totalDecrementPoint,
+                    total: totalPrices,
                     type: type == 'money_payment' ? 'wallet' : 'cashback',
-                  })
-                }
+                  });
+                }}
                 text={'Tiến hành thanh toán'}
               />
             </View>
@@ -353,3 +483,12 @@ const CreateOrder = ({route}) => {
 };
 
 export default CreateOrder;
+
+function fetchDeliveryFee(token, addressId, lOrder, onSuccess, onFailure) {
+  const form = new FormData();
+  form.append('token', token);
+  form.append('address_id', addressId);
+  form.append('lOrder', JSON.stringify(lOrder));
+
+  api_get_delivery_fee(form).then(onSuccess).catch(onFailure);
+}
